@@ -1,24 +1,25 @@
 import './App.less';
+import HomePage from './components/HomePage.jsx';
 
-import React, {useEffect} from "react";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+
 
 function App() {
+
+  // state hook for price
+  const [price, setPrice] = useState(0);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.jsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          {/* <Route component={NotFoundPage}/> */}
+        </Switch>
+      </Router>
+    </>
   );
 }
 
