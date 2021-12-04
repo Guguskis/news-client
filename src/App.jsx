@@ -1,9 +1,13 @@
-import './App.less';
+import './App.css';
 import HomePage from './components/HomePage.jsx';
 
 import React, { useState, useEffect } from "react";
+import { StylesProvider, createGenerateClassName } from '@mui/styles';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
+const generateClassName = createGenerateClassName({
+  productionPrefix: 'c',
+});
 
 function App() {
 
@@ -12,6 +16,7 @@ function App() {
 
 
   return (
+    // <StylesProvider generateClassName={generateClassName}>
     <>
       <Router>
         <Switch>
@@ -19,7 +24,8 @@ function App() {
           {/* <Route component={NotFoundPage}/> */}
         </Switch>
       </Router>
-    </>
+      </>
+    // </StylesProvider >
   );
 }
 

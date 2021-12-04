@@ -2,30 +2,41 @@
 
 import React from 'react';
 
-// import typography
 import Typography from '@material-ui/core/Typography';
 import Button from '@mui/material/Button';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import Container from '@mui/material/Container';
 
-function HomePage()  {
+const styles = {
+    button: {
+        fontSize: '1rem',
+        backgroundColor: 'green',
+        '&:hover': {
+            backgroundColor: '#00ff00'
+        }
+    }
+}
+
+
+function HomePage() {
 
     function addSignal() {
         return console.log('add signal');
     }
 
-
     return (
-        <>
+        <Container >
             <Typography
                 variant="h6"
                 component="h1"
-                color="textPrimary"
+                color="textSecondary"
                 gutterBottom
             >
                 Signals
             </Typography>
 
             <Button
+                sx={styles.button}
                 onClick={() => addSignal()}
                 variant="contained"
                 endIcon={<AddBoxIcon />}
@@ -33,7 +44,7 @@ function HomePage()  {
             >
                 Create
             </Button>
-        </>
+        </Container >
     );
 };
 
