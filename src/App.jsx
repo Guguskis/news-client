@@ -3,7 +3,7 @@ import HomePage from './components/HomePage.jsx';
 
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { createTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
@@ -24,14 +24,14 @@ const theme = createTheme({
 function App() {
 
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <Router>
         <Switch>
           <Route exact path="/" component={HomePage} />
           {/* <Route component={NotFoundPage}/> */}
         </Switch>
       </Router>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 }
 
