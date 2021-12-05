@@ -28,7 +28,32 @@ const styles = {
     },
 }
 
-
+const signalCardForm = () => {
+    return (
+        <>
+            <CardContent sx={{ alignContent: "center" }} >
+                <Box component="div" gutterBottom>
+                    <Typography variant="h5" component="h2">
+                        XRP/USDT
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                        Profit: 50$ / 10%
+                    </Typography>
+                </Box>
+                <Box component="div">
+                    <Typography variant="body2" component="p">
+                        Entry 0.55 $
+                    </Typography>
+                </Box>
+                <Box component="div">
+                    <Typography variant="body2" align="right" component="p">
+                        1.25 $ Exit 
+                    </Typography>
+                </Box>
+            </CardContent>
+        </>
+    );
+}
 
 function HomePage() {
     const [price, setPrice] = useState(0);
@@ -38,44 +63,19 @@ function HomePage() {
         return console.log('add signal');
     }
 
-    const bull = (
-        <Box
-            component="span"
-            sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-        >
-        </Box>
-    );
-
-    const card = (
-        <React.Fragment>
-            <CardContent sx={{alignContent: "center"}} >
-                <Typography  gutterBottom>
-                    Word of the Day
-                </Typography>
-                <Typography variant="h5" component="div">
-                    be{bull}nev{bull}o{bull}lent
-                </Typography>
-                <Typography >
-                    adjective
-                </Typography>
-                <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
-                </Typography>
-            </CardContent>
-            <CardActions>
-                <Button size="small">Learn More</Button>
-            </CardActions>
-        </React.Fragment>
-    );
     return (
-        <Box sx={{ minWidth: 275, display: "flex", alignItems: "center", flexDirection: "column" }}>
-            <Card variant="outlined">{card}</Card>
-            <Card variant="outlined">{card}</Card>
-            <Card variant="outlined">{card}</Card>
-            <Card variant="outlined">{card}</Card>
-            <Card variant="outlined">{card}</Card>
+        <Box sx={{ minWidth: 275, margin: "50px", height: "100wh", display: "flex", alignItems: "center", flexDirection: "column"}}>
+            <Typography
+                variant="h6"
+                component="h1"
+                color="textSecondary"
+                gutterBottom>
+                Signals
+            </Typography>
+            <Card variant="outlined" sx={{margin: "0.25rem"}}>{signalCardForm()}</Card>
+            <Card variant="outlined" sx={{margin: "0.25rem"}}>{signalCardForm()}</Card>
+            <Card variant="outlined" sx={{margin: "0.25rem"}}>{signalCardForm()}</Card>
+            <Card variant="outlined" sx={{margin: "0.25rem"}}>{signalCardForm()}</Card>
         </Box>
     );
 
