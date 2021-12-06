@@ -3,7 +3,6 @@
 import * as React from 'react';
 
 import Typography from '@material-ui/core/Typography';
-import Container from '@mui/material/Container';
 import { useState } from 'react';
 
 import Box from '@mui/material/Box';
@@ -93,6 +92,10 @@ function HomePage() {
         }
     ]);
 
+    const assembleSignal = (signal) => {
+        return <SignalComponent signal={signal} setSignals={setSignals} />;
+    }
+
     return (
         <Box sx={styles.body}>
             <Typography
@@ -101,9 +104,7 @@ function HomePage() {
                 gutterBottom>
                 Signals
             </Typography>
-            {signals.map(signal =>
-                <SignalComponent signal={signal} setSignals={setSignals} />
-            )}
+            {signals.map(assembleSignal)}
         </Box>
     );
 
