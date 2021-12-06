@@ -15,43 +15,10 @@ const styles = {
     }
 }
 
-function SignalComponent() {
+function SignalComponent(props) {
 
-    const [signals, setSignals] = useState([
-        {
-            id: 1,
-            symbol: "XRP/USDT",
-            position: 100,
-            entries: [
-                {
-                    id: 1,
-                    dateTime: "2020-01-01:00:00:00",
-                    price: 50,
-                    side: "LONG",
-                    type: "MARKET",
-                    units: 100
-                }
-            ],
-            exits: [
-                {
-                    id: 1,
-                    dateTime: "2020-01-01:00:00:00",
-                    price: 62,
-                    side: "SHORT",
-                    type: "TAKE_PROFIT",
-                    units: 100
-                },
-                {
-                    id: 1,
-                    dateTime: "2020-01-01:00:00:00",
-                    price: 56,
-                    side: "SHORT",
-                    type: "STOP_LOSS",
-                    units: 100
-                }
-            ]
-        }
-    ]);
+    // signal prop
+    const { signal, setSignals } = props;
 
     const [price, setPrice] = useState(0);
 
@@ -60,8 +27,6 @@ function SignalComponent() {
     }
 
     const Component = () => {
-
-        const signal = signals[0];
 
         return (
             <CardContent sx={styles.component} >
@@ -99,7 +64,7 @@ function SignalComponent() {
                     component="h2"
                     color="textSecondary"
                 >
-                    Price: {signals.price}
+                    Price: {signal.price}
                 </Typography>
 
                 <TextField

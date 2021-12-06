@@ -19,12 +19,79 @@ const styles = {
 }
 
 function HomePage() {
-    const [price, setPrice] = useState(0);
 
     const addSignal = () => {
-        // function addSignal() {
         return console.log('add signal');
     }
+
+    const [signals, setSignals] = useState([
+        {
+            id: 1,
+            symbol: "XRP/USDT",
+            position: 100,
+            entries: [
+                {
+                    id: 1,
+                    dateTime: "2020-01-01:00:00:00",
+                    price: 50,
+                    side: "LONG",
+                    type: "MARKET",
+                    units: 100
+                }
+            ],
+            exits: [
+                {
+                    id: 1,
+                    dateTime: "2020-01-01:00:00:00",
+                    price: 62,
+                    side: "SHORT",
+                    type: "TAKE_PROFIT",
+                    units: 100
+                },
+                {
+                    id: 1,
+                    dateTime: "2020-01-01:00:00:00",
+                    price: 56,
+                    side: "SHORT",
+                    type: "STOP_LOSS",
+                    units: 100
+                }
+            ]
+        },
+        {
+            id: 1,
+            symbol: "BTC/USDT",
+            position: 220,
+            entries: [
+                {
+                    id: 1,
+                    dateTime: "2020-01-01:00:00:00",
+                    price: 50,
+                    side: "LONG",
+                    type: "MARKET",
+                    units: 100
+                }
+            ],
+            exits: [
+                {
+                    id: 1,
+                    dateTime: "2020-01-01:00:00:00",
+                    price: 62,
+                    side: "SHORT",
+                    type: "TAKE_PROFIT",
+                    units: 100
+                },
+                {
+                    id: 1,
+                    dateTime: "2020-01-01:00:00:00",
+                    price: 56,
+                    side: "SHORT",
+                    type: "STOP_LOSS",
+                    units: 100
+                }
+            ]
+        }
+    ]);
 
     return (
         <Box sx={styles.body}>
@@ -34,10 +101,9 @@ function HomePage() {
                 gutterBottom>
                 Signals
             </Typography>
-            <SignalComponent />
-            <SignalComponent />
-            <SignalComponent />
-            <SignalComponent />
+            {signals.map(signal =>
+                <SignalComponent signal={signal} setSignals={setSignals} />
+            )}
         </Box>
     );
 
