@@ -8,7 +8,10 @@ import Button from '@mui/material/Button';
 import { ObjectState } from "../utils/utils.jsx";
 
 const styles = {
-    component: {
+    container: {
+        minWidth: "100px"
+    },
+    details: {
         alignContent: "center",
         color: "primary.main",
         padding: "0 1rem"
@@ -18,19 +21,44 @@ const styles = {
 function SignalComponent(props) {
 
     // signal prop
-    const { signal, setSignals } = props;
+    const { signal } = props;
 
     const [price, setPrice] = useState(0);
 
     function addSignal() {
         console.log('add signal');
     }
+    return (
+        <Card variant="outlined" sx={styles.container}>
+            <Component />
+        </Card>
+    );
+    function Component() {
+        return (
+            <CardContent sx={styles.details} >
+                <SignalDetails signal={signal} />
+                <SignalForm signal={signal} />
+            </CardContent>
+        );
+    }
 
-    const Component = () => {
+    function SignalDetails(props) {
+
+        const { signal } = props;
+
+        const assembleEntries = (entry) =>
+            <Typography variant="body2" component="p">
+                Entry {entry.price} $
+            </Typography>
+
+        const assembleExits = (exit) =>
+            <Typography variant="body2" component="p" align="right">
+                {exit.price} $ Exit
+            </Typography>
 
         return (
-            <CardContent sx={styles.component} >
-                <Box component="div" borderBottom="1px solid red">
+            <>
+                <Box component="div" borderBottom="1px solid">
                     <Typography variant="h5"  >
                         {signal.symbol}
                     </Typography>
@@ -38,26 +66,16 @@ function SignalComponent(props) {
                         Profit: 50$ / 10%
                     </Typography>
                 </Box>
-                <Box component="div">
-                    {signal.entries.map((entry) =>
-                        <Typography variant="body2" component="p">
-                            Entry {entry.price} $
-                        </Typography>
-                    )}
-                </Box>
-                <Box component="div">
-                    {signal.exits.map((exit) =>
-                        <Typography variant="body2" component="p" align="right">
-                            {exit.price} $ Exit
-                        </Typography>
-                    )}
-                </Box>
-                <SignalForm />
-            </CardContent>
+                <Box component="div">{signal.entries.map(assembleEntries)}</Box>
+                <Box component="div">{signal.exits.map(assembleExits)}</Box>
+            </>
         );
     }
 
-    const SignalForm = () => {
+    function SignalForm(props) {
+
+        const { signal } = props;
+
         return (
             <Box component="div" >
                 <Typography
@@ -70,6 +88,7 @@ function SignalComponent(props) {
                 <TextField
                     // label="Price"
                     variant="outlined"
+
                     type="number"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
@@ -77,7 +96,7 @@ function SignalComponent(props) {
                 <Button
                     variant="contained"
                     endIcon={<AddBoxIcon />}
-                    type="submit"
+                    // type="submit"
                     onClick={addSignal}
                 // stop limiting onClick count
                 >
@@ -88,11 +107,7 @@ function SignalComponent(props) {
         );
     }
 
-    return (
-        <Card variant="outlined" sx={{ minWidth: "100px" }}>
-            <Component />
-        </Card>
-    );
+
 }
 
 export default SignalComponent;
