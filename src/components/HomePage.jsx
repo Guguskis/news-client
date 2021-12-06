@@ -48,7 +48,7 @@ function HomePage() {
                     units: 100
                 },
                 {
-                    id: 1,
+                    id: 2,
                     dateTime: "2020-01-01:00:00:00",
                     price: 56,
                     side: "SHORT",
@@ -58,7 +58,7 @@ function HomePage() {
             ]
         },
         {
-            id: 1,
+            id: 2,
             symbol: "BTC/USDT",
             position: 220,
             entries: [
@@ -66,6 +66,14 @@ function HomePage() {
                     id: 1,
                     dateTime: "2020-01-01:00:00:00",
                     price: 50,
+                    side: "LONG",
+                    type: "MARKET",
+                    units: 100
+                },
+                {
+                    id: 2,
+                    dateTime: "2020-01-01:00:00:00",
+                    price: 75,
                     side: "LONG",
                     type: "MARKET",
                     units: 100
@@ -81,7 +89,7 @@ function HomePage() {
                     units: 100
                 },
                 {
-                    id: 1,
+                    id: 2,
                     dateTime: "2020-01-01:00:00:00",
                     price: 56,
                     side: "SHORT",
@@ -93,7 +101,7 @@ function HomePage() {
     ]);
 
     const assembleSignal = (signal) => {
-        return <SignalComponent signal={signal} setSignals={setSignals} />;
+        return <SignalComponent key={signal.id} signal={signal} />;
     }
 
     return (
