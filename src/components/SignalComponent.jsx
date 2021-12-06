@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 
 const styles = {
     container: {
-        minWidth: "100px"
+        marginBottom: "10px",
     },
     details: {
         alignContent: "center",
@@ -33,7 +33,7 @@ function SignalComponent({ signal }) {
         return (
             <CardContent sx={styles.details} >
                 <SignalDetails signal={signal} />
-                <SignalForm signal={signal} />
+                {/* <SignalForm signal={signal} /> */}
             </CardContent>
         );
     }
@@ -41,7 +41,7 @@ function SignalComponent({ signal }) {
     function SignalDetails({ signal }) {
 
         return (
-            <>
+            <Box component="div" >
                 <Box component="div" borderBottom="1px solid">
                     <Typography variant="h5">
                         {signal.symbol}
@@ -50,9 +50,9 @@ function SignalComponent({ signal }) {
                         Profit: 50$ / 10%
                     </Typography>
                 </Box>
-                <Box component="div">{signal.entries.map(assembleEntry)}</Box>
-                <Box component="div">{signal.exits.map(assembleExit)}</Box>
-            </>
+                <Box component="div" >{signal.entries.map(assembleEntry)}</Box>
+                <Box component="div" >{signal.exits.map(assembleExit)}</Box>
+            </Box>
         );
 
         function assembleEntry(entry) {
@@ -95,8 +95,7 @@ function SignalComponent({ signal }) {
                     variant="contained"
                     endIcon={<AddBoxIcon />}
                     // type="submit"
-                    onClick={addSignal}
-                >
+                    onClick={addSignal}>
                     Create
                 </Button>
             </Box>
