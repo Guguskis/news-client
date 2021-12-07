@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
-import { Box, Card, CardContent, TextField, Button, MenuItem } from '@mui/material';
+import { Box, Card, CardContent, TextField, Button, MenuItem, InputAdornment  } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const styles = {
@@ -138,8 +138,9 @@ function SignalComponent({ signal, isEdit = false, onSubmit }) {
         return (
             <Box component="div" >
                 <TextField
-                    select
                     label="Pair"
+                    select
+                    sx={{ margin: "0 1rem" }}
                     variant="standard"
                     disabled={!isEdit}
                     value={pair}
@@ -152,15 +153,19 @@ function SignalComponent({ signal, isEdit = false, onSubmit }) {
                 </TextField>
                 <TextField
                     label="Price"
+                    sx={{ margin: "0 1rem", width: "auto" }}
                     variant="standard"
                     disabled={!isEdit}
                     value={price}
-                    onChange={(e) => setPrice(e.target.value)} />
+                    onChange={(e) => setPrice(e.target.value)} 
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                      }}
+                    />
                 {isEdit &&
                     <Button
                         variant="contained"
                         endIcon={<AddBoxIcon />}
-                        // type="submit"
                         disabled={!isEdit}
                         onClick={submit}>
                         Save
