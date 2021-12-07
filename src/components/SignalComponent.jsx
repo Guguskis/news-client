@@ -2,8 +2,9 @@ import * as React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
-import { Box, Card, CardContent, TextField, Button, MenuItem, InputAdornment  } from '@mui/material';
+import { Box, Card, CardContent, TextField, Button, MenuItem, InputAdornment } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import { ObjectState } from "../utils/utils.jsx";
 
 const styles = {
     container: {
@@ -18,7 +19,17 @@ const styles = {
     }
 }
 
-function SignalComponent({ signal, isEdit = false, onSubmit }) {
+function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit }) {
+    const [pairs, setPairs] = useState([
+        {
+            value: "BTC/ASS",
+            label: "BTC/ASS"
+        },
+        {
+            value: "ETH/ASS",
+            label: "ETH/ASS"
+        },
+    ]);
 
     return (
         <Card variant="outlined" sx={styles.container}>
@@ -30,9 +41,11 @@ function SignalComponent({ signal, isEdit = false, onSubmit }) {
 
         return (
             <CardContent sx={styles.details} >
-                <SignalDetails signal={signal} />
-                {/* {isEdit && <SignalForm signal={signal} />} */}
-                <SignalForm signal={signal} onSignalSubmit={onSubmit} />
+                {isEdit || isCreate ?
+                    <SignalForm signal={signal} onSignalSubmit={onSubmit} />
+                    :
+                    <SignalDetails signal={signal} />
+                }
             </CardContent>
         );
     }
@@ -73,107 +86,88 @@ function SignalComponent({ signal, isEdit = false, onSubmit }) {
     }
 
     function SignalForm({ onSignalSubmit }) {
-        const [pairs, setPairs] = useState([
-            {
-                value: "BTC/ASS",
-                label: "BTC/ASS"
-            },
-            {
-                value: "ETH/ASS",
-                label: "ETH/ASS"
-            },
-        ]);
+
         const [price, setPrice] = useState(0);
         const [pair, setPair] = useState(pairs[0]);
+        const [entries, setEntries] = useState([]);
+        const [exits, setExits] = useState([]);
 
         const submit = () => {
-            signal = {
-                id: 4,
-                symbol: "BTC/ASS",
-                position: 220,
-                entries: [
-                    {
-                        id: 1,
-                        dateTime: "2020-01-01:00:00:00",
-                        price: 50,
-                        side: "LONG",
-                        type: "MARKET",
-                        units: 100
-                    },
-                    {
-                        id: 2,
-                        dateTime: "2020-01-01:00:00:00",
-                        price: 75,
-                        side: "LONG",
-                        type: "MARKET",
-                        units: 100
-                    }
-                ],
-                exits: [
-                    {
-                        id: 1,
-                        dateTime: "2020-01-01:00:00:00",
-                        price: 62,
-                        side: "SHORT",
-                        type: "TAKE_PROFIT",
-                        units: 100
-                    },
-                    {
-                        id: 2,
-                        dateTime: "2020-01-01:00:00:00",
-                        price: 56,
-                        side: "SHORT",
-                        type: "STOP_LOSS",
-                        units: 100
-                    }
-                ]
-            };
+            if (isCreate) {
+                onCreateSignalSubmit();
+            } else if (isEdit) {
+                onEditSignalSubmit()
+            } else {
+                console.error("isCreate or isEdit should be true");
+            }
+        }
 
-            console.log("SignalForm -> submit -> signal");
+        const onCreateSignalSubmit = () => {
+            // build signal and send POST
+            const signal = {
+                symbol: pair.value,
+                price: price,
+                entries: entries,
+                exits: exits
+            };
+            console.log("create", signal);
             onSignalSubmit(signal);
         }
 
-        
+        const onEditSignalSubmit = () => {
+            // build signal and send PUT
+            ObjectState.set(signal, "symbol", pair.value);
+            ObjectState.set(signal, "price", price);
+            console.log("create", signal);
+            onSignalSubmit(signal);
+        }
 
         return (
-            <Box component="div" >
-                <TextField
-                    label="Pair"
-                    select
-                    sx={{ margin: "0 1rem" }}
-                    variant="standard"
-                    disabled={!isEdit}
-                    value={pair}
-                    onChange={(e) => setPair(e.target.value)}>
-                    {pairs.map(pair => (
-                        <MenuItem key={pair.value} value={pair.value}>
-                            {pair.label}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <TextField
-                    label="Price"
-                    sx={{ margin: "0 1rem", width: "auto" }}
-                    variant="standard"
-                    disabled={!isEdit}
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)} 
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                      }}
+            <Box component="div" alignItems="center">
+                <Box component="div"  >
+                    <TextField
+                        label="Pair"
+                        select
+                        sx={{ margin: "0 1rem", minWidth: "100px" }}
+                        variant="standard"
+                        disabled={!isModify()}
+                        value={pair.value}
+                        onChange={(e) => setPair(e.target)}>
+                        {pairs.map(pair => (
+                            <MenuItem key={pair.value} value={pair.value}>
+                                {pair.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                    <TextField
+                        label="Price"
+                        sx={{ margin: "0 1rem" }}
+                        variant="standard"
+                        disabled={!isModify()}
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                        }}
                     />
-                {isEdit &&
-                    <Button
-                        variant="contained"
-                        endIcon={<AddBoxIcon />}
-                        disabled={!isEdit}
-                        onClick={submit}>
-                        Save
-                    </Button>
+                </Box>
+                {isModify() &&
+                    <Box component="div" display="flex" justifyContent="right">
+                        <Button
+                            variant="contained"
+                            endIcon={<AddBoxIcon />}
+                            disabled={!isModify()}
+                            onClick={submit}>
+                            Save
+                        </Button>
+                    </Box>
                 }
-
             </Box>
         );
+    }
+
+    function isModify() {
+        return isEdit || isCreate;
     }
 }
 
