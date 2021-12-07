@@ -5,8 +5,10 @@ import * as React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
 
-import Box from '@mui/material/Box';
+import { Box, Button } from '@mui/material';
 import SignalComponent from '../components/SignalComponent.jsx';
+import AddBoxIcon from '@mui/icons-material/AddBox'
+import {ArraysState} from "../utils/utils.jsx";
 
 const styles = {
     body: {
@@ -19,9 +21,11 @@ const styles = {
 
 function HomePage() {
 
-    const addSignal = () => {
-        return console.log('add signal');
-    }
+    const [isAddSignal, setIsAddSignal] = useState(false);
+    const [signal, setSignal] = useState({
+        entries: [],
+        exits: []
+    });
 
     const [signals, setSignals] = useState([
         {
@@ -100,9 +104,20 @@ function HomePage() {
         }
     ]);
 
-    const assembleSignal = (signal) => {
-        return <SignalComponent key={signal.id} signal={signal} />;
+    const addSignal = (e) => {
+        e.preventDefault();
+        console.log('add signal');
+
+        setIsAddSignal(true);
     }
+
+    const onSubmitSignal = (signal) => {
+        ArraysState.add(setSignals, signal);
+        console.log('added signal to array', signal);
+    }
+
+    const assembleSignal = (signal) =>
+        <SignalComponent key={signal.id} signal={signal} />
 
     return (
         <Box sx={styles.body}>
@@ -112,9 +127,22 @@ function HomePage() {
                 gutterBottom>
                 Signals
             </Typography>
+            <Box sx={{ marginBottom: "10px" }}>
+                <Button
+                    variant="contained"
+                    endIcon={<AddBoxIcon />}
+                    onClick={addSignal}>
+                    Add Signal
+                </Button>
+            </Box>
+            {isAddSignal && <SignalComponent signal={signal} isEdit={true} onSubmit={onSubmitSignal} />}
             {signals.map(assembleSignal)}
         </Box>
     );
+
+    function CreateSignalCard() {
+
+    }
 
 };
 

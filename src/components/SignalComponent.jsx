@@ -2,13 +2,14 @@ import * as React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
-import { Box, Card, CardContent, TextField, Container } from '@mui/material';
+import { Box, Card, CardContent, TextField, Button, MenuItem } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import Button from '@mui/material/Button';
 
 const styles = {
     container: {
         marginBottom: "10px",
+        minWidth: "300px",
+        minHeight: "100px",
     },
     details: {
         alignContent: "center",
@@ -17,11 +18,7 @@ const styles = {
     }
 }
 
-function SignalComponent({ signal }) {
-
-    function addSignal() {
-        console.log('add signal');
-    }
+function SignalComponent({ signal, isEdit = false, onSubmit }) {
 
     return (
         <Card variant="outlined" sx={styles.container}>
@@ -30,10 +27,12 @@ function SignalComponent({ signal }) {
     );
 
     function Component() {
+
         return (
             <CardContent sx={styles.details} >
                 <SignalDetails signal={signal} />
-                {/* <SignalForm signal={signal} /> */}
+                {/* {isEdit && <SignalForm signal={signal} />} */}
+                <SignalForm signal={signal} onSignalSubmit={onSubmit} />
             </CardContent>
         );
     }
@@ -44,7 +43,7 @@ function SignalComponent({ signal }) {
             <Box component="div" >
                 <Box component="div" borderBottom="1px solid">
                     <Typography variant="h5">
-                        {signal.symbol}
+                        {isEdit ? "" : "#" + signal.id + " "}{signal.symbol}
                     </Typography>
                     <Typography variant="body2" component="p">
                         Profit: 50$ / 10%
@@ -73,31 +72,101 @@ function SignalComponent({ signal }) {
 
     }
 
-    function SignalForm({ signal }) {
-
+    function SignalForm({ onSignalSubmit }) {
+        const [pairs, setPairs] = useState([
+            {
+                value: "BTC/ASS",
+                label: "BTC/ASS"
+            },
+            {
+                value: "ETH/ASS",
+                label: "ETH/ASS"
+            },
+        ]);
         const [price, setPrice] = useState(0);
+        const [pair, setPair] = useState(pairs[0]);
+
+        const submit = () => {
+            signal = {
+                id: 4,
+                symbol: "BTC/ASS",
+                position: 220,
+                entries: [
+                    {
+                        id: 1,
+                        dateTime: "2020-01-01:00:00:00",
+                        price: 50,
+                        side: "LONG",
+                        type: "MARKET",
+                        units: 100
+                    },
+                    {
+                        id: 2,
+                        dateTime: "2020-01-01:00:00:00",
+                        price: 75,
+                        side: "LONG",
+                        type: "MARKET",
+                        units: 100
+                    }
+                ],
+                exits: [
+                    {
+                        id: 1,
+                        dateTime: "2020-01-01:00:00:00",
+                        price: 62,
+                        side: "SHORT",
+                        type: "TAKE_PROFIT",
+                        units: 100
+                    },
+                    {
+                        id: 2,
+                        dateTime: "2020-01-01:00:00:00",
+                        price: 56,
+                        side: "SHORT",
+                        type: "STOP_LOSS",
+                        units: 100
+                    }
+                ]
+            };
+
+            console.log("SignalForm -> submit -> signal");
+            onSignalSubmit(signal);
+        }
+
+        
 
         return (
             <Box component="div" >
-                <Typography
-                    component="h2">
-                    Price: {signal.price}
-                </Typography>
-
                 <TextField
-                    // label="Price"
-                    variant="outlined"
-                    type="number"
+                    select
+                    label="Pair"
+                    variant="standard"
+                    disabled={!isEdit}
+                    value={pair}
+                    onChange={(e) => setPair(e.target.value)}>
+                    {pairs.map(pair => (
+                        <MenuItem key={pair.value} value={pair.value}>
+                            {pair.label}
+                        </MenuItem>
+                    ))}
+                </TextField>
+                <TextField
+                    label="Price"
+                    variant="standard"
+                    disabled={!isEdit}
                     value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                />
-                <Button
-                    variant="contained"
-                    endIcon={<AddBoxIcon />}
-                    // type="submit"
-                    onClick={addSignal}>
-                    Create
-                </Button>
+                    onChange={(e) => setPrice(e.target.value)} />
+                {isEdit &&
+                    <Button
+                        variant="contained"
+                        endIcon={<AddBoxIcon />}
+                        // type="submit"
+                        disabled={!isEdit}
+                        onClick={submit}>
+                        Save
+                    </Button>
+                }
+
             </Box>
         );
     }
