@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 import Typography from '@material-ui/core/Typography';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Box, Button } from '@mui/material';
 import SignalComponent from '../components/SignalComponent.jsx';
@@ -104,6 +104,11 @@ function HomePage() {
         }
     ]);
 
+    useEffect(() => {
+        const sorted = [...signals].sort((prevSignal, currSignal) => prevSignal.id > currSignal.id); // todo fix sorting for react hooks
+        // setSignals(sorted)
+    }, [signals]);
+
     const addSignal = (e) => {
         e.preventDefault();
         console.log('add signal');
@@ -112,20 +117,37 @@ function HomePage() {
     }
 
     const onSubmitSignal = (signal) => {
-        ArraysState.add(setSignals, signal);
+        const newSignal = signals.filter(s => s.id === signal.id).length === 0;
+        if (newSignal) {
+            ArraysState.add(setSignals, signal);
+        } else {
+            ArraysState.replaceByKey(setSignals, signal, "id")
+        }
+
+        setIsAddSignal(false);
         console.log('added signal to array', signal);
+    }
+
+    const onCancelSignal = () => {
+        setIsAddSignal(false);
+        console.log('cancelled signal editing');
     }
 
     const assembleSignal = (signal) =>
         <SignalComponent
             key={signal.id}
-            signal={signal} />
+            signal={signal}
+            onSubmit={onSubmitSignal}
+            onCancel={onCancelSignal}
+        />
 
     const assembleCreateSignal = () =>
         <SignalComponent
             signal={signal}
             isCreate={true}
-            onSubmit={onSubmitSignal} />
+            onSubmit={onSubmitSignal}
+            onCancel={onCancelSignal}
+        />
 
     return (
         <Box sx={styles.body}>

@@ -1,9 +1,15 @@
 import * as React from 'react';
 
 import Typography from '@material-ui/core/Typography';
-import { useState } from 'react';
-import { Box, Card, CardContent, TextField, Button, MenuItem, InputAdornment } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box, Card, CardContent, TextField, Button, MenuItem, InputAdornment, Container, Grid } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import IconButton from '@mui/material/IconButton';
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import CancelSharpIcon from '@mui/icons-material/CancelSharp';
+// import { AddBoxIcon, IconButton, MenuOutlinedIcon } from '@mui/icons-material';
+
 import { ObjectState } from "../utils/utils.jsx";
 
 const styles = {
@@ -19,17 +25,11 @@ const styles = {
     }
 }
 
-function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit }) {
-    const [pairs, setPairs] = useState([
-        {
-            value: "BTC/ASS",
-            label: "BTC/ASS"
-        },
-        {
-            value: "ETH/ASS",
-            label: "ETH/ASS"
-        },
-    ]);
+function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, onCancel }) {
+    const [pairs, setPairs] = useState(["BTC/ASS", "ETH/ASS", "XRP/USDT", "BTC/USDT"]);
+
+    const [isFormEdit, setIsFormEdit] = useState(isEdit);
+    const [isFormCreate, setIsFormCreate] = useState(isCreate);
 
     return (
         <Card variant="outlined" sx={styles.container}>
@@ -41,11 +41,12 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit })
 
         return (
             <CardContent sx={styles.details} >
-                {isEdit || isCreate ?
+                {/* {isModify() ?
                     <SignalForm signal={signal} onSignalSubmit={onSubmit} />
                     :
                     <SignalDetails signal={signal} />
-                }
+                } */}
+                <SignalForm signal={signal} onSignalSubmit={onSubmit} />
             </CardContent>
         );
     }
@@ -85,17 +86,21 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit })
 
     }
 
-    function SignalForm({ onSignalSubmit }) {
+    function SignalForm({ signal, onSignalSubmit }) {
 
-        const [price, setPrice] = useState(0);
-        const [pair, setPair] = useState(pairs[0]);
+        const [symbol, setSymbol] = useState("BTC/ASS");
         const [entries, setEntries] = useState([]);
         const [exits, setExits] = useState([]);
 
+        useEffect(() => {
+            if (signal.symbol)
+                setSymbol(signal.symbol);
+        }, [signal.symbol])
+
         const submit = () => {
-            if (isCreate) {
+            if (isFormCreate) {
                 onCreateSignalSubmit();
-            } else if (isEdit) {
+            } else if (isFormEdit) {
                 onEditSignalSubmit()
             } else {
                 console.error("isCreate or isEdit should be true");
@@ -103,43 +108,82 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit })
         }
 
         const onCreateSignalSubmit = () => {
-            // build signal and send POST
             const signal = {
-                symbol: pair.value,
-                price: price,
+                id: Math.random() * 1000,
+                symbol: symbol,
                 entries: entries,
                 exits: exits
             };
-            console.log("create", signal);
+            console.log("send POST", signal);
+            setIsFormCreate(false)
             onSignalSubmit(signal);
         }
-
+        
         const onEditSignalSubmit = () => {
-            // build signal and send PUT
-            ObjectState.set(signal, "symbol", pair.value);
-            ObjectState.set(signal, "price", price);
-            console.log("create", signal);
-            onSignalSubmit(signal);
+            const editedSignal = {
+                id: signal.id,
+                symbol: symbol,
+                entries: entries,
+                exits: exits
+            };
+            console.log("send PUT", editedSignal);
+            
+            setIsFormEdit(false)
+            onSignalSubmit(editedSignal);
+        }
+
+        const onSignalCancel = () => {
+            if (isFormCreate) {
+                onCancel();
+            } else if (isFormEdit) {
+                setIsFormEdit(false)
+            } else {
+                console.log("onSignalCancel Tried to press cancel button while form was neither in edit or create")
+            }
+        }
+
+        const onSignalEdit = () => {
+            if (!isFormEdit) {
+                setIsFormEdit(true);
+            } else if (isFormCreate) {
+                onCancel();
+            } else {
+                console.log("onSignalEdit Tried to press cancel button while form was neither in edit or create")
+            }
         }
 
         return (
-            <Box component="div" alignItems="center">
-                <Box component="div"  >
+            // <Container>
+            <Grid sx={{ direction: "column", }}>
+
+                <Box sx={{ textAlign: "right" }}>
+                    {isModify() ?
+                        <IconButton onClick={onSignalCancel}>
+                            <CancelSharpIcon />
+                        </IconButton>
+                        :
+                        <IconButton onClick={onSignalEdit}>
+                            <EditIcon />
+                        </IconButton>
+                    }
+                </Box>
+
+                <Box component="div">
                     <TextField
                         label="Pair"
                         select
                         sx={{ margin: "0 1rem", minWidth: "100px" }}
                         variant="standard"
                         disabled={!isModify()}
-                        value={pair.value}
-                        onChange={(e) => setPair(e.target)}>
+                        value={symbol}
+                        onChange={(e) => setSymbol(e.target.value)}>
                         {pairs.map(pair => (
-                            <MenuItem key={pair.value} value={pair.value}>
-                                {pair.label}
+                            <MenuItem key={pair} value={pair}>
+                                {pair}
                             </MenuItem>
                         ))}
                     </TextField>
-                    <TextField
+                    {/* <TextField
                         label="Price"
                         sx={{ margin: "0 1rem" }}
                         variant="standard"
@@ -149,7 +193,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit })
                         InputProps={{
                             startAdornment: <InputAdornment position="start">$</InputAdornment>,
                         }}
-                    />
+                    /> */}
                 </Box>
                 {isModify() &&
                     <Box component="div" display="flex" justifyContent="right">
@@ -162,12 +206,13 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit })
                         </Button>
                     </Box>
                 }
-            </Box>
+            </Grid>
+            // </Container>
         );
     }
 
     function isModify() {
-        return isEdit || isCreate;
+        return isFormEdit || isFormCreate;
     }
 }
 
