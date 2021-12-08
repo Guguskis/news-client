@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelSharpIcon from '@mui/icons-material/CancelSharp';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 // import { AddBoxIcon, IconButton, MenuOutlinedIcon } from '@mui/icons-material';
 
 import { ObjectState } from "../utils/utils.jsx";
@@ -118,7 +119,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             setIsFormCreate(false)
             onSignalSubmit(signal);
         }
-        
+
         const onEditSignalSubmit = () => {
             const editedSignal = {
                 id: signal.id,
@@ -127,7 +128,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 exits: exits
             };
             console.log("send PUT", editedSignal);
-            
+
             setIsFormEdit(false)
             onSignalSubmit(editedSignal);
         }
@@ -154,36 +155,42 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
         return (
             // <Container>
-            <Grid sx={{ direction: "column", }}>
+            <CardContent >
+                <Grid sx={{ direction: "column", justifyContent: "space-between" }} spacing={10}>
 
-                <Box sx={{ textAlign: "right" }}>
-                    {isModify() ?
-                        <IconButton onClick={onSignalCancel}>
-                            <CancelSharpIcon />
-                        </IconButton>
-                        :
-                        <IconButton onClick={onSignalEdit}>
-                            <EditIcon />
-                        </IconButton>
-                    }
-                </Box>
+                    <Box sx={{ textAlign: "right" }}>
+                        {isModify() ?
+                            <Grid sx={{justifyContent: "flex-end", alignItems: "center"}}>
+                                <IconButton onClick={onSignalCancel} color="error">
+                                    <DeleteForeverIcon />
+                                </IconButton>
+                                <IconButton onClick={onSignalCancel} color="primary">
+                                    <CancelSharpIcon fontSize="small" />
+                                </IconButton>
+                            </Grid>
+                            :
+                            <IconButton onClick={onSignalEdit} color="primary">
+                                <EditIcon />
+                            </IconButton>
+                        }
+                    </Box>
 
-                <Box component="div">
-                    <TextField
-                        label="Pair"
-                        select
-                        sx={{ margin: "0 1rem", minWidth: "100px" }}
-                        variant="standard"
-                        disabled={!isModify()}
-                        value={symbol}
-                        onChange={(e) => setSymbol(e.target.value)}>
-                        {pairs.map(pair => (
-                            <MenuItem key={pair} value={pair}>
-                                {pair}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    {/* <TextField
+                    <Box component="div" marginBottom="1rem">
+                        <TextField
+                            label="Pair"
+                            select
+                            sx={{ margin: "0 1rem", minWidth: "100px" }}
+                            variant="standard"
+                            disabled={!isModify()}
+                            value={symbol}
+                            onChange={(e) => setSymbol(e.target.value)}>
+                            {pairs.map(pair => (
+                                <MenuItem key={pair} value={pair}>
+                                    {pair}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        {/* <TextField
                         label="Price"
                         sx={{ margin: "0 1rem" }}
                         variant="standard"
@@ -194,19 +201,20 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                             startAdornment: <InputAdornment position="start">$</InputAdornment>,
                         }}
                     /> */}
-                </Box>
-                {isModify() &&
-                    <Box component="div" display="flex" justifyContent="right">
-                        <Button
-                            variant="contained"
-                            endIcon={<AddBoxIcon />}
-                            disabled={!isModify()}
-                            onClick={submit}>
-                            Save
-                        </Button>
                     </Box>
-                }
-            </Grid>
+                    {isModify() &&
+                        <Box component="div" display="flex" justifyContent="right">
+                            <Button
+                                variant="contained"
+                                endIcon={<AddBoxIcon />}
+                                disabled={!isModify()}
+                                onClick={submit}>
+                                Save
+                            </Button>
+                        </Box>
+                    }
+                </Grid>
+            </CardContent>
             // </Container>
         );
     }
