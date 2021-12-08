@@ -22,10 +22,6 @@ const styles = {
 function HomePage() {
 
     const [isAddSignal, setIsAddSignal] = useState(false);
-    const [signal, setSignal] = useState({
-        entries: [],
-        exits: []
-    });
 
     const [signals, setSignals] = useState([
         {

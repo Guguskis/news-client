@@ -62,20 +62,13 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
     return (
         <Card variant="outlined" sx={styles.container} key="signal-component">
-            <Component />
+            <CardContent sx={styles.details} >
+                <SignalForm onSignalSubmit={onSubmit} />
+            </CardContent>
         </Card>
     );
 
-    function Component() {
-
-        return (
-            <CardContent sx={styles.details} >
-                <SignalForm signal={signal} onSignalSubmit={onSubmit} />
-            </CardContent>
-        );
-    }
-
-    function SignalForm({ signal, onSignalSubmit }) {
+    function SignalForm({ onSignalSubmit }) {
 
         const submit = () => {
             if (isFormCreate) {
@@ -159,7 +152,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                             label="#"
                             variant="standard"
                             sx={{ width: "2rem" }}
-                            value={signal.id}
+                            value={id}
                             disabled>
                         </TextField>
 
@@ -200,10 +193,10 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     /> */}
                     </Box>
                     <Grid marginBottom="0.5rem" padding="0.5rem">
-                        {signal.entries.map(assembleEntry)}
+                        {entries.map(assembleEntry)}
                     </Grid >
                     <Grid marginBottom="0.5rem" padding="0.5rem">
-                        {signal.exits.map(assembleExit)}
+                        {exits.map(assembleExit)}
                     </Grid>
                     {isModify() &&
                         <Box component="div" display="flex" justifyContent="right">
