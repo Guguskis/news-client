@@ -130,7 +130,7 @@ function HomePage() {
 
     const onCancelSignal = () => {
         setIsAddSignal(false);
-        console.log('cancelled signal editing');
+        console.log('cancelled create new signal');
     }
 
     const assembleSignal = (signal) =>
