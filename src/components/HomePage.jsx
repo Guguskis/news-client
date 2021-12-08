@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Box, Button } from '@mui/material';
 import SignalComponent from '../components/SignalComponent.jsx';
 import AddBoxIcon from '@mui/icons-material/AddBox'
-import {ArraysState} from "../utils/utils.jsx";
+import { ArraysState } from "../utils/utils.jsx";
 
 const styles = {
     body: {
@@ -117,7 +117,15 @@ function HomePage() {
     }
 
     const assembleSignal = (signal) =>
-        <SignalComponent key={signal.id} signal={signal} />
+        <SignalComponent
+            key={signal.id}
+            signal={signal} />
+
+    const assembleCreateSignal = () =>
+        <SignalComponent
+            signal={signal}
+            isCreate={true}
+            onSubmit={onSubmitSignal} />
 
     return (
         <Box sx={styles.body}>
@@ -135,15 +143,10 @@ function HomePage() {
                     Add Signal
                 </Button>
             </Box>
-            {isAddSignal && <SignalComponent signal={signal} isEdit={true} onSubmit={onSubmitSignal} />}
+            {isAddSignal && assembleCreateSignal()}
             {signals.map(assembleSignal)}
         </Box>
     );
-
-    function CreateSignalCard() {
-
-    }
-
 };
 
 export default HomePage;
