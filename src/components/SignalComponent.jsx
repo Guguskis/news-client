@@ -39,7 +39,6 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     const [exits, setExits] = useState([]);
 
     useEffect(() => {
-        console.log("signal binded", signal)
         bindSignalStateFields(signal);
     }, [signal])
 
@@ -56,9 +55,14 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             setId(signal.id)
         if (signal.symbol)
             setSymbol(signal.symbol)
-        setChannel(signal.channel)
-        setEntries(signal.entries)
-        setExits(signal.exits)
+        if (signal.channel)
+            setChannel(signal.channel)
+        if (signal.entries)
+            setEntries(signal.entries)
+        if (signal.exits)
+            setExits(signal.exits)
+
+        console.log("signal binded", signal)
     }
 
     const submit = () => {
@@ -168,9 +172,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                             variant="standard"
                             disabled={!isModify()}
                             value={channel}
-                            onChange={(e) => setChannel(e.target.value)}
-                        // autoFocus
-                        >
+                            onChange={(e) => setChannel(e.target.value)}>
                         </TextField>
                         {/* <TextField
                         label="Price"
