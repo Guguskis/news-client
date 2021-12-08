@@ -51,6 +51,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     }, [exits])
 
     const bindSignalStateFields = (signal) => {
+        if (!signal) return;
         if (signal.id)
             setId(signal.id)
         if (signal.symbol)
@@ -60,76 +61,66 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         setExits(signal.exits)
     }
 
+    const submit = () => {
+        if (isFormCreate) {
+            onCreateSignalSubmit();
+        } else if (isFormEdit) {
+            onEditSignalSubmit()
+        } else {
+            console.error("isCreate or isEdit should be true");
+        }
+    }
+
+    const onCreateSignalSubmit = () => {
+        const signal = {
+            id: Math.random() * 1000,
+            symbol: symbol,
+            channel: channel,
+            entries: entries,
+            exits: exits
+        };
+        console.log("send POST", signal);
+        setIsFormCreate(false)
+        onSubmit(signal);
+    }
+
+    const onEditSignalSubmit = () => {
+        const editedSignal = {
+            id: id,
+            symbol: symbol,
+            entries: entries,
+            exits: exits
+        };
+        console.log("send PUT", editedSignal);
+
+        setIsFormEdit(false)
+        onSubmit(editedSignal);
+    }
+
+    const onSignalCancel = () => {
+        if (isFormCreate) {
+            onCancel();
+        } else if (isFormEdit) {
+            setIsFormEdit(false)
+        } else {
+            console.log("onSignalCancel Tried to press cancel button while form was neither in edit or create")
+        }
+    }
+
+    const onSignalEdit = () => {
+        if (!isFormEdit) {
+            setIsFormEdit(true);
+        } else if (isFormCreate) {
+            onCancel();
+        } else {
+            console.log("onSignalEdit Tried to press cancel button while form was neither in edit or create")
+        }
+    }
+
     return (
         <Card variant="outlined" sx={styles.container} key="signal-component">
             <CardContent sx={styles.details} >
-                <SignalForm onSignalSubmit={onSubmit} />
-            </CardContent>
-        </Card>
-    );
-
-    function SignalForm({ onSignalSubmit }) {
-
-        const submit = () => {
-            if (isFormCreate) {
-                onCreateSignalSubmit();
-            } else if (isFormEdit) {
-                onEditSignalSubmit()
-            } else {
-                console.error("isCreate or isEdit should be true");
-            }
-        }
-
-        const onCreateSignalSubmit = () => {
-            const signal = {
-                id: Math.random() * 1000,
-                symbol: symbol,
-                entries: entries,
-                exits: exits
-            };
-            console.log("send POST", signal);
-            setIsFormCreate(false)
-            onSignalSubmit(signal);
-        }
-
-        const onEditSignalSubmit = () => {
-            const editedSignal = {
-                id: signal.id,
-                symbol: symbol,
-                entries: entries,
-                exits: exits
-            };
-            console.log("send PUT", editedSignal);
-
-            setIsFormEdit(false)
-            onSignalSubmit(editedSignal);
-        }
-
-        const onSignalCancel = () => {
-            if (isFormCreate) {
-                onCancel();
-            } else if (isFormEdit) {
-                setIsFormEdit(false)
-            } else {
-                console.log("onSignalCancel Tried to press cancel button while form was neither in edit or create")
-            }
-        }
-
-        const onSignalEdit = () => {
-            if (!isFormEdit) {
-                setIsFormEdit(true);
-            } else if (isFormCreate) {
-                onCancel();
-            } else {
-                console.log("onSignalEdit Tried to press cancel button while form was neither in edit or create")
-            }
-        }
-
-        return (
-            // <Container>
-            <CardContent >
                 <Grid sx={{ direction: "column", justifyContent: "space-between" }}>
-
                     <Box sx={{ textAlign: "right" }}>
                         {isModify() ?
                             <Grid sx={{ justifyContent: "flex-end", alignItems: "center" }}>
@@ -148,13 +139,14 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     </Box>
 
                     <Box component="div" marginBottom="1rem">
-                        <TextField
+                        {(id >= 0) && <TextField
                             label="#"
                             variant="standard"
                             sx={{ width: "2rem" }}
                             value={id}
                             disabled>
-                        </TextField>
+                        </TextField>}
+
 
                         <TextField
                             label="Pair"
@@ -211,28 +203,26 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     }
                 </Grid>
             </CardContent>
-            // </Container>
-        );
+        </Card>
+    );
 
-        function assembleEntry(entry) {
-            return (
-                <Grid key={entry.id} flexDirection="row">
-                    <Typography key={entry.id} variant="body2" component="p" sx={{ border: "1px solid red" }}>
-                        Entry {entry.price} $
-                    </Typography>
-                </Grid>
-            )
-        }
-
-        function assembleExit(exit) {
-            return (
-                <Typography key={exit.id} variant="body2" component="p" align="right">
-                    {exit.price} $ Exit
+    function assembleEntry(entry) {
+        return (
+            <Grid key={entry.id} flexDirection="row">
+                <Typography key={entry.id} variant="body2" component="p" >
+                    Entry {entry.price} $
                 </Typography>
-            )
-        }
+            </Grid>
+        )
     }
 
+    function assembleExit(exit) {
+        return (
+            <Typography key={exit.id} variant="body2" component="p" align="right">
+                {exit.price} $ Exit
+            </Typography>
+        )
+    }
     function isModify() {
         return isFormEdit || isFormCreate;
     }

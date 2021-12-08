@@ -139,7 +139,6 @@ function HomePage() {
 
     const assembleCreateSignal = () =>
         <SignalComponent
-            signal={signal}
             isCreate={true}
             onSubmit={onSubmitSignal}
             onCancel={onCancelSignal}
