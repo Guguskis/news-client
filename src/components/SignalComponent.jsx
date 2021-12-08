@@ -42,13 +42,6 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         bindSignalStateFields(signal);
     }, [signal])
 
-    useEffect(() => {
-        console.log("updated entries", entries)
-    }, [entries])
-    useEffect(() => {
-        console.log("updated exits", exits)
-    }, [exits])
-
     const bindSignalStateFields = (signal) => {
         if (!signal) return;
         if (signal.id)
@@ -174,17 +167,6 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                             value={channel}
                             onChange={(e) => setChannel(e.target.value)}>
                         </TextField>
-                        {/* <TextField
-                        label="Price"
-                        sx={{ margin: "0 1rem" }}
-                        variant="standard"
-                        disabled={!isModify()}
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                        }}
-                    /> */}
                     </Box>
                     <Grid marginBottom="0.5rem" padding="0.5rem">
                         {entries.map(assembleEntry)}
