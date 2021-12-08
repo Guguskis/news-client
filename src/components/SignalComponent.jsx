@@ -32,8 +32,36 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     const [isFormEdit, setIsFormEdit] = useState(isEdit);
     const [isFormCreate, setIsFormCreate] = useState(isCreate);
 
+    const [id, setId] = useState(-1);
+    const [symbol, setSymbol] = useState("BTC/ASS");
+    const [channel, setChannel] = useState("");
+    const [entries, setEntries] = useState([]);
+    const [exits, setExits] = useState([]);
+
+    useEffect(() => {
+        console.log("signal binded", signal)
+        bindSignalStateFields(signal);
+    }, [signal])
+
+    useEffect(() => {
+        console.log("updated entries", entries)
+    }, [entries])
+    useEffect(() => {
+        console.log("updated exits", exits)
+    }, [exits])
+
+    const bindSignalStateFields = (signal) => {
+        if (signal.id)
+            setId(signal.id)
+        if (signal.symbol)
+            setSymbol(signal.symbol)
+        setChannel(signal.channel)
+        setEntries(signal.entries)
+        setExits(signal.exits)
+    }
+
     return (
-        <Card variant="outlined" sx={styles.container}>
+        <Card variant="outlined" sx={styles.container} key="signal-component">
             <Component />
         </Card>
     );
@@ -42,61 +70,12 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
         return (
             <CardContent sx={styles.details} >
-                {/* {isModify() ?
-                    <SignalForm signal={signal} onSignalSubmit={onSubmit} />
-                    :
-                    <SignalDetails signal={signal} />
-                } */}
                 <SignalForm signal={signal} onSignalSubmit={onSubmit} />
             </CardContent>
         );
     }
 
-    function SignalDetails({ signal }) {
-
-        return (
-            <Box component="div" >
-                <Box component="div" borderBottom="1px solid">
-                    <Typography variant="h5">
-                        {isEdit ? "" : "#" + signal.id + " "}{signal.symbol}
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                        Profit: 50$ / 10%
-                    </Typography>
-                </Box>
-                <Box component="div" >{signal.entries.map(assembleEntry)}</Box>
-                <Box component="div" >{signal.exits.map(assembleExit)}</Box>
-            </Box>
-        );
-
-        function assembleEntry(entry) {
-            return (
-                <Typography key={entry.id} variant="body2" component="p">
-                    Entry {entry.price} $
-                </Typography>
-            )
-        }
-
-        function assembleExit(exit) {
-            return (
-                <Typography key={exit.id} variant="body2" component="p" align="right">
-                    {exit.price} $ Exit
-                </Typography>
-            )
-        }
-
-    }
-
     function SignalForm({ signal, onSignalSubmit }) {
-
-        const [symbol, setSymbol] = useState("BTC/ASS");
-        const [entries, setEntries] = useState([]);
-        const [exits, setExits] = useState([]);
-
-        useEffect(() => {
-            if (signal.symbol)
-                setSymbol(signal.symbol);
-        }, [signal.symbol])
 
         const submit = () => {
             if (isFormCreate) {
@@ -156,11 +135,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         return (
             // <Container>
             <CardContent >
-                <Grid sx={{ direction: "column", justifyContent: "space-between" }} spacing={10}>
+                <Grid sx={{ direction: "column", justifyContent: "space-between" }}>
 
                     <Box sx={{ textAlign: "right" }}>
                         {isModify() ?
-                            <Grid sx={{justifyContent: "flex-end", alignItems: "center"}}>
+                            <Grid sx={{ justifyContent: "flex-end", alignItems: "center" }}>
                                 <IconButton onClick={onSignalCancel} color="error">
                                     <DeleteForeverIcon />
                                 </IconButton>
@@ -177,6 +156,14 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
                     <Box component="div" marginBottom="1rem">
                         <TextField
+                            label="#"
+                            variant="standard"
+                            sx={{ width: "2rem" }}
+                            value={signal.id}
+                            disabled>
+                        </TextField>
+
+                        <TextField
                             label="Pair"
                             select
                             sx={{ margin: "0 1rem", minWidth: "100px" }}
@@ -190,6 +177,16 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                                 </MenuItem>
                             ))}
                         </TextField>
+                        <TextField
+                            label="Signal group"
+                            sx={{ margin: "0 1rem", minWidth: "100px" }}
+                            variant="standard"
+                            disabled={!isModify()}
+                            value={channel}
+                            onChange={(e) => setChannel(e.target.value)}
+                        // autoFocus
+                        >
+                        </TextField>
                         {/* <TextField
                         label="Price"
                         sx={{ margin: "0 1rem" }}
@@ -202,6 +199,12 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                         }}
                     /> */}
                     </Box>
+                    <Grid marginBottom="0.5rem" padding="0.5rem">
+                        {signal.entries.map(assembleEntry)}
+                    </Grid >
+                    <Grid marginBottom="0.5rem" padding="0.5rem">
+                        {signal.exits.map(assembleExit)}
+                    </Grid>
                     {isModify() &&
                         <Box component="div" display="flex" justifyContent="right">
                             <Button
@@ -217,6 +220,24 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             </CardContent>
             // </Container>
         );
+
+        function assembleEntry(entry) {
+            return (
+                <Grid key={entry.id} flexDirection="row">
+                    <Typography key={entry.id} variant="body2" component="p" sx={{ border: "1px solid red" }}>
+                        Entry {entry.price} $
+                    </Typography>
+                </Grid>
+            )
+        }
+
+        function assembleExit(exit) {
+            return (
+                <Typography key={exit.id} variant="body2" component="p" align="right">
+                    {exit.price} $ Exit
+                </Typography>
+            )
+        }
     }
 
     function isModify() {
