@@ -21,8 +21,6 @@ const styles = {
     },
     details: {
         alignContent: "center",
-        color: "primary.main",
-        padding: "0 1rem"
     }
 }
 
@@ -143,8 +141,6 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                             value={id}
                             disabled>
                         </TextField>}
-
-
                         <TextField
                             label="Pair"
                             select
