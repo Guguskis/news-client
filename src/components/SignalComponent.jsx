@@ -117,6 +117,20 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         }
     }
 
+    const onCreateTrigger = (type) => {
+        if (isFormCreate) {
+            // open modal
+            // don't send HTTP request
+            console.log("CREATE")
+        } else if (isFormEdit) {
+            // open modal
+            // send POST signal/id/trigger
+            console.log("EDIT")
+        } else {
+            console.log("onCreateTrigger Tried to press cancel button while form was neither in edit or create")
+        }
+    }
+
     return (
         <Card variant="outlined" sx={styles.container} key="signal-component">
             <CardContent sx={styles.details} >
@@ -209,9 +223,10 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 <Typography variant="h6" component="h2">
                     Entries
                 </Typography>
-                <IconButton onClick={onSignalCancel} color="primary">
-                    <AddBoxIcon />
-                </IconButton>
+                {isModify() &&
+                    <IconButton onClick={() => onCreateTrigger("entry")} color="primary">
+                        <AddBoxIcon />
+                    </IconButton>}
             </Grid>
             <Grid marginBottom="0.5rem" padding="0.5rem">
                 {entries.map(assembleTrigger)}
@@ -225,9 +240,10 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 <Typography variant="h6" component="h2">
                     Exits
                 </Typography>
-                <IconButton onClick={onSignalCancel} color="primary">
-                    <AddBoxIcon />
-                </IconButton>
+                {isModify() &&
+                    <IconButton onClick={() => onCreateTrigger("entry")} color="primary">
+                        <AddBoxIcon />
+                    </IconButton>}
             </Grid>
             <Grid marginBottom="0.5rem" padding="0.5rem">
                 {exits.map(assembleTrigger)}
