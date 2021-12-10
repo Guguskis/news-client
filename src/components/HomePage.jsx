@@ -16,6 +16,7 @@ const styles = {
         alignItems: "center",
         flexDirection: "column",
         color: "primary.main",
+        padding: "2rem"
     }
 }
 
