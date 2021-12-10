@@ -15,7 +15,7 @@ import { ObjectState } from "../utils/utils.jsx";
 
 const styles = {
     container: {
-        marginBottom: "10px",
+        marginBottom: "1rem",
         minWidth: "300px",
         minHeight: "100px",
     },
@@ -164,9 +164,25 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                             onChange={(e) => setChannel(e.target.value)}>
                         </TextField>
                     </Box>
+                    <Grid display="flex" flexDirection="row" alignItems="center">
+                        <Typography variant="h6" component="h2">
+                            Entries
+                        </Typography>
+                        <IconButton onClick={onSignalCancel} color="primary">
+                            <AddBoxIcon />
+                        </IconButton>
+                    </Grid>
                     <Grid marginBottom="0.5rem" padding="0.5rem">
                         {entries.map(assembleEntry)}
                     </Grid >
+                    <Grid display="flex" flexDirection="row" alignItems="center">
+                        <Typography variant="h6" component="h2">
+                            Exits
+                        </Typography>
+                        <IconButton onClick={onSignalCancel} color="primary">
+                            <AddBoxIcon />
+                        </IconButton>
+                    </Grid>
                     <Grid marginBottom="0.5rem" padding="0.5rem">
                         {exits.map(assembleExit)}
                     </Grid>
@@ -190,7 +206,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         return (
             <Grid key={entry.id} flexDirection="row">
                 <Typography key={entry.id} variant="body2" component="p" >
-                    Entry {entry.price} $
+                    {entry.price} $
                 </Typography>
             </Grid>
         )
@@ -198,8 +214,8 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
     function assembleExit(exit) {
         return (
-            <Typography key={exit.id} variant="body2" component="p" align="right">
-                {exit.price} $ Exit
+            <Typography key={exit.id} variant="body2" component="p">
+                {exit.price} $
             </Typography>
         )
     }
