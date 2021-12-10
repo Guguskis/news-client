@@ -131,48 +131,35 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         </Card>
     );
 
-    function SaveButton() {
-        return <Box component="div" display="flex" justifyContent="right">
-            <Button
-                variant="contained"
-                endIcon={<AddBoxIcon />}
-                disabled={!isModify()}
-                onClick={submit}>
-                Save
-            </Button>
-        </Box>;
-    }
-
-    function EntrySection() {
-        return <>
-            <Grid display="flex" flexDirection="row" alignItems="center">
-                <Typography variant="h6" component="h2">
-                    Entries
-                </Typography>
-                <IconButton onClick={onSignalCancel} color="primary">
-                    <AddBoxIcon />
-                </IconButton>
-            </Grid>
-            <Grid marginBottom="0.5rem" padding="0.5rem">
-                {entries.map(assembleTrigger)}
-            </Grid>
-        </>;
-    }
-
-    function ExitSection() {
-        return <>
-            <Grid display="flex" flexDirection="row" alignItems="center">
-                <Typography variant="h6" component="h2">
-                    Exits
-                </Typography>
-                <IconButton onClick={onSignalCancel} color="primary">
-                    <AddBoxIcon />
-                </IconButton>
-            </Grid>
-            <Grid marginBottom="0.5rem" padding="0.5rem">
-                {exits.map(assembleTrigger)}
-            </Grid>
-        </>;
+    function ActionsBar() {
+        return <Grid sx={{ direction: "row", justifyContent: "space-between", display: "flex" }}>
+            <Box sx={{ textAlign: "left", paddingLeft: "1rem" }} component="span">
+                {(id >= 0) && <TextField
+                    label="#"
+                    component="span"
+                    variant="standard"
+                    sx={{ width: "2rem" }}
+                    value={id}
+                    disabled>
+                </TextField>}
+            </Box>
+            <Box sx={{ textAlign: "right" }} component="span">
+                {isModify() ?
+                    <Box component="span" sx={{ justifyContent: "flex-end", alignItems: "center" }}>
+                        {isFormEdit &&
+                            <IconButton onClick={onSignalCancel} color="error">
+                                <DeleteForeverIcon />
+                            </IconButton>}
+                        <IconButton onClick={onSignalCancel} color="primary">
+                            <CancelSharpIcon fontSize="small" />
+                        </IconButton>
+                    </Box>
+                    :
+                    <IconButton onClick={onSignalEdit} color="primary">
+                        <EditIcon />
+                    </IconButton>}
+            </Box>
+        </Grid>;
     }
 
     function DetailsSection() {
@@ -216,35 +203,48 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         </Box>;
     }
 
-    function ActionsBar() {
-        return <Grid sx={{ direction: "row", justifyContent: "space-between", display: "flex" }}>
-            <Box sx={{ textAlign: "left", paddingLeft: "1rem" }} component="span">
-                {(id >= 0) && <TextField
-                    label="#"
-                    component="span"
-                    variant="standard"
-                    sx={{ width: "2rem" }}
-                    value={id}
-                    disabled>
-                </TextField>}
-            </Box>
-            <Box sx={{ textAlign: "right" }} component="span">
-                {isModify() ?
-                    <Box component="span" sx={{ justifyContent: "flex-end", alignItems: "center" }}>
-                        {isFormEdit &&
-                            <IconButton onClick={onSignalCancel} color="error">
-                                <DeleteForeverIcon />
-                            </IconButton>}
-                        <IconButton onClick={onSignalCancel} color="primary">
-                            <CancelSharpIcon fontSize="small" />
-                        </IconButton>
-                    </Box>
-                    :
-                    <IconButton onClick={onSignalEdit} color="primary">
-                        <EditIcon />
-                    </IconButton>}
-            </Box>
-        </Grid>;
+    function EntrySection() {
+        return <>
+            <Grid display="flex" flexDirection="row" alignItems="center">
+                <Typography variant="h6" component="h2">
+                    Entries
+                </Typography>
+                <IconButton onClick={onSignalCancel} color="primary">
+                    <AddBoxIcon />
+                </IconButton>
+            </Grid>
+            <Grid marginBottom="0.5rem" padding="0.5rem">
+                {entries.map(assembleTrigger)}
+            </Grid>
+        </>;
+    }
+
+    function ExitSection() {
+        return <>
+            <Grid display="flex" flexDirection="row" alignItems="center">
+                <Typography variant="h6" component="h2">
+                    Exits
+                </Typography>
+                <IconButton onClick={onSignalCancel} color="primary">
+                    <AddBoxIcon />
+                </IconButton>
+            </Grid>
+            <Grid marginBottom="0.5rem" padding="0.5rem">
+                {exits.map(assembleTrigger)}
+            </Grid>
+        </>;
+    }
+
+    function SaveButton() {
+        return <Box component="div" display="flex" justifyContent="right">
+            <Button
+                variant="contained"
+                endIcon={<AddBoxIcon />}
+                disabled={!isModify()}
+                onClick={submit}>
+                Save
+            </Button>
+        </Box>;
     }
 
     function assembleTrigger(trigger) {
