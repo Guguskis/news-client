@@ -130,7 +130,44 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             <CardContent sx={styles.details} >
                 <Grid sx={{ direction: "column", justifyContent: "space-between" }}>
                     <ActionsBar />
-                    <DetailsSection />
+                    <Box component="div" marginBottom="1rem">
+                        <TextField
+                            label="Pair"
+                            select
+                            sx={{ margin: "0 1rem", minWidth: "100px" }}
+                            variant="standard"
+                            disabled={!isSignalCreate}
+                            value={symbol}
+                            onChange={(e) => setSymbol(e.target.value)}>
+                            {pairs.map(pair => (
+                                <MenuItem key={pair} value={pair}>
+                                    {pair}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <TextField
+                            label="Side"
+                            select
+                            sx={{ margin: "0 1rem", minWidth: "100px" }}
+                            variant="standard"
+                            disabled={!isSignalCreate}
+                            value={side}
+                            onChange={(e) => setSide(e.target.value)}>
+                            {sides.map(side => (
+                                <MenuItem key={side} value={side}>
+                                    {side}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <TextField
+                            label="Channel"
+                            sx={{ margin: "0 1rem", minWidth: "100px" }}
+                            variant="standard"
+                            disabled={!isModify()}
+                            value={channel}
+                            onChange={(e) => setChannel(e.target.value)}>
+                        </TextField>
+                    </Box>
                     {!isSignalCreate && <EntrySection />}
                     {!isSignalCreate && <ExitSection />}
                     {isModify() && <SaveButton />}
@@ -168,47 +205,6 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     </IconButton>}
             </Box>
         </Grid>;
-    }
-
-    function DetailsSection() {
-        return <Box component="div" marginBottom="1rem">
-            <TextField
-                label="Pair"
-                select
-                sx={{ margin: "0 1rem", minWidth: "100px" }}
-                variant="standard"
-                disabled={!isSignalCreate}
-                value={symbol}
-                onChange={(e) => setSymbol(e.target.value)}>
-                {pairs.map(pair => (
-                    <MenuItem key={pair} value={pair}>
-                        {pair}
-                    </MenuItem>
-                ))}
-            </TextField>
-            <TextField
-                label="Side"
-                select
-                sx={{ margin: "0 1rem", minWidth: "100px" }}
-                variant="standard"
-                disabled={!isSignalCreate}
-                value={side}
-                onChange={(e) => setSide(e.target.value)}>
-                {sides.map(side => (
-                    <MenuItem key={side} value={side}>
-                        {side}
-                    </MenuItem>
-                ))}
-            </TextField>
-            <TextField
-                label="Channel"
-                sx={{ margin: "0 1rem", minWidth: "100px" }}
-                variant="standard"
-                disabled={!isModify()}
-                value={channel}
-                onChange={(e) => setChannel(e.target.value)}>
-            </TextField>
-        </Box>;
     }
 
     function EntrySection() {
