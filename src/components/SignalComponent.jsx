@@ -121,31 +121,37 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         <Card variant="outlined" sx={styles.container} key="signal-component">
             <CardContent sx={styles.details} >
                 <Grid sx={{ direction: "column", justifyContent: "space-between" }}>
-                    <Box sx={{ textAlign: "right" }}>
-                        {isModify() ?
-                            <Grid sx={{ justifyContent: "flex-end", alignItems: "center" }}>
-                                <IconButton onClick={onSignalCancel} color="error">
-                                    <DeleteForeverIcon />
+                    <Grid sx={{ direction: "row", justifyContent: "space-between", display: "flex" }}>
+                        <Box sx={{ textAlign: "left", paddingLeft: "1rem" }} component="span">
+                            {(id >= 0) && <TextField
+                                label="#"
+                                component="span"
+                                variant="standard"
+                                sx={{ width: "2rem" }}
+                                value={id}
+                                disabled>
+                            </TextField>}
+                        </Box>
+                        <Box sx={{ textAlign: "right" }} component="span">
+                            {isModify() ?
+                                <Box component="span" sx={{ justifyContent: "flex-end", alignItems: "center" }}>
+                                    {isFormEdit &&
+                                        <IconButton onClick={onSignalCancel} color="error">
+                                            <DeleteForeverIcon />
+                                        </IconButton>}
+                                    <IconButton onClick={onSignalCancel} color="primary">
+                                        <CancelSharpIcon fontSize="small" />
+                                    </IconButton>
+                                </Box>
+                                :
+                                <IconButton onClick={onSignalEdit} color="primary">
+                                    <EditIcon />
                                 </IconButton>
-                                <IconButton onClick={onSignalCancel} color="primary">
-                                    <CancelSharpIcon fontSize="small" />
-                                </IconButton>
-                            </Grid>
-                            :
-                            <IconButton onClick={onSignalEdit} color="primary">
-                                <EditIcon />
-                            </IconButton>
-                        }
-                    </Box>
+                            }
+                        </Box>
+                    </Grid>
 
                     <Box component="div" marginBottom="1rem">
-                        {(id >= 0) && <TextField
-                            label="#"
-                            variant="standard"
-                            sx={{ width: "2rem" }}
-                            value={id}
-                            disabled>
-                        </TextField>}
                         <TextField
                             label="Pair"
                             select
