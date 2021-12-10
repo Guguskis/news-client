@@ -26,12 +26,14 @@ const styles = {
 
 function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, onCancel }) {
     const [pairs, setPairs] = useState(["BTC/ASS", "ETH/ASS", "XRP/USDT", "BTC/USDT"]);
+    const [sides, setSides] = useState(["LONG", "SHORT"]);
 
     const [isFormEdit, setIsFormEdit] = useState(isEdit);
     const [isFormCreate, setIsFormCreate] = useState(isCreate);
 
     const [id, setId] = useState(-1);
     const [symbol, setSymbol] = useState("BTC/ASS");
+    const [side, setSide] = useState("LONG");
     const [channel, setChannel] = useState("");
     const [entries, setEntries] = useState([]);
     const [exits, setExits] = useState([]);
@@ -46,6 +48,8 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             setId(signal.id)
         if (signal.symbol)
             setSymbol(signal.symbol)
+        if (signal.side)
+            setSide(signal.side)
         if (signal.channel)
             setChannel(signal.channel)
         if (signal.entries)
@@ -70,6 +74,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         const signal = {
             id: Math.random() * 1000,
             symbol: symbol,
+            side: side,
             channel: channel,
             entries: entries,
             exits: exits
@@ -146,7 +151,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                             select
                             sx={{ margin: "0 1rem", minWidth: "100px" }}
                             variant="standard"
-                            disabled={!isModify()}
+                            disabled={!isFormCreate}
                             value={symbol}
                             onChange={(e) => setSymbol(e.target.value)}>
                             {pairs.map(pair => (
@@ -156,7 +161,21 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                             ))}
                         </TextField>
                         <TextField
-                            label="Signal group"
+                            label="Side"
+                            select
+                            sx={{ margin: "0 1rem", minWidth: "100px" }}
+                            variant="standard"
+                            disabled={!isFormCreate}
+                            value={side}
+                            onChange={(e) => setSide(e.target.value)}>
+                            {sides.map(side => (
+                                <MenuItem key={side} value={side}>
+                                    {side}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <TextField
+                            label="Channel"
                             sx={{ margin: "0 1rem", minWidth: "100px" }}
                             variant="standard"
                             disabled={!isModify()}
@@ -173,7 +192,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                         </IconButton>
                     </Grid>
                     <Grid marginBottom="0.5rem" padding="0.5rem">
-                        {entries.map(assembleEntry)}
+                        {entries.map(assembleTrigger)}
                     </Grid >
                     <Grid display="flex" flexDirection="row" alignItems="center">
                         <Typography variant="h6" component="h2">
@@ -184,7 +203,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                         </IconButton>
                     </Grid>
                     <Grid marginBottom="0.5rem" padding="0.5rem">
-                        {exits.map(assembleExit)}
+                        {exits.map(assembleTrigger)}
                     </Grid>
                     {isModify() &&
                         <Box component="div" display="flex" justifyContent="right">
@@ -202,23 +221,17 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         </Card>
     );
 
-    function assembleEntry(entry) {
+    function assembleTrigger(trigger) {
         return (
-            <Grid key={entry.id} flexDirection="row">
-                <Typography key={entry.id} variant="body2" component="p" >
-                    {entry.price} $
+            <Grid key={trigger.id} flexDirection="row">
+                <Typography key={trigger.id} variant="body2" component="p" >
+                    {/* {trigger.price} $ */}
+                    Type | Price | Units | Executed
                 </Typography>
             </Grid>
         )
     }
 
-    function assembleExit(exit) {
-        return (
-            <Typography key={exit.id} variant="body2" component="p">
-                {exit.price} $
-            </Typography>
-        )
-    }
     function isModify() {
         return isFormEdit || isFormCreate;
     }
