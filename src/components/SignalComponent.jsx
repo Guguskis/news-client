@@ -28,8 +28,8 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     const [pairs, setPairs] = useState(["BTC/ASS", "ETH/ASS", "XRP/USDT", "BTC/USDT"]);
     const [sides, setSides] = useState(["LONG", "SHORT"]);
 
-    const [isFormEdit, setIsFormEdit] = useState(isEdit);
-    const [isFormCreate, setIsFormCreate] = useState(isCreate);
+    const [isSignalEdit, setIsSignalEdit] = useState(isEdit);
+    const [isSignalCreate, setIsSignalCreate] = useState(isCreate);
 
     const [id, setId] = useState(-1);
     const [symbol, setSymbol] = useState("BTC/ASS");
@@ -61,9 +61,9 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     }
 
     const submit = () => {
-        if (isFormCreate) {
+        if (isSignalCreate) {
             onCreateSignalSubmit();
-        } else if (isFormEdit) {
+        } else if (isSignalEdit) {
             onEditSignalSubmit()
         } else {
             console.error("isCreate or isEdit should be true");
@@ -80,7 +80,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             exits: exits
         };
         console.log("send POST", signal);
-        setIsFormCreate(false)
+        setIsSignalCreate(false)
         onSubmit(signal);
     }
 
@@ -93,24 +93,24 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         };
         console.log("send PUT", editedSignal);
 
-        setIsFormEdit(false)
+        setIsSignalEdit(false)
         onSubmit(editedSignal);
     }
 
     const onSignalCancel = () => {
-        if (isFormCreate) {
+        if (isSignalCreate) {
             onCancel();
-        } else if (isFormEdit) {
-            setIsFormEdit(false)
+        } else if (isSignalEdit) {
+            setIsSignalEdit(false)
         } else {
             console.log("onSignalCancel Tried to press cancel button while form was neither in edit or create")
         }
     }
 
     const onSignalEdit = () => {
-        if (!isFormEdit) {
-            setIsFormEdit(true);
-        } else if (isFormCreate) {
+        if (!isSignalEdit) {
+            setIsSignalEdit(true);
+        } else if (isSignalCreate) {
             onCancel();
         } else {
             console.log("onSignalEdit Tried to press cancel button while form was neither in edit or create")
@@ -118,17 +118,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     }
 
     const onCreateTrigger = (type) => {
-        if (isFormCreate) {
-            // open modal
-            // don't send HTTP request
-            console.log("CREATE")
-        } else if (isFormEdit) {
-            // open modal
-            // send POST signal/id/trigger
-            console.log("EDIT")
-        } else {
-            console.log("onCreateTrigger Tried to press cancel button while form was neither in edit or create")
+        if (isSignalCreate) {
+            console.log("onCreateTrigger trigger cannot be added during signal creation")
+            return;
         }
+        console.log("EDIT", type)
     }
 
     return (
@@ -137,8 +131,8 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 <Grid sx={{ direction: "column", justifyContent: "space-between" }}>
                     <ActionsBar />
                     <DetailsSection />
-                    <EntrySection />
-                    <ExitSection />
+                    {!isSignalCreate && <EntrySection />}
+                    {!isSignalCreate && <ExitSection />}
                     {isModify() && <SaveButton />}
                 </Grid>
             </CardContent>
@@ -160,7 +154,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             <Box sx={{ textAlign: "right" }} component="span">
                 {isModify() ?
                     <Box component="span" sx={{ justifyContent: "flex-end", alignItems: "center" }}>
-                        {isFormEdit &&
+                        {isSignalEdit &&
                             <IconButton onClick={onSignalCancel} color="error">
                                 <DeleteForeverIcon />
                             </IconButton>}
@@ -183,7 +177,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 select
                 sx={{ margin: "0 1rem", minWidth: "100px" }}
                 variant="standard"
-                disabled={!isFormCreate}
+                disabled={!isSignalCreate}
                 value={symbol}
                 onChange={(e) => setSymbol(e.target.value)}>
                 {pairs.map(pair => (
@@ -197,7 +191,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 select
                 sx={{ margin: "0 1rem", minWidth: "100px" }}
                 variant="standard"
-                disabled={!isFormCreate}
+                disabled={!isSignalCreate}
                 value={side}
                 onChange={(e) => setSide(e.target.value)}>
                 {sides.map(side => (
@@ -221,12 +215,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         return <>
             <Grid display="flex" flexDirection="row" alignItems="center">
                 <Typography variant="h6" component="h2">
-                    Entries
+                    Entry
                 </Typography>
-                {isModify() &&
-                    <IconButton onClick={() => onCreateTrigger("entry")} color="primary">
-                        <AddBoxIcon />
-                    </IconButton>}
+                <IconButton onClick={() => onCreateTrigger("entry")} color="primary">
+                    <AddBoxIcon />
+                </IconButton>
             </Grid>
             <Grid marginBottom="0.5rem" padding="0.5rem">
                 {entries.map(assembleTrigger)}
@@ -238,12 +231,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         return <>
             <Grid display="flex" flexDirection="row" alignItems="center">
                 <Typography variant="h6" component="h2">
-                    Exits
+                    Exit
                 </Typography>
-                {isModify() &&
-                    <IconButton onClick={() => onCreateTrigger("entry")} color="primary">
-                        <AddBoxIcon />
-                    </IconButton>}
+                <IconButton onClick={() => onCreateTrigger("exit")} color="primary">
+                    <AddBoxIcon />
+                </IconButton>
             </Grid>
             <Grid marginBottom="0.5rem" padding="0.5rem">
                 {exits.map(assembleTrigger)}
@@ -275,7 +267,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     }
 
     function isModify() {
-        return isFormEdit || isFormCreate;
+        return isSignalEdit || isSignalCreate;
     }
 }
 
