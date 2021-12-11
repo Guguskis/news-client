@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 import { useState, useEffect } from 'react';
-import { Box, Card, CardContent, TextField, Button, MenuItem, InputAdornment, Container, Grid } from '@mui/material';
+import { Box, Card, CardContent, TextField, Button, MenuItem, Grid } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IconButton from '@mui/material/IconButton';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
@@ -12,6 +12,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 // import { AddBoxIcon, IconButton, MenuOutlinedIcon } from '@mui/icons-material';
 
 import { ObjectState } from "../utils/utils.jsx";
+import TriggerModal from './TriggerModal.jsx';
 
 const styles = {
     container: {
@@ -30,6 +31,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
     const [isSignalEdit, setIsSignalEdit] = useState(isEdit);
     const [isSignalCreate, setIsSignalCreate] = useState(isCreate);
+    const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
 
     const [id, setId] = useState(-1);
     const [symbol, setSymbol] = useState("BTC/ASS");
@@ -117,12 +119,17 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         }
     }
 
-    const onCreateTrigger = (type) => {
-        if (isSignalCreate) {
-            console.log("onCreateTrigger trigger cannot be added during signal creation")
-            return;
-        }
-        console.log("EDIT", type)
+    const onTriggerCreate = () => {
+        setIsTriggerModalOpen(true);
+    }
+
+    const onTriggerSubmit = (trigger) => {
+        console.log("onTriggerSubmit", trigger);
+        setIsTriggerModalOpen(false);
+    }
+
+    const onTriggerCancel = () => {
+        setIsTriggerModalOpen(false);
     }
 
     return (
@@ -171,6 +178,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     {!isSignalCreate && <EntrySection />}
                     {!isSignalCreate && <ExitSection />}
                     {isModify() && <SaveButton />}
+                    <TriggerModal
+                        isOpen={isTriggerModalOpen}
+                        onSubmit={onTriggerSubmit}
+                        onCancel={onTriggerCancel}
+                    />
                 </Grid>
             </CardContent>
         </Card>
@@ -213,7 +225,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 <Typography variant="h6" component="h2">
                     Entry
                 </Typography>
-                <IconButton onClick={() => onCreateTrigger("entry")} color="primary">
+                <IconButton onClick={onTriggerCreate} color="primary">
                     <AddBoxIcon />
                 </IconButton>
             </Grid>
@@ -229,7 +241,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 <Typography variant="h6" component="h2">
                     Exit
                 </Typography>
-                <IconButton onClick={() => onCreateTrigger("exit")} color="primary">
+                <IconButton onClick={onTriggerCreate} color="primary">
                     <AddBoxIcon />
                 </IconButton>
             </Grid>
@@ -255,6 +267,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         return (
             <Grid key={trigger.id} flexDirection="row">
                 <Typography key={trigger.id} variant="body2" component="p" >
+                    {/* todo add stateHook for active trigger (to modify) */}
                     {/* {trigger.price} $ */}
                     Type | Price | Units | Executed
                 </Typography>
