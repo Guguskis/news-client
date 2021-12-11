@@ -20,6 +20,7 @@ const styles = {
         marginBottom: "1rem",
         minWidth: "300px",
         minHeight: "100px",
+        maxWidth: "30rem",
     },
     details: {
         alignContent: "center",
@@ -56,6 +57,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
 
     const [id, setId] = useState(-1);
+    const [leverage, setLeverage] = useState(1);
     const [symbol, setSymbol] = useState(symbols[0]);
     const [isLong, setIsLong] = useState(true);
     const [channel, setChannel] = useState("");
@@ -69,6 +71,8 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         if (!signal) return;
         if (signal.id)
             setId(signal.id)
+        if (signal.leverage)
+            setLeverage(signal.leverage)
         if (signal.symbol)
             setSymbol(signal.symbol)
         if (signal.isLong)
@@ -178,7 +182,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                         <TextField
                             label="Side"
                             select
-                            sx={{ margin: "0 1rem", minWidth: "100px" }}
+                            sx={{ margin: "0 1rem" }}
                             variant="standard"
                             disabled={!isSignalCreate}
                             value={isLong}
@@ -190,8 +194,16 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                             ))}
                         </TextField>
                         <TextField
+                            label="Leverage"
+                            sx={{ margin: "0 1rem", maxWidth: "5rem" }}
+                            variant="standard"
+                            disabled={!isModify()}
+                            value={leverage}
+                            onChange={(e) => setLeverage(e.target.value)}>
+                        </TextField>
+                        <TextField
                             label="Channel"
-                            sx={{ margin: "0 1rem", minWidth: "100px" }}
+                            sx={{ margin: "0 1rem" }}
                             variant="standard"
                             disabled={!isModify()}
                             value={channel}
