@@ -159,6 +159,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         console.debug("onTriggerDelete", trigger);
     }
 
+    const onTriggerEdit = (trigger) => {
+        // todo send PUT trigger
+        console.debug("onTriggerEdit", trigger);
+    }
+
     return (
         <Card variant="outlined" sx={styles.container} key="signal-component">
             <CardContent sx={styles.details} >
@@ -328,9 +333,14 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 </StyledTableCell>
                 {isModify() &&
                     <StyledTableCell align="right" scope="row">
-                        <IconButton color="error" onClick={() => onTriggerDelete(trigger)} >
-                            <DeleteForeverIcon />
-                        </IconButton>
+                        <Box component="span">
+                            <IconButton onClick={() => onTriggerEdit(trigger)} color="primary" >
+                                <EditIcon />
+                            </IconButton>
+                            <IconButton color="error" onClick={() => onTriggerDelete(trigger)} >
+                                <DeleteForeverIcon />
+                            </IconButton>
+                        </Box>
                     </StyledTableCell>
                 }
             </StyledTableRow>
