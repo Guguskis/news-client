@@ -5,6 +5,8 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import {toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 
 const theme = createTheme({
   palette: {
@@ -27,6 +29,10 @@ const theme = createTheme({
   },
 });
 
+toast.configure({
+  position: "top-right",
+  autoClose: 5000
+})
 
 function App() {
   return (

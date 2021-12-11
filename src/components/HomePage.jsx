@@ -10,6 +10,7 @@ import SignalComponent from '../components/SignalComponent.jsx';
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import { ArraysState } from "../utils/utils.jsx";
 import { API } from "../config/axiosConfig.jsx";
+import { toast } from "react-toastify";
 
 const styles = {
     body: {
@@ -112,12 +113,14 @@ function HomePage() {
     }, [signals]);
 
     useEffect(() => {
-        if (currencies)
-            console.debug("Fetched currencies", currencies)
-        else if (currenciesError)
+        if (currenciesError) {
+            toast.error("Failed to fetch currencies")
             console.error("Failed to fetch currencies", currenciesError)
-        else
+        } else if (currencies) {
+            console.debug("Fetched currencies", currencies)
+        } else {
             console.debug("Fetching currencies...")
+        }
     }, [currencies, currenciesError])
 
     const addSignal = (e) => {
@@ -161,7 +164,7 @@ function HomePage() {
             symbols={currencies}
         />
 
-    if (currenciesLoading)
+    if (currenciesLoading || currenciesError)
         return <Box sx={styles.body}>
             <Typography
                 variant="h3"
