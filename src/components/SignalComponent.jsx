@@ -13,6 +13,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { styled } from '@mui/material/styles';
 
 import TriggerModal from './TriggerModal.jsx';
+import { ArraysState } from '../utils/utils.jsx';
 
 const styles = {
     container: {
@@ -140,12 +141,18 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     }
 
     const onTriggerSubmit = (trigger) => {
-        console.log("onTriggerSubmit", trigger);
+        console.debug("onTriggerSubmit", trigger);
         setIsTriggerModalOpen(false);
     }
 
     const onTriggerCancel = () => {
         setIsTriggerModalOpen(false);
+    }
+
+    const onTriggerDelete = (trigger) => {
+        // todo SEND trigger DELETE
+        ArraysState.remove(setTriggers, trigger);
+        console.debug("onTriggerDelete", trigger);
     }
 
     return (
@@ -236,6 +243,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     }
 
     function EntrySection() {
+        const entries = triggers.filter(t => t.isEntry);
         return <>
             <Grid display="flex" flexDirection="row" alignItems="center">
                 <Typography variant="h6" component="h2">
@@ -245,17 +253,20 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     <AddBoxIcon />
                 </IconButton>
             </Grid>
-            <TableContainer component={Paper} sx={{ marginBottom: "0.5rem", padding: "0.25rem" }}>
-                <Table size="small" >
-                    <TableBody>
-                        {triggers.filter(t => t.isEntry).map(assembleTrigger)}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            {entries.length > 0 &&
+                <TableContainer component={Paper} sx={{ marginBottom: "0.5rem", padding: "0.25rem" }}>
+                    <Table size="small" >
+                        <TableBody>
+                            {entries.map(assembleTrigger)}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            }
         </>;
     }
 
     function ExitSection() {
+        const exits = triggers.filter(t => !t.isEntry);
         return <>
             <Grid display="flex" flexDirection="row" alignItems="center">
                 <Typography variant="h6" component="h2">
@@ -265,13 +276,15 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     <AddBoxIcon />
                 </IconButton>
             </Grid>
-            <TableContainer component={Paper} sx={{ marginBottom: "0.5rem", padding: "0.25rem" }}>
-                <Table size="small" aria-label="a dense table" >
-                    <TableBody>
-                        {triggers.filter(t => !t.isEntry).map(assembleTrigger)}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            {exits.length > 0 &&
+                <TableContainer component={Paper} sx={{ marginBottom: "0.5rem", padding: "0.25rem" }}>
+                    <Table size="small" aria-label="a dense table" >
+                        <TableBody>
+                            {exits.map(assembleTrigger)}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            }
         </>;
     }
 
@@ -301,9 +314,13 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 <StyledTableCell scope="row">
                     {trigger.isMarket ? "Market" : "Limit"}@{trigger.price}
                 </StyledTableCell>
-                <StyledTableCell>
-                    {trigger.quantity}
-                </StyledTableCell>
+                {isModify() &&
+                    <StyledTableCell align="right" scope="row">
+                        <IconButton color="error" fontSize="small" onClick={() => onTriggerDelete(trigger)} >
+                            <DeleteForeverIcon />
+                        </IconButton>
+                    </StyledTableCell>
+                }
             </StyledTableRow>
         )
 
@@ -312,7 +329,8 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 {trigger.executed ?
                     <CheckCircleIcon color="success" fontSize="small" />
                     :
-                    <HourglassBottomIcon color="warning" fontSize="small" />}
+                    <HourglassBottomIcon color="warning" fontSize="small" />
+                }
             </Box>;
         }
     }
