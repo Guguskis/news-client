@@ -21,8 +21,11 @@ const styles = {
 const TriggerModal = ({ trigger, isOpen, isEdit = false, isCreate = false, onSubmit, onCancel }) => {
 
     const [id, setId] = useState(-1);
-    const [type, setType] = useState("MARKET");
-    const [units, setUnits] = useState(100);
+    const [isEntry, setIsEntry] = useState(false);
+    const [isMarket, setIsMarket] = useState(false);
+    const [quantity, setQuantity] = useState(0);
+    const [executed, setExecuted] = useState(false);
+    const [executionTime, setExecutionTime] = useState(Date.now());
     const [price, setPrice] = useState(250);
 
     useEffect(() => {
@@ -33,18 +36,25 @@ const TriggerModal = ({ trigger, isOpen, isEdit = false, isCreate = false, onSub
         if (!trigger) return;
         if (trigger.id)
             setId(trigger.id)
-        if (trigger.type)
-            setType(trigger.type)
-        if (trigger.units)
-            setUnits(trigger.units)
+        if (trigger.isEntry)
+            setIsEntry(trigger.isEntry)
+        if (trigger.isMarket)
+            setIsMarket(trigger.isMarket)
+        if (trigger.quantity)
+            setQuantity(trigger.quantity)
+        if (trigger.executed)
+            setExecuted(trigger.executed)
+        if (trigger.executionTime)
+            setExecutionTime(trigger.executionTime)
         if (trigger.price)
             setPrice(trigger.price)
+
         console.log("trigger binded", trigger)
     }
 
     const onTriggerCreate = (type) => {
         if (isCreate) {
-            console.log("onCreateTrigger trigger cannot be added during signal creation")
+            console.log("onTriggerCreate trigger cannot be added during signal creation")
             return;
         } else if (type === "exit") {
 
