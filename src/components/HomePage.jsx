@@ -27,88 +27,15 @@ function HomePage() {
         url: "/api/currencies",
         method: "GET"
     })
+    const [{ data: signals, loading: signalsLoading, error: signalsError }, signalsExecute] = API.useCryptoApi({
+        url: "/api/signals",
+        method: "GET"
+    })
 
     const [isAddSignal, setIsAddSignal] = useState(false);
 
-    const [signals, setSignals] = useState([
-        {
-            id: 1,
-            symbol: "XRPUSDT",
-            position: 100,
-            entries: [
-                {
-                    id: 1,
-                    dateTime: "2020-01-01:00:00:00",
-                    price: 50,
-                    side: "LONG",
-                    type: "MARKET",
-                    units: 100
-                }
-            ],
-            exits: [
-                {
-                    id: 1,
-                    dateTime: "2020-01-01:00:00:00",
-                    price: 62,
-                    side: "SHORT",
-                    type: "TAKE_PROFIT",
-                    units: 100
-                },
-                {
-                    id: 2,
-                    dateTime: "2020-01-01:00:00:00",
-                    price: 56,
-                    side: "SHORT",
-                    type: "STOP_LOSS",
-                    units: 100
-                }
-            ]
-        },
-        {
-            id: 2,
-            symbol: "DOTUSD",
-            position: 220,
-            entries: [
-                {
-                    id: 1,
-                    dateTime: "2020-01-01:00:00:00",
-                    price: 50,
-                    side: "LONG",
-                    type: "MARKET",
-                    units: 100
-                },
-                {
-                    id: 2,
-                    dateTime: "2020-01-01:00:00:00",
-                    price: 75,
-                    side: "LONG",
-                    type: "MARKET",
-                    units: 100
-                }
-            ],
-            exits: [
-                {
-                    id: 1,
-                    dateTime: "2020-01-01:00:00:00",
-                    price: 62,
-                    side: "SHORT",
-                    type: "TAKE_PROFIT",
-                    units: 100
-                },
-                {
-                    id: 2,
-                    dateTime: "2020-01-01:00:00:00",
-                    price: 56,
-                    side: "SHORT",
-                    type: "STOP_LOSS",
-                    units: 100
-                }
-            ]
-        }
-    ]);
-
     useEffect(() => {
-        const sorted = [...signals].sort((prevSignal, currSignal) => prevSignal.id > currSignal.id); // todo fix sorting for react hooks
+        // const sorted = [...signals].sort((prevSignal, currSignal) => prevSignal.id > currSignal.id); // todo fix sorting for react hooks
         // setSignals(sorted)
     }, [signals]);
 
@@ -123,6 +50,17 @@ function HomePage() {
         }
     }, [currencies, currenciesError])
 
+    useEffect(() => {
+        if (signalsError) {
+            toast.error("Failed to fetch signals")
+            console.error("Failed to fetch signals", signalsError)
+        } else if (signals) {
+            console.debug("Fetched signals", signals)
+        } else {
+            console.debug("Fetching signals...")
+        }
+    }, [signals, signalsError])
+
     const addSignal = (e) => {
         e.preventDefault();
         console.log('add signal');
@@ -131,15 +69,10 @@ function HomePage() {
     }
 
     const onSubmitSignal = (signal) => {
-        const newSignal = signals.filter(s => s.id === signal.id).length === 0;
-        if (newSignal) {
-            ArraysState.add(setSignals, signal);
-        } else {
-            ArraysState.replaceByKey(setSignals, signal, "id")
-        }
-
+        signalsExecute();
         setIsAddSignal(false);
-        console.log('added signal to array', signal);
+        toast.success("Signal saved")
+        console.debug('Signal saved', signal);
     }
 
     const onCancelSignal = () => {
@@ -164,7 +97,7 @@ function HomePage() {
             symbols={currencies}
         />
 
-    if (currenciesLoading || currenciesError)
+    if (currenciesLoading || signalsLoading || currenciesError || signalsError)
         return <Box sx={styles.body}>
             <Typography
                 variant="h3"
