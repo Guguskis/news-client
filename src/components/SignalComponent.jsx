@@ -5,13 +5,11 @@ import { useState, useEffect } from 'react';
 import { Box, Card, CardContent, TextField, Button, MenuItem, Grid } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IconButton from '@mui/material/IconButton';
-import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelSharpIcon from '@mui/icons-material/CancelSharp';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 // import { AddBoxIcon, IconButton, MenuOutlinedIcon } from '@mui/icons-material';
 
-import { ObjectState } from "../utils/utils.jsx";
 import TriggerModal from './TriggerModal.jsx';
 
 const styles = {
@@ -27,7 +25,7 @@ const styles = {
 
 function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, onCancel }) {
     const [pairs, setPairs] = useState(["BTC/ASS", "ETH/ASS", "XRP/USDT", "BTC/USDT"]);
-    const [sides, setSides] = useState(["LONG", "SHORT"]);
+    const [sides, setSides] = useState([{ label: "Long", value: true }, { label: "Short", value: false }]);
 
     const [isSignalEdit, setIsSignalEdit] = useState(isEdit);
     const [isSignalCreate, setIsSignalCreate] = useState(isCreate);
@@ -35,10 +33,9 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
     const [id, setId] = useState(-1);
     const [symbol, setSymbol] = useState("BTC/ASS");
-    const [side, setSide] = useState("LONG");
+    const [isLong, setIsLong] = useState(true);
     const [channel, setChannel] = useState("");
-    const [entries, setEntries] = useState([]);
-    const [exits, setExits] = useState([]);
+    const [triggers, setTriggers] = useState([]);
 
     useEffect(() => {
         bindSignalStateFields(signal);
@@ -50,14 +47,12 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             setId(signal.id)
         if (signal.symbol)
             setSymbol(signal.symbol)
-        if (signal.side)
-            setSide(signal.side)
+        if (signal.isLong)
+            setIsLong(signal.isLong)
         if (signal.channel)
             setChannel(signal.channel)
-        if (signal.entries)
-            setEntries(signal.entries)
-        if (signal.exits)
-            setExits(signal.exits)
+        if (signal.triggers)
+            setTriggers(signal.triggers)
 
         console.log("signal binded", signal)
     }
@@ -76,10 +71,9 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         const signal = {
             id: Math.random() * 1000,
             symbol: symbol,
-            side: side,
+            isLong: isLong,
             channel: channel,
-            entries: entries,
-            exits: exits
+            triggers: triggers,
         };
         console.log("send POST", signal);
         setIsSignalCreate(false)
@@ -90,8 +84,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         const editedSignal = {
             id: id,
             symbol: symbol,
-            entries: entries,
-            exits: exits
+            triggers: triggers,
         };
         console.log("send PUT", editedSignal);
 
@@ -158,11 +151,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                             sx={{ margin: "0 1rem", minWidth: "100px" }}
                             variant="standard"
                             disabled={!isSignalCreate}
-                            value={side}
-                            onChange={(e) => setSide(e.target.value)}>
-                            {sides.map(side => (
-                                <MenuItem key={side} value={side}>
-                                    {side}
+                            value={isLong}
+                            onChange={(e) => setIsLong(e.target.value)}>
+                            {sides.map(isLong => (
+                                <MenuItem key={isLong.label} value={isLong.value}>
+                                    {isLong.label}
                                 </MenuItem>
                             ))}
                         </TextField>
@@ -230,7 +223,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 </IconButton>
             </Grid>
             <Grid marginBottom="0.5rem" padding="0.5rem">
-                {entries.map(assembleTrigger)}
+                {triggers.filter(t => t.isEntry).map(assembleTrigger)}
             </Grid>
         </>;
     }
@@ -246,7 +239,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 </IconButton>
             </Grid>
             <Grid marginBottom="0.5rem" padding="0.5rem">
-                {exits.map(assembleTrigger)}
+                {triggers.filter(t => !t.isEntry).map(assembleTrigger)}
             </Grid>
         </>;
     }
