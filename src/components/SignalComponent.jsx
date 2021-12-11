@@ -231,7 +231,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                                 <DeleteForeverIcon />
                             </IconButton>}
                         <IconButton onClick={onSignalCancel} color="primary">
-                            <CancelSharpIcon fontSize="small" />
+                            <CancelSharpIcon />
                         </IconButton>
                     </Box>
                     :
@@ -316,7 +316,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 </StyledTableCell>
                 {isModify() &&
                     <StyledTableCell align="right" scope="row">
-                        <IconButton color="error" fontSize="small" onClick={() => onTriggerDelete(trigger)} >
+                        <IconButton color="error" onClick={() => onTriggerDelete(trigger)} >
                             <DeleteForeverIcon />
                         </IconButton>
                     </StyledTableCell>
@@ -327,9 +327,9 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         function ExecutedIcon() {
             return <Box component="span" marginRight="1rem">
                 {trigger.executed ?
-                    <CheckCircleIcon color="success" fontSize="small" />
+                    <CheckCircleIcon color="success" />
                     :
-                    <HourglassBottomIcon color="warning" fontSize="small" />
+                    <HourglassBottomIcon color="warning" />
                 }
             </Box>;
         }
