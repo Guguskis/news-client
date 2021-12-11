@@ -22,8 +22,7 @@ const styles = {
     }
 }
 
-function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, onCancel }) {
-    const [pairs, setPairs] = useState(["BTC/ASS", "ETH/ASS", "XRP/USDT", "BTC/USDT"]);
+function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, onCancel, symbols }) {
     const [sides, setSides] = useState([{ label: "Long", value: true }, { label: "Short", value: false }]);
 
     const [isSignalEdit, setIsSignalEdit] = useState(isEdit);
@@ -31,7 +30,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
 
     const [id, setId] = useState(-1);
-    const [symbol, setSymbol] = useState("BTC/ASS");
+    const [symbol, setSymbol] = useState(symbols[0]);
     const [isLong, setIsLong] = useState(true);
     const [channel, setChannel] = useState("");
     const [triggers, setTriggers] = useState([]);
@@ -131,16 +130,16 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     <ActionsBar />
                     <Box component="div" marginBottom="1rem">
                         <TextField
-                            label="Pair"
+                            label="Currency"
                             select
                             sx={{ margin: "0 1rem", minWidth: "100px" }}
                             variant="standard"
                             disabled={!isSignalCreate}
                             value={symbol}
                             onChange={(e) => setSymbol(e.target.value)}>
-                            {pairs.map(pair => (
-                                <MenuItem key={pair} value={pair}>
-                                    {pair}
+                            {symbols.map(symbol => (
+                                <MenuItem key={symbol} value={symbol}>
+                                    {symbol}
                                 </MenuItem>
                             ))}
                         </TextField>

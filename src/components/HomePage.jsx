@@ -5,10 +5,11 @@ import * as React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useState, useEffect } from 'react';
 
-import { Box, Button } from '@mui/material';
+import { Box, Button, CircularProgress } from '@mui/material';
 import SignalComponent from '../components/SignalComponent.jsx';
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import { ArraysState } from "../utils/utils.jsx";
+import { API } from "../config/axiosConfig.jsx";
 
 const styles = {
     body: {
@@ -21,13 +22,17 @@ const styles = {
 }
 
 function HomePage() {
+    const [{ data: currencies, loading: currenciesLoading, error: currenciesError }, currenciesExecute] = API.useCryptoApi({
+        url: "/api/currencies",
+        method: "GET"
+    })
 
     const [isAddSignal, setIsAddSignal] = useState(false);
 
     const [signals, setSignals] = useState([
         {
             id: 1,
-            symbol: "XRP/USDT",
+            symbol: "XRPUSDT",
             position: 100,
             entries: [
                 {
@@ -60,7 +65,7 @@ function HomePage() {
         },
         {
             id: 2,
-            symbol: "BTC/USDT",
+            symbol: "DOTUSD",
             position: 220,
             entries: [
                 {
@@ -106,6 +111,15 @@ function HomePage() {
         // setSignals(sorted)
     }, [signals]);
 
+    useEffect(() => {
+        if (currencies)
+            console.debug("Fetched currencies", currencies)
+        else if (currenciesError)
+            console.error("Failed to fetch currencies", currenciesError)
+        else
+            console.debug("Fetching currencies...")
+    }, [currencies, currenciesError])
+
     const addSignal = (e) => {
         e.preventDefault();
         console.log('add signal');
@@ -136,6 +150,7 @@ function HomePage() {
             signal={signal}
             onSubmit={onSubmitSignal}
             onCancel={onCancelSignal}
+            symbols={currencies}
         />
 
     const assembleCreateSignal = () =>
@@ -143,7 +158,19 @@ function HomePage() {
             isCreate={true}
             onSubmit={onSubmitSignal}
             onCancel={onCancelSignal}
+            symbols={currencies}
         />
+
+    if (currenciesLoading)
+        return <Box sx={styles.body}>
+            <Typography
+                variant="h3"
+                component="h1"
+                gutterBottom>
+                Signals
+            </Typography>
+            <CircularProgress />
+        </Box>
 
     return (
         <Box sx={styles.body}>
