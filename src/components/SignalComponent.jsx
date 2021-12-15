@@ -56,6 +56,9 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     const [isSignalCreate, setIsSignalCreate] = useState(isCreate);
     const [isTriggerModalOpen, setIsTriggerModalOpen] = useState(false);
 
+    const [triggerToEdit, setTriggerToEdit] = useState({});
+    const [isEditTrigger, setIsEditTrigger] = useState(false);
+
     const [id, setId] = useState(-1);
     const [leverage, setLeverage] = useState(1);
     const [symbol, setSymbol] = useState(symbols[0]);
@@ -140,13 +143,27 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         }
     }
 
-    const onTriggerCreate = () => {
-        setIsTriggerModalOpen(true);
-    }
-
     const onTriggerSubmit = (trigger) => {
         console.debug("onTriggerSubmit", trigger);
         setIsTriggerModalOpen(false);
+    }
+
+    const onTriggerCreate = (isEntry) => {
+        const trigger = {
+            isEntry: isEntry
+        }
+        setTriggerToEdit(trigger);
+        setIsEditTrigger(false);
+        setIsTriggerModalOpen(true);
+        console.debug("onTriggerCreate", trigger);
+    }
+
+    const onTriggerEdit = (trigger) => {
+        // todo send PUT trigger
+        setTriggerToEdit(trigger);
+        setIsEditTrigger(true);
+        setIsTriggerModalOpen(true);
+        console.debug("onTriggerEdit", trigger);
     }
 
     const onTriggerCancel = () => {
@@ -157,11 +174,6 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         // todo SEND trigger DELETE
         ArraysState.remove(setTriggers, trigger);
         console.debug("onTriggerDelete", trigger);
-    }
-
-    const onTriggerEdit = (trigger) => {
-        // todo send PUT trigger
-        console.debug("onTriggerEdit", trigger);
     }
 
     return (
@@ -219,10 +231,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     {!isSignalCreate && <ExitSection />}
                     {isModify() && <SaveButton />}
                     <TriggerModal
+                        trigger={triggerToEdit}
                         isOpen={isTriggerModalOpen}
+                        isEdit={isEditTrigger}
                         onSubmit={onTriggerSubmit}
-                        onCancel={onTriggerCancel}
-                    />
+                        onCancel={onTriggerCancel} />
                 </Grid>
             </CardContent>
         </Card>
@@ -266,7 +279,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 <Typography variant="h6" component="h2">
                     Entry
                 </Typography>
-                <IconButton onClick={onTriggerCreate} color="primary">
+                <IconButton onClick={() => onTriggerCreate(true)} color="primary">
                     <AddBoxIcon />
                 </IconButton>
             </Grid>
@@ -289,7 +302,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 <Typography variant="h6" component="h2">
                     Exit
                 </Typography>
-                <IconButton onClick={onTriggerCreate} color="primary">
+                <IconButton onClick={() => onTriggerCreate(false)} color="primary">
                     <AddBoxIcon />
                 </IconButton>
             </Grid>
