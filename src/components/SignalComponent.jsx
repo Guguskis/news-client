@@ -231,6 +231,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     {!isSignalCreate && <ExitSection />}
                     {isModify() && <SaveButton />}
                     <TriggerModal
+                        signal={signal}
                         trigger={triggerToEdit}
                         isOpen={isTriggerModalOpen}
                         isEdit={isEditTrigger}

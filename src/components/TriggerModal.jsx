@@ -2,7 +2,10 @@ import React from 'react';
 
 import { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { Box, Card, CardContent, TextField, Button, MenuItem, Modal, Container, Grid } from '@mui/material';
+import { Box, TextField, Button, Modal, Container, Grid } from '@mui/material';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import IconButton from '@mui/material/IconButton';
+import CancelSharpIcon from '@mui/icons-material/CancelSharp';
 
 const styles = {
     modal: {
@@ -18,7 +21,7 @@ const styles = {
     }
 }
 
-const TriggerModal = ({ trigger, isOpen, isEdit = false, onSubmit, onCancel }) => {
+const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCancel }) => {
 
     const [id, setId] = useState(-1);
     const [isEntry, setIsEntry] = useState(true);
@@ -46,7 +49,30 @@ const TriggerModal = ({ trigger, isOpen, isEdit = false, onSubmit, onCancel }) =
         console.debug("trigger bound", trigger)
     }
 
-    const onTriggerCreate = () => {
+    const submit = () => {
+        const trigger = {
+            isEntry: isEntry,
+            isMarket: isMarket,
+            quantity: quantity,
+            executed: executed,
+            executionTime: executionTime,
+            price: price
+        }
+
+        if (isEdit) {
+            onTriggerEditSubmit(trigger);
+        } else {
+            onTriggerCreateSubmit(trigger);
+        }
+
+        onSubmit(trigger);
+    }
+
+    const onTriggerCreateSubmit = (trigger) => {
+        onSubmit(trigger);
+    }
+
+    const onTriggerEditSubmit = (trigger) => {
         onSubmit(trigger);
     }
 
@@ -55,24 +81,41 @@ const TriggerModal = ({ trigger, isOpen, isEdit = false, onSubmit, onCancel }) =
     }
 
     return (
-        <div>
-            <Modal
-                open={isOpen}
-                onClose={onTriggerCancel}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={styles.modal}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Add trigger {isEntry ? "entry" : "exit"}
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                    </Typography>
-                </Box>
-            </Modal>
-        </div>
+        <Modal
+            open={isOpen}
+            onClose={onTriggerCancel}
+        >
+            <Box sx={styles.modal}>
+                <ActionsBar/>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Add trigger {isEntry ? "entry" : "exit"}
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                </Typography>
+                <SaveButton />
+            </Box>
+        </Modal>
     );
+
+    function SaveButton() {
+        return <Box component="div" display="flex" justifyContent="right">
+            <Button
+                variant="contained"
+                endIcon={<AddBoxIcon />}
+                onClick={submit}>
+                Save
+            </Button>
+        </Box>;
+    }
+
+    function ActionsBar() {
+        return <Box sx={{ textAlign: "right" }} component="div">
+            <IconButton onClick={onTriggerCancel} color="primary">
+                <CancelSharpIcon />
+            </IconButton>
+        </Box>;
+    }
 };
 
 export default TriggerModal;
