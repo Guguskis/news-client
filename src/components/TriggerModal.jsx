@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { Box, TextField, Button, Modal, Container, Grid } from '@mui/material';
+import { Box, TextField, Button, Modal, Container, Grid, MenuItem, Switch, Stack } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IconButton from '@mui/material/IconButton';
 import CancelSharpIcon from '@mui/icons-material/CancelSharp';
@@ -18,6 +18,7 @@ const styles = {
         border: '2px solid #000',
         boxShadow: 24,
         p: 4,
+        paddingTop: "1rem"
     }
 }
 
@@ -86,13 +87,23 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
             onClose={onTriggerCancel}
         >
             <Box sx={styles.modal}>
-                <ActionsBar/>
+                <ActionsBar />
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Add trigger {isEntry ? "entry" : "exit"}
+                    Trigger
                 </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                </Typography>
+                <Stack direction="row" sx={{ alignItems: "center" }}>
+                    {/* <Typography id="modal-modal-title" variant="body2" component="h2" margin="auto"> */}
+                    <Typography variant="body2">
+                        Limit
+                    </Typography>
+                    <Switch
+                        onChange={(e) => setIsEntry(e.target.checked)}
+                        value={isMarket}
+                    />
+                    <Typography variant="body2">
+                        Market
+                    </Typography>
+                </Stack>
                 <SaveButton />
             </Box>
         </Modal>
