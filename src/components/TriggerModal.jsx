@@ -30,7 +30,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
     const [isMarket, setIsMarket] = useState(false);
     const [quantity, setQuantity] = useState(0);
     const [executed, setExecuted] = useState(false);
-    const [executionTime, setExecutionTime] = useState(Date.now());
+    const [entryTime, setEntryTime] = useState(Date.now());
     const [price, setPrice] = useState(250);
 
     useEffect(() => {
@@ -45,7 +45,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
         setIsMarket(trigger.isMarket)
         setQuantity(trigger.quantity)
         setExecuted(trigger.executed)
-        setExecutionTime(trigger.executionTime)
+        setEntryTime(trigger.entryTime)
         setPrice(trigger.price)
 
         console.debug("trigger bound", trigger)
@@ -57,7 +57,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
             isMarket: isMarket,
             quantity: quantity,
             executed: executed,
-            executionTime: executionTime,
+            entryTime: entryTime,
             price: price
         }
 
@@ -117,9 +117,9 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
     function MarketTriggerForm() {
         return <Box>
             <DateTimePicker
-                label="Execution time"
-                value={executionTime}
-                onChange={setExecutionTime}
+                label="Entry time"
+                value={entryTime}
+                onChange={setEntryTime}
                 ampm={false}
                 renderInput={(params) => <TextField {...params} />}
             />
