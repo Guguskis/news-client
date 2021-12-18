@@ -35,11 +35,6 @@ function HomePage() {
     const [isAddSignal, setIsAddSignal] = useState(false);
 
     useEffect(() => {
-        // const sorted = [...signals].sort((prevSignal, currSignal) => prevSignal.id > currSignal.id); // todo fix sorting for react hooks
-        // setSignals(sorted)
-    }, [signals]);
-
-    useEffect(() => {
         if (currenciesError) {
             toast.error("Failed to fetch currencies")
             console.error("Failed to fetch currencies", currenciesError)
@@ -61,10 +56,7 @@ function HomePage() {
         }
     }, [signals, signalsError])
 
-    const addSignal = (e) => {
-        e.preventDefault();
-        console.log('add signal');
-
+    const addSignal = () => {
         setIsAddSignal(true);
     }
 
