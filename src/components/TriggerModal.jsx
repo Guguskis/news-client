@@ -3,6 +3,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Box, TextField, Button, Modal, Container, Grid, MenuItem, Switch, Stack } from '@mui/material';
+import DateTimePicker from '@mui/lab/DateTimePicker';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IconButton from '@mui/material/IconButton';
 import CancelSharpIcon from '@mui/icons-material/CancelSharp';
@@ -92,6 +93,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
                     Trigger
                 </Typography>
                 <TriggerTypeSwitch />
+                {isMarket ? <MarketTriggerForm /> : <LimitTriggerForm />}
                 <SaveButton />
             </Box>
         </Modal>
@@ -105,11 +107,28 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
             <Switch
                 onChange={(e) => setIsMarket(e.target.checked)}
                 checked={isMarket}
-                disabled={isEdit}/>
+                disabled={isEdit} />
             <Typography variant="body2">
                 Market
             </Typography>
         </Stack>;
+    }
+
+    function MarketTriggerForm() {
+        return <Box>
+            <DateTimePicker
+                label="Execution time"
+                value={executionTime}
+                onChange={setExecutionTime}
+                ampm={false}
+                renderInput={(params) => <TextField {...params} />}
+            />
+        </Box>
+    }
+    function LimitTriggerForm() {
+        return <Box>
+
+        </Box>
     }
 
     function SaveButton() {

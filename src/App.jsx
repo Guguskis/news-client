@@ -4,8 +4,10 @@ import HomePage from './components/HomePage.jsx';
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import DateAdapter from '@mui/lab/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CssBaseline from '@mui/material/CssBaseline';
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 
 const theme = createTheme({
@@ -37,13 +39,15 @@ toast.configure({
 function App() {
   return (
     <ThemeProvider theme={theme} >
-      <CssBaseline />
-      <Router>
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          {/* <Route component={NotFoundPage}/> */}
-        </Switch>
-      </Router>
+      <LocalizationProvider dateAdapter={DateAdapter}>
+        <CssBaseline />
+        <Router>
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            {/* <Route component={NotFoundPage}/> */}
+          </Switch>
+        </Router>
+      </LocalizationProvider>
     </ThemeProvider>
   );
 }
