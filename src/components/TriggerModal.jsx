@@ -121,6 +121,8 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
                 value={entryTime}
                 onChange={setEntryTime}
                 ampm={false}
+                inputFormat="yyyy-MM-dd HH:mm"
+                mask="____-__-__ __:__"
                 renderInput={(params) => <TextField {...params} />}
             />
         </Box>
