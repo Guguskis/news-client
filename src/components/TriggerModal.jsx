@@ -29,7 +29,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
     const [id, setId] = useState(-1);
     const [isEntry, setIsEntry] = useState(true);
     const [isMarket, setIsMarket] = useState(false);
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(100);
     const [executed, setExecuted] = useState(false);
     const [entryTime, setEntryTime] = useState(Date.now());
     const [price, setPrice] = useState(250);
