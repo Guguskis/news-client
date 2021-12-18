@@ -91,23 +91,25 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Trigger
                 </Typography>
-                <Stack direction="row" sx={{ alignItems: "center" }}>
-                    {/* <Typography id="modal-modal-title" variant="body2" component="h2" margin="auto"> */}
-                    <Typography variant="body2">
-                        Limit
-                    </Typography>
-                    <Switch
-                        onChange={(e) => setIsEntry(e.target.checked)}
-                        value={isMarket}
-                    />
-                    <Typography variant="body2">
-                        Market
-                    </Typography>
-                </Stack>
+                <TriggerTypeSwitch />
                 <SaveButton />
             </Box>
         </Modal>
     );
+
+    function TriggerTypeSwitch() {
+        return <Stack direction="row" sx={{ alignItems: "center" }}>
+            <Typography variant="body2">
+                Limit
+            </Typography>
+            <Switch
+                onChange={(e) => setIsMarket(e.target.checked)}
+                checked={isMarket} />
+            <Typography variant="body2">
+                Market
+            </Typography>
+        </Stack>;
+    }
 
     function SaveButton() {
         return <Box component="div" display="flex" justifyContent="right">
