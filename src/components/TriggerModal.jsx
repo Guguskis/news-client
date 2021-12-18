@@ -93,7 +93,19 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
                     Trigger
                 </Typography>
                 <TriggerTypeSwitch />
-                {isMarket ? <MarketTriggerForm /> : <LimitTriggerForm />}
+                <Box sx={{ marginBottom: "1rem", maxWidth: "100%" }}>
+                    <DateTimePicker
+                        gutterBottom
+                        label="Entry time"
+                        value={entryTime}
+                        onChange={setEntryTime}
+                        ampm={false}
+                        inputFormat="yyyy-MM-dd HH:mm"
+                        mask="____-__-__ __:__"
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                </Box>
+                {isMarket && <LimitTriggerForm />}
                 <SaveButton />
             </Box>
         </Modal>
@@ -114,19 +126,6 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
         </Stack>;
     }
 
-    function MarketTriggerForm() {
-        return <Box marginBottom="1rem">
-            <DateTimePicker
-                label="Entry time"
-                value={entryTime}
-                onChange={setEntryTime}
-                ampm={false}
-                inputFormat="yyyy-MM-dd HH:mm"
-                mask="____-__-__ __:__"
-                renderInput={(params) => <TextField {...params} />}
-            />
-        </Box>
-    }
     function LimitTriggerForm() {
         return <Box marginBottom="1rem">
 
