@@ -15,6 +15,7 @@ const styles = {
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 400,
+        maxWidth: "90%",
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -105,7 +106,19 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
                         renderInput={(params) => <TextField {...params} />}
                     />
                 </Box>
-                {isMarket && <LimitTriggerForm />}
+                {!isMarket &&
+                    <Box marginBottom="1rem">
+                        <TextField
+                            id="price"
+                            label="Price"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            margin="normal"
+                            variant="outlined"
+                            fullWidth
+                            disabled={isEdit}
+                        />
+                    </Box>}
                 <SaveButton />
             </Box>
         </Modal>
@@ -124,12 +137,6 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
                 Market
             </Typography>
         </Stack>;
-    }
-
-    function LimitTriggerForm() {
-        return <Box marginBottom="1rem">
-
-        </Box>
     }
 
     function SaveButton() {
