@@ -100,7 +100,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
     );
 
     function TriggerTypeSwitch() {
-        return <Stack direction="row" sx={{ alignItems: "center" }}>
+        return <Stack direction="row" sx={{ alignItems: "center" }} marginBottom="1rem">
             <Typography variant="body2">
                 Limit
             </Typography>
@@ -115,7 +115,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
     }
 
     function MarketTriggerForm() {
-        return <Box>
+        return <Box marginBottom="1rem">
             <DateTimePicker
                 label="Entry time"
                 value={entryTime}
@@ -128,7 +128,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
         </Box>
     }
     function LimitTriggerForm() {
-        return <Box>
+        return <Box marginBottom="1rem">
 
         </Box>
     }
