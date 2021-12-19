@@ -60,8 +60,8 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         { manual: true }
     )
     const [{ data: editSignalData, loading: editSignalLoading, error: editSignalError }, editSignalExecute] = API.useCryptoApi({
-        url: "/api/signals",
-        method: "PUT"
+        url: `/api/signals/${signal?.id}`,
+        method: "PATCH"
     },
         { manual: true }
     )
@@ -100,6 +100,20 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         }
     }, [createSignalError]);
 
+    useEffect(() => {
+        if (!editSignalLoading && editSignalData) {
+            onSubmit(editSignalData);
+            toast.success("Signal saved")
+            console.info('Signal saved', editSignalData);
+        }
+    }, [editSignalLoading, editSignalData, onSubmit]);
+
+    useEffect(() => {
+        if (editSignalError) {
+            toast.error(editSignalError.message);
+        }
+    }, [editSignalError]);
+
 
     const bindSignalStateFields = (signal) => {
         if (!signal) return;
@@ -130,26 +144,28 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     }
 
     const onCreateSignalSubmit = () => {
-        const signal = {
-            symbol: symbol,
-            leverage: leverage,
-            isLong: isLong,
-            channel: channel,
-            triggers: triggers,
-        };
-        console.info("Sending create signal request", signal);
-        createSignalExecute({ data: { ...createSignalData, data: signal } })
+        console.info("Sending create signal request");
+        createSignalExecute({
+            data: {
+                ...createSignalData,
+                symbol: symbol,
+                leverage: leverage,
+                isLong: isLong,
+                channel: channel,
+                triggers: triggers,
+            }
+        })
     }
 
     const onEditSignalSubmit = () => {
-        const editedSignal = {
-            id: id,
-            symbol: symbol,
-            triggers: triggers,
-        };
-        toast.warn("todo send PUT");
-        setIsSignalEdit(false)
-        onSubmit(editedSignal);
+        console.info("Sending edit signal request");
+        editSignalExecute({
+            data: {
+                ...editSignalData,
+                symbol: symbol,
+                channel: channel
+            }
+        })
     }
 
     const onSignalCancel = () => {
