@@ -59,6 +59,12 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     },
         { manual: true }
     )
+    const [{ data: editSignalData, loading: editSignalLoading, error: editSignalError }, editSignalExecute] = API.useCryptoApi({
+        url: "/api/signals",
+        method: "PUT"
+    },
+        { manual: true }
+    )
 
     const [sides, setSides] = useState([{ label: "Long", value: true }, { label: "Short", value: false }]);
 
@@ -132,7 +138,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             triggers: triggers,
         };
         console.info("Sending create signal request", signal);
-        createSignalExecute({ data: { createSignalData, data: signal } })
+        createSignalExecute({ data: { ...createSignalData, data: signal } })
     }
 
     const onEditSignalSubmit = () => {
