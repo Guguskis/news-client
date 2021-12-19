@@ -65,6 +65,12 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     },
         { manual: true }
     )
+    const [{ data: deleteSignalData, loading: deleteSignalLoading, error: deleteSignalError }, deleteSignalExecute] = API.useCryptoApi({
+        url: `/api/signals/${signal?.id}`,
+        method: "DELETE"
+    },
+        { manual: true }
+    )
 
     const [sides, setSides] = useState([{ label: "Long", value: true }, { label: "Short", value: false }]);
 
@@ -113,6 +119,20 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             toast.error(editSignalError.message);
         }
     }, [editSignalError]);
+
+    useEffect(() => {
+        if (!deleteSignalLoading && deleteSignalData) {
+            onSubmit(deleteSignalData);
+            toast.success("Signal deleted")
+            console.info('Signal deleted', deleteSignalData);
+        }
+    }, [deleteSignalLoading, deleteSignalData, onSubmit]);
+
+    useEffect(() => {
+        if (deleteSignalError) {
+            toast.error(deleteSignalError.message);
+        }
+    }, [deleteSignalError]);
 
 
     const bindSignalStateFields = (signal) => {
@@ -166,6 +186,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 channel: channel
             }
         })
+    }
+
+    const onSignalDeleteSubmit = () => {
+        console.info("Sending delete signal request");
+        deleteSignalExecute();
     }
 
     const onSignalCancel = () => {
@@ -303,7 +328,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 {isModify() ?
                     <Box component="span" sx={{ justifyContent: "flex-end", alignItems: "center" }}>
                         {isSignalEdit &&
-                            <IconButton onClick={onSignalCancel} color="error">
+                            <IconButton onClick={onSignalDeleteSubmit} color="error">
                                 <DeleteForeverIcon />
                             </IconButton>}
                         <IconButton onClick={onSignalCancel} color="primary">

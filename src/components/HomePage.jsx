@@ -60,7 +60,7 @@ function HomePage() {
         setIsAddSignal(true);
     }
 
-    const onSubmitSignal = (signal) => {
+    const onSubmitSignal = () => {
         setIsAddSignal(false);
         signalsExecute();
     }
