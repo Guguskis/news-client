@@ -81,19 +81,18 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     }, [signal])
 
     useEffect(() => {
-        // todo no error handling
         if (!createSignalLoading && createSignalData) {
-            console.log("RESPONSE RECEIVED code is createSignalerror", createSignalError);
-
-            if (createSignalError) {
-                toast.error(createSignalError.message);
-            } else {
-                toast.success("Signal saved")
-                onSubmit(createSignalData);
-                console.info('Signal saved', createSignalData);
-            }
+            onSubmit(createSignalData);
+            toast.success("Signal saved")
+            console.info('Signal saved', createSignalData);
         }
-    }, [createSignalLoading, createSignalData, createSignalError, onSubmit]);
+    }, [createSignalLoading, createSignalData, onSubmit]);
+
+    useEffect(() => {
+        if (createSignalError) {
+            toast.error(createSignalError.message);
+        }
+    }, [createSignalError]);
 
 
     const bindSignalStateFields = (signal) => {
@@ -142,8 +141,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             symbol: symbol,
             triggers: triggers,
         };
-        console.log("send PUT", editedSignal);
-
+        toast.warn("todo send PUT");
         setIsSignalEdit(false)
         onSubmit(editedSignal);
     }
