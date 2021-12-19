@@ -11,9 +11,12 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { styled } from '@mui/material/styles';
+import { API } from "../config/axiosConfig.jsx";
+
 
 import TriggerModal from './TriggerModal.jsx';
 import { ArraysState } from '../utils/utils.jsx';
+import { toast } from 'react-toastify';
 
 const styles = {
     container: {
@@ -50,6 +53,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, onCancel, symbols }) {
+    const [{ data: createSignalData, loading: createSignalLoading, error: createSignalError }, createSignalExecute] = API.useCryptoApi({
+        url: "/api/signals",
+        method: "POST"
+    },
+        { manual: true }
+    )
+
     const [sides, setSides] = useState([{ label: "Long", value: true }, { label: "Short", value: false }]);
 
     const [isSignalEdit, setIsSignalEdit] = useState(isEdit);
@@ -70,6 +80,22 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         bindSignalStateFields(signal);
     }, [signal])
 
+    useEffect(() => {
+        // todo no error handling
+        if (!createSignalLoading && createSignalData) {
+            console.log("RESPONSE RECEIVED code is createSignalerror", createSignalError);
+
+            if (createSignalError) {
+                toast.error(createSignalError.message);
+            } else {
+                toast.success("Signal saved")
+                onSubmit(createSignalData);
+                console.info('Signal saved', createSignalData);
+            }
+        }
+    }, [createSignalLoading, createSignalData, createSignalError, onSubmit]);
+
+
     const bindSignalStateFields = (signal) => {
         if (!signal) return;
         if (signal.id)
@@ -85,7 +111,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         if (signal.triggers)
             setTriggers(signal.triggers)
 
-        console.log("signal binded", signal)
+        console.debug("signal bound", signal)
     }
 
     const submit = () => {
@@ -100,15 +126,14 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
     const onCreateSignalSubmit = () => {
         const signal = {
-            id: Math.random() * 1000,
             symbol: symbol,
+            leverage: leverage,
             isLong: isLong,
             channel: channel,
             triggers: triggers,
         };
-        console.log("send POST", signal);
-        setIsSignalCreate(false)
-        onSubmit(signal);
+        console.info("Sending create signal request", signal);
+        createSignalExecute({ data: { createSignalData, data: signal } })
     }
 
     const onEditSignalSubmit = () => {

@@ -61,10 +61,8 @@ function HomePage() {
     }
 
     const onSubmitSignal = (signal) => {
-        signalsExecute();
         setIsAddSignal(false);
-        toast.success("Signal saved")
-        console.debug('Signal saved', signal);
+        signalsExecute();
     }
 
     const onCancelSignal = () => {
