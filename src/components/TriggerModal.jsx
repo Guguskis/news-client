@@ -48,8 +48,6 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
         setExecuted(trigger.executed)
         setEntryTime(trigger.entryTime)
         setPrice(trigger.price)
-
-        console.debug("trigger bound", trigger)
     }
 
     const submit = () => {

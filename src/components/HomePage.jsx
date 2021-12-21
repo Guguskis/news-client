@@ -27,7 +27,7 @@ function HomePage() {
         url: "/api/currencies",
         method: "GET"
     })
-    const [{ data: signals, loading: signalsLoading, error: signalsError }, signalsExecute] = API.useCryptoApi({
+    const [{ data: signalsData, loading: signalsLoading, error: signalsError }, signalsExecute] = API.useCryptoApi({
         url: "/api/signals",
         method: "GET"
     })
@@ -49,12 +49,12 @@ function HomePage() {
         if (signalsError) {
             toast.error("Failed to fetch signals")
             console.error("Failed to fetch signals", signalsError)
-        } else if (signals) {
-            console.debug("Fetched signals", signals)
+        } else if (signalsData) {
+            console.debug("Fetched signals", signalsData)
         } else {
             console.debug("Fetching signals...")
         }
-    }, [signals, signalsError])
+    }, [signalsData, signalsError])
 
     const addSignal = () => {
         setIsAddSignal(true);
@@ -115,7 +115,7 @@ function HomePage() {
                 </Button>
             </Box>
             {isAddSignal && assembleCreateSignal()}
-            {signals.map(assembleSignal)}
+            {signalsData.items.map(assembleSignal)}
         </Box>
     );
 };

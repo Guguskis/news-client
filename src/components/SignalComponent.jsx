@@ -94,9 +94,9 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
     useEffect(() => {
         if (!createSignalLoading && createSignalData) {
-            onSubmit(createSignalData);
             toast.success("Signal saved")
             console.info('Signal saved', createSignalData);
+            onSubmit();
         }
     }, [createSignalLoading, createSignalData, onSubmit]);
 
@@ -108,9 +108,9 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
     useEffect(() => {
         if (!editSignalLoading && editSignalData) {
-            onSubmit(editSignalData);
             toast.success("Signal saved")
             console.info('Signal saved', editSignalData);
+            onSubmit();
         }
     }, [editSignalLoading, editSignalData, onSubmit]);
 
@@ -120,11 +120,12 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         }
     }, [editSignalError]);
 
+    // todo resolve performance issue and toast being shown mid expiration
     useEffect(() => {
         if (!deleteSignalLoading && deleteSignalData) {
-            onSubmit(deleteSignalData);
             toast.success("Signal deleted")
             console.info('Signal deleted', deleteSignalData);
+            onSubmit();
         }
     }, [deleteSignalLoading, deleteSignalData, onSubmit]);
 
@@ -149,8 +150,6 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
             setChannel(signal.channel)
         if (signal.triggers)
             setTriggers(signal.triggers)
-
-        console.debug("signal bound", signal)
     }
 
     const submit = () => {
