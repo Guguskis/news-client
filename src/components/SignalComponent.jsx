@@ -181,7 +181,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         editSignalExecute({
             data: {
                 ...editSignalData,
-                symbol: symbol,
+                leverage: leverage,
                 channel: channel
             }
         })
