@@ -7,7 +7,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import DateAdapter from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CssBaseline from '@mui/material/CssBaseline';
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 
 const theme = createTheme({
@@ -40,6 +40,7 @@ function App() {
   return (
     <ThemeProvider theme={theme} >
       <LocalizationProvider dateAdapter={DateAdapter}>
+        <ToastContainer />
         <CssBaseline />
         <Router>
           <Switch>
