@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 import { useState, useEffect } from 'react';
-import { Box, Card, CardContent, TextField, Button, MenuItem, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Paper, tableCellClasses } from '@mui/material';
+import { Box, Card, CardContent, TextField, Button, MenuItem, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Paper, tableCellClasses, Stack } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
@@ -345,14 +345,16 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     function EntrySection() {
         const entries = triggers.filter(t => t.isEntry);
         return <>
-            <Grid display="flex" flexDirection="row" alignItems="center">
-                <Typography variant="h6" component="h2">
-                    Entry
-                </Typography>
+            <Stack direction="row" sx={{ alignItems: "center" }}>
+                <Box width="2.5rem">
+                    <Typography variant="h6" component="h2" >
+                        Entry
+                    </Typography>
+                </Box>
                 <IconButton onClick={() => onTriggerCreate(true)} color="primary">
                     <AddBoxIcon />
                 </IconButton>
-            </Grid>
+            </Stack>
             {entries.length > 0 &&
                 <TableContainer component={Paper} sx={{ marginBottom: "0.5rem", padding: "0.25rem" }}>
                     <Table size="small" >
@@ -369,9 +371,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         const exits = triggers.filter(t => !t.isEntry);
         return <>
             <Grid display="flex" flexDirection="row" alignItems="center">
-                <Typography variant="h6" component="h2">
-                    Exit
-                </Typography>
+                <Box width="2.5rem">
+                    <Typography variant="h6" component="h2" width="2.25rem" >
+                        Exit
+                    </Typography>
+                </Box>
                 <IconButton onClick={() => onTriggerCreate(false)} color="primary">
                     <AddBoxIcon />
                 </IconButton>
