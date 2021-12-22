@@ -190,7 +190,6 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 leverage: leverage,
                 isLong: isLong,
                 channel: channel,
-                triggers: triggers,
             }
         })
     }
@@ -444,7 +443,7 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     <ExecutedIcon />
                 </StyledTableCell>
                 <StyledTableCell scope="row">
-                    {trigger.isMarket ? "Market" : "Limit"}@{trigger.price}
+                    {trigger.isMarket ? "Market" : "Limit"}@{trigger.price} {trigger.isEntry ? "Entry" : "Exit"}
                 </StyledTableCell>
                 {isModify() &&
                     <StyledTableCell align="right" scope="row">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useDebugValue } from 'react';
 
 import { useState, useEffect, useCallback } from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -38,7 +38,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
     )
 
     const [id, setId] = useState(-1);
-    const [isEntry, setIsEntry] = useState(true);
+    const [isEntry, setIsEntry] = useState(false);
     const [isMarket, setIsMarket] = useState(true);
     const [quantity, setQuantity] = useState(100);
     const [executed, setExecuted] = useState(false);
@@ -96,7 +96,6 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
 
         createTriggerExecute({
             data: {
-                ...createTriggerData,
                 isEntry: isEntry,
                 isMarket: isMarket,
                 quantity: quantity,
