@@ -449,9 +449,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     <StyledTableCell align="right" scope="row">
                         <Box component="span">
                             <IconButton color="error" onClick={() => onTriggerDelete(trigger)} >
-                                <CircularProgress color="error" size="1rem" />
-                                :
-                                <DeleteForeverIcon />
+                                {deleteSignalLoading ?
+                                    <CircularProgress color="error" size="1rem" />
+                                    :
+                                    <DeleteForeverIcon />
+                                }
                             </IconButton>
                             <IconButton onClick={() => onTriggerEdit(trigger)} color="primary" >
                                 <EditIcon />
