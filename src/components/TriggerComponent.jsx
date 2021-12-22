@@ -19,18 +19,6 @@ import TriggerModal from './TriggerModal.jsx';
 import { ArraysState } from '../utils/utils.jsx';
 import { toast } from 'react-toastify';
 
-const styles = {
-    container: {
-        marginBottom: "1rem",
-        minWidth: "300px",
-        minHeight: "100px",
-        maxWidth: "30rem",
-    },
-    details: {
-        alignContent: "center",
-    }
-}
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,

@@ -32,28 +32,6 @@ const styles = {
     }
 }
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: "0.75rem",
-    },
-    borderBottomWidth: 0,
-    // borderBottomColor: theme.palette.primary.main,
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    borderBottomColor: theme.palette.primary.main,
-    '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-    },
-    '&:last-child td, &:last-child th': {
-        border: 0,
-    },
-}));
-
 function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, onCancel, symbols }) {
     const [{ data: createSignalData, loading: createSignalLoading, error: createSignalError }, createSignalExecute] = API.useCryptoApi({
         url: "/api/signals",
@@ -233,8 +211,8 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
     const onTriggerSubmit = (trigger) => {
         console.debug("onTriggerSubmit", trigger);
-        getSignalExecute();
         setIsTriggerModalOpen(false);
+        getSignalExecute();
     }
 
     const onTriggerSubmitCallback = useCallback(onTriggerSubmit, [onTriggerSubmit])
@@ -249,22 +227,8 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         console.debug("onTriggerCreate", trigger);
     }
 
-    const onTriggerEdit = (trigger) => {
-        // todo send PUT trigger
-        setTriggerToEdit(trigger);
-        setIsEditTrigger(true);
-        setIsTriggerModalOpen(true);
-        console.debug("onTriggerEdit", trigger);
-    }
-
     const onTriggerCancel = () => {
         setIsTriggerModalOpen(false);
-    }
-
-    const onTriggerDelete = (trigger) => {
-        // todo SEND trigger DELETE
-        ArraysState.remove(setTriggers, trigger);
-        console.debug("onTriggerDelete", trigger);
     }
 
     return (
@@ -321,14 +285,21 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     {!isSignalCreate && <EntrySection />}
                     {!isSignalCreate && <ExitSection />}
                     {isModify() && <SaveButton />}
-                    {isTriggerModalOpen && <TriggerModal
-                        signal={signal}
-                        trigger={triggerToEdit}
-                        isOpen={true}
-                        isEdit={isEditTrigger}
-                        onSubmit={onTriggerSubmitCallback}
-                        onCancel={onTriggerCancel} />}
                 </Grid>
+                {isTriggerModalOpen && <TriggerModal
+                    signal={signal}
+                    trigger={triggerToEdit}
+                    isOpen={true}
+                    isEdit={isEditTrigger}
+                    onSubmit={onTriggerSubmitCallback}
+                    onCancel={onTriggerCancel} />}
+                {/* <TriggerModal
+                    signal={signal}
+                    trigger={triggerToEdit}
+                    isOpen={isTriggerModalOpen}
+                    isEdit={isEditTrigger}
+                    onSubmit={onTriggerSubmitCallback}
+                    onCancel={onTriggerCancel} /> */}
             </CardContent>
         </Card>
     );
@@ -433,9 +404,6 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     }
 
     function assembleTrigger(trigger) {
-        // const executionTime = new Date(trigger.executionTime);
-        // // date format 2021-11-04 00:00
-        // const executionTimeString = `${executionTime.getFullYear()}-${executionTime.getMonth() + 1}-${executionTime.getDate()} ${executionTime.getHours()}:${executionTime.getMinutes()}`;
         return (
             <TriggerComponent
                 key={trigger.id}
@@ -445,43 +413,6 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                 onSubmit={onTriggerSubmitCallback}
             />
         )
-        // return (
-        //     <StyledTableRow
-        //         key={trigger.id}>
-        //         <StyledTableCell scope="row" width="0.5rem">
-        //             <ExecutedIcon />
-        //         </StyledTableCell>
-        //         <StyledTableCell scope="row">
-        //             {trigger.isMarket ? "Market" : "Limit"}@{trigger.price} {trigger.isEntry ? "Entry" : "Exit"}
-        //         </StyledTableCell>
-        //         {isModify() &&
-        //             <StyledTableCell align="right" scope="row">
-        //                 <Box component="span">
-        //                     <IconButton color="error" onClick={() => onTriggerDelete(trigger)} >
-        //                         {deleteSignalLoading ?
-        //                             <CircularProgress color="error" size="1rem" />
-        //                             :
-        //                             <DeleteForeverIcon />
-        //                         }
-        //                     </IconButton>
-        //                     <IconButton onClick={() => onTriggerEdit(trigger)} color="primary" >
-        //                         <EditIcon />
-        //                     </IconButton>
-        //                 </Box>
-        //             </StyledTableCell>
-        //         }
-        //     </StyledTableRow>
-        // )
-
-        // function ExecutedIcon() {
-        //     return <Box component="span" marginRight="1rem">
-        //         {trigger.executed ?
-        //             <CheckCircleIcon color="success" />
-        //             :
-        //             <HourglassBottomIcon color="warning" />
-        //         }
-        //     </Box>;
-        // }
     }
 
     function isModify() {
