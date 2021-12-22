@@ -45,7 +45,7 @@ function TriggerComponent({ signal, trigger, showActionBar = true, onSubmit }) {
 
     const [{ data: deleteTriggerData, loading: deleteTriggerLoading, error: deleteTriggerError }, deleteTriggerExecute] = API.useCryptoApi({
         url: `/api/signals/${signal?.id}/triggers/${trigger?.id}`,
-        method: "GET"
+        method: "DELETE"
     },
         { manual: true }
     )
@@ -83,6 +83,20 @@ function TriggerComponent({ signal, trigger, showActionBar = true, onSubmit }) {
             setPrice(trigger.price)
     }
 
+    useEffect(() => {
+        if (!deleteTriggerLoading && deleteTriggerData) {
+            toast.success("Trigger deleted")
+            console.info('Trigger deleted', deleteTriggerData);
+            onSubmit();
+        }
+    }, [deleteTriggerLoading, deleteTriggerData, onSubmit]);
+
+    useEffect(() => {
+        if (deleteTriggerError) {
+            toast.error(deleteTriggerError.message);
+        }
+    }, [deleteTriggerError]);
+
     const onTriggerSubmit = (trigger) => {
         console.debug("onTriggerSubmit", trigger);
         onSubmit();
@@ -91,15 +105,6 @@ function TriggerComponent({ signal, trigger, showActionBar = true, onSubmit }) {
     }
 
     const onTriggerSubmitCallback = useCallback(onTriggerSubmit, [onTriggerSubmit])
-
-    const onTriggerCreate = (isEntry) => {
-        const trigger = {
-            isEntry: isEntry
-        }
-        setIsEditTrigger(false);
-        setIsTriggerModalOpen(true);
-        console.debug("onTriggerCreate", trigger);
-    }
 
     const onTriggerEdit = () => {
         // todo send PUT trigger
@@ -113,8 +118,7 @@ function TriggerComponent({ signal, trigger, showActionBar = true, onSubmit }) {
     }
 
     const onTriggerDelete = (trigger) => {
-        // todo SEND trigger DELETE
-        // ArraysState.remove(setTriggers, trigger);
+        deleteTriggerExecute();
         console.debug("onTriggerDelete", trigger);
     }
 
