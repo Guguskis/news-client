@@ -89,7 +89,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
             <Box sx={styles.modal}>
                 <ActionsBar />
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Trigger
+                    {isEntry ? `${isEdit ? "Update" : "Create"} Entry` : `${isEdit ? "Update" : "Create"} Exit`}
                 </Typography>
                 <TriggerTypeSwitch />
                 <Box sx={{ marginBottom: "1rem", maxWidth: "100%" }}>
