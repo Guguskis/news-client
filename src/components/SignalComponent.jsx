@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Typography from '@material-ui/core/Typography';
 import { useState, useEffect, useCallback } from 'react';
-import { Box, Card, CardContent, TextField, Button, MenuItem, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Paper, tableCellClasses, Stack } from '@mui/material';
+import { Box, Card, CardContent, TextField, Button, MenuItem, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Paper, tableCellClasses, Stack, CircularProgress } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
@@ -12,6 +12,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { styled } from '@mui/material/styles';
 import { API } from "../config/axiosConfig.jsx";
+import { LoadingButton } from '@mui/lab';
 
 
 import TriggerModal from './TriggerModal.jsx';
@@ -349,7 +350,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     <Box component="span" sx={{ justifyContent: "flex-end", alignItems: "center" }}>
                         {isSignalEdit &&
                             <IconButton onClick={onSignalDeleteSubmit} color="error">
-                                <DeleteForeverIcon />
+                                {deleteSignalLoading ?
+                                    <CircularProgress color="error" size="1rem"/>
+                                    :
+                                    <DeleteForeverIcon />
+                                }
                             </IconButton>}
                         <IconButton onClick={onSignalCancel} color="primary">
                             <CancelSharpIcon />
@@ -415,14 +420,16 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
     function SaveButton() {
         return <Box component="div" display="flex" justifyContent="right">
-            <Button
+            <LoadingButton
+                loading={createSignalLoading || editSignalLoading}
                 variant="contained"
+                loadingIndicator={<CircularProgress color="primary" size="1rem" />}
                 endIcon={<AddBoxIcon />}
                 disabled={!isModify()}
                 onClick={submit}>
                 Save
-            </Button>
-        </Box>;
+            </LoadingButton>
+        </Box >;
     }
 
     function assembleTrigger(trigger) {

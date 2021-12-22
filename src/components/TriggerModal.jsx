@@ -2,7 +2,8 @@ import React from 'react';
 
 import { useState, useEffect, useCallback } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { Box, TextField, Button, Modal, Container, Grid, MenuItem, Switch, Stack } from '@mui/material';
+import { Box, TextField, Button, Modal, Container, Grid, MenuItem, Switch, Stack, CircularProgress } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IconButton from '@mui/material/IconButton';
@@ -28,7 +29,7 @@ const styles = {
 }
 
 const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCancel }) => {
- // introduced bug when clicking edit signal causes signal craeted popup   
+    // introduced bug when clicking edit signal causes signal craeted popup   
     const [{ data: createTriggerData, loading: createTriggerLoading, error: createTriggerError }, createTriggerExecute] = API.useCryptoApi({
         url: `/api/signals/${signal?.id}/triggers`,
         method: "POST"
@@ -176,12 +177,14 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
 
     function SaveButton() {
         return <Box component="div" display="flex" justifyContent="right">
-            <Button
+            <LoadingButton
+                loading={createTriggerLoading}
+                loadingIndicator={<CircularProgress color="primary" size="1rem" />}
                 variant="contained"
                 endIcon={<AddBoxIcon />}
                 onClick={submit}>
                 Save
-            </Button>
+            </LoadingButton>
         </Box>;
     }
 
