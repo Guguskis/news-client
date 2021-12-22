@@ -11,6 +11,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox'
 import { ArraysState } from "../utils/utils.jsx";
 import { API } from "../config/axiosConfig.jsx";
 import { toast } from "react-toastify";
+import { useCallback } from 'react';
 
 const styles = {
     body: {
@@ -77,13 +78,17 @@ function HomePage() {
         console.log('cancelled create new signal');
     }
 
+    const onSubmitSignalCallback = useCallback(onSubmitSignal, [onSubmitSignal]) 
+    const onCancelSignalCallback = useCallback(onCancelSignal, [onCancelSignal])
+
+
     const assembleSignal = (signal) => {
         return (
             <SignalComponent
                 key={signal.id}
                 signal={signal}
-                onSubmit={onSubmitSignal}
-                onCancel={onCancelSignal}
+                onSubmit={onSubmitSignalCallback}
+                onCancel={onCancelSignalCallback}
                 symbols={currencies}
             />
         )
@@ -92,8 +97,8 @@ function HomePage() {
     const AssembledCreateSignal = () =>
         <SignalComponent
             isCreate={true}
-            onSubmit={onSubmitSignal}
-            onCancel={onCancelSignal}
+            onSubmit={onSubmitSignalCallback}
+            onCancel={onCancelSignalCallback}
             symbols={currencies}
         />
 
