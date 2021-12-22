@@ -1,12 +1,15 @@
 import React from 'react';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Box, TextField, Button, Modal, Container, Grid, MenuItem, Switch, Stack } from '@mui/material';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IconButton from '@mui/material/IconButton';
 import CancelSharpIcon from '@mui/icons-material/CancelSharp';
+
+import { API } from "../config/axiosConfig.jsx";
+import { toast } from 'react-toastify';
 
 const styles = {
     modal: {
@@ -25,10 +28,17 @@ const styles = {
 }
 
 const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCancel }) => {
+ // introduced bug when clicking edit signal causes signal craeted popup   
+    const [{ data: createTriggerData, loading: createTriggerLoading, error: createTriggerError }, createTriggerExecute] = API.useCryptoApi({
+        url: `/api/signals/${signal?.id}/triggers`,
+        method: "POST"
+    },
+        { manual: true }
+    )
 
     const [id, setId] = useState(-1);
     const [isEntry, setIsEntry] = useState(true);
-    const [isMarket, setIsMarket] = useState(false);
+    const [isMarket, setIsMarket] = useState(true);
     const [quantity, setQuantity] = useState(100);
     const [executed, setExecuted] = useState(false);
     const [entryTime, setEntryTime] = useState(Date.now());
@@ -38,39 +48,61 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
         bindTriggerStateFields(trigger);
     }, [trigger])
 
+    useEffect(() => {
+        if (!createTriggerLoading && createTriggerData) {
+            toast.success("Trigger created")
+            console.info('Trigger created', createTriggerData);
+            onSubmit(createTriggerData);
+        }
+    }, [createTriggerLoading, createTriggerData, onSubmit]);
+
+    useEffect(() => {
+        if (createTriggerError) {
+            toast.error(createTriggerError.message);
+        }
+    }, [createTriggerError]);
+
     const bindTriggerStateFields = (trigger) => {
         if (!trigger) return;
-
-        setId(trigger.id)
-        setIsEntry(trigger.isEntry)
-        setIsMarket(trigger.isMarket)
-        setQuantity(trigger.quantity)
-        setExecuted(trigger.executed)
-        setEntryTime(trigger.entryTime)
-        setPrice(trigger.price)
+        if (trigger.id)
+            setId(trigger.id)
+        if (trigger.isEntry)
+            setIsEntry(trigger.isEntry)
+        if (trigger.isMarket)
+            setIsMarket(trigger.isMarket)
+        if (trigger.quantity)
+            setQuantity(trigger.quantity)
+        if (trigger.executed)
+            setExecuted(trigger.executed)
+        if (trigger.entryTime)
+            setEntryTime(trigger.entryTime)
+        if (trigger.price)
+            setPrice(trigger.price)
     }
 
     const submit = () => {
-        const trigger = {
-            isEntry: isEntry,
-            isMarket: isMarket,
-            quantity: quantity,
-            executed: executed,
-            entryTime: entryTime,
-            price: price
-        }
-
         if (isEdit) {
-            onTriggerEditSubmit(trigger);
+            onTriggerEditSubmit();
         } else {
-            onTriggerCreateSubmit(trigger);
+            onTriggerCreateSubmit();
         }
-
-        onSubmit(trigger);
     }
 
-    const onTriggerCreateSubmit = (trigger) => {
-        onSubmit(trigger);
+    const onTriggerCreateSubmit = () => {
+        console.info('Sending create trigger request');
+        const time = new Date(entryTime);
+        time.setMinutes(time.getMinutes() - 1);
+
+        createTriggerExecute({
+            data: {
+                ...createTriggerData,
+                isEntry: isEntry,
+                isMarket: isMarket,
+                quantity: quantity,
+                entryTime: time.toISOString(),
+                price: price
+            }
+        });
     }
 
     const onTriggerEditSubmit = (trigger) => {

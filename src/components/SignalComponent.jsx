@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Typography from '@material-ui/core/Typography';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Box, Card, CardContent, TextField, Button, MenuItem, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Paper, tableCellClasses, Stack } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IconButton from '@mui/material/IconButton';
@@ -72,6 +72,13 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         { manual: true }
     )
 
+    const [{ data: getSignalData, loading: getSignalLoading, error: getSignalError }, getSignalExecute] = API.useCryptoApi({
+        url: `/api/signals/${signal?.id}`,
+        method: "GET"
+    },
+        { manual: true }
+    )
+
     const [sides, setSides] = useState([{ label: "Long", value: true }, { label: "Short", value: false }]);
 
     const [isSignalEdit, setIsSignalEdit] = useState(isEdit);
@@ -135,6 +142,17 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
         }
     }, [deleteSignalError]);
 
+    useEffect(() => {
+        if (!getSignalLoading && getSignalData) {
+            bindSignalStateFields(getSignalData)
+        }
+    }, [getSignalLoading, getSignalData]);
+
+    useEffect(() => {
+        if (getSignalError) {
+            toast.error(getSignalError.message);
+        }
+    }, [getSignalError]);
 
     const bindSignalStateFields = (signal) => {
         if (!signal) return;
@@ -214,8 +232,11 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
 
     const onTriggerSubmit = (trigger) => {
         console.debug("onTriggerSubmit", trigger);
+        getSignalExecute();
         setIsTriggerModalOpen(false);
     }
+
+    const onTriggerSubmitCallback = useCallback(onTriggerSubmit, [onTriggerSubmit])
 
     const onTriggerCreate = (isEntry) => {
         const trigger = {
@@ -299,13 +320,13 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     {!isSignalCreate && <EntrySection />}
                     {!isSignalCreate && <ExitSection />}
                     {isModify() && <SaveButton />}
-                    <TriggerModal
+                    {isTriggerModalOpen && <TriggerModal
                         signal={signal}
                         trigger={triggerToEdit}
-                        isOpen={isTriggerModalOpen}
+                        isOpen={true}
                         isEdit={isEditTrigger}
-                        onSubmit={onTriggerSubmit}
-                        onCancel={onTriggerCancel} />
+                        onSubmit={onTriggerSubmitCallback}
+                        onCancel={onTriggerCancel} />}
                 </Grid>
             </CardContent>
         </Card>
