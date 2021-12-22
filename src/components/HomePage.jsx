@@ -34,6 +34,12 @@ function HomePage() {
 
     const [signals, setSignals] = useState([]);
     const [isAddSignal, setIsAddSignal] = useState(false);
+    
+    useEffect(() => {
+        if (signalsData) {
+            setSignals(signalsData.items)
+        }
+    }, [signalsData])
 
     useEffect(() => {
         if (currenciesError) {
@@ -82,13 +88,6 @@ function HomePage() {
             />
         )
     }
-
-    useEffect(() => {
-        if (signalsData) {
-            setSignals(signalsData.items)
-        }
-    }, [signalsData])
-
 
     const AssembledCreateSignal = () =>
         <SignalComponent
