@@ -32,6 +32,7 @@ function HomePage() {
         method: "GET"
     })
 
+    const [signals, setSignals] = useState([]);
     const [isAddSignal, setIsAddSignal] = useState(false);
 
     useEffect(() => {
@@ -70,14 +71,24 @@ function HomePage() {
         console.log('cancelled create new signal');
     }
 
-    const assembleSignal = (signal) =>
-        <SignalComponent
-            key={signal.id}
-            signal={signal}
-            onSubmit={onSubmitSignal}
-            onCancel={onCancelSignal}
-            symbols={currencies}
-        />
+    const assembleSignal = (signal) => {
+        return (
+            <SignalComponent
+                key={signal.id}
+                signal={signal}
+                onSubmit={onSubmitSignal}
+                onCancel={onCancelSignal}
+                symbols={currencies}
+            />
+        )
+    }
+
+    useEffect(() => {
+        if (signalsData) {
+            setSignals(signalsData.items)
+        }
+    }, [signalsData])
+
 
     const assembleCreateSignal = () =>
         <SignalComponent
@@ -87,16 +98,9 @@ function HomePage() {
             symbols={currencies}
         />
 
-    if (currenciesLoading || signalsLoading || currenciesError || signalsError)
-        return <Box sx={styles.body}>
-            <Typography
-                variant="h3"
-                component="h1"
-                gutterBottom>
-                Signals
-            </Typography>
-            <CircularProgress />
-        </Box>
+    function isLoadingData() {
+        return currenciesLoading || signalsLoading || currenciesError || signalsError;
+    }
 
     return (
         <Box sx={styles.body}>
@@ -115,7 +119,11 @@ function HomePage() {
                 </Button>
             </Box>
             {isAddSignal && assembleCreateSignal()}
-            {signalsData.items.map(assembleSignal)}
+            {isLoadingData() ?
+                <CircularProgress />
+                :
+                signals.map(assembleSignal)
+            }
         </Box>
     );
 };
