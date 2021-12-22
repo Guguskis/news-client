@@ -89,7 +89,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
             <Box sx={styles.modal}>
                 <ActionsBar />
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    {isEntry ? `${isEdit ? "Update" : "Create"} Entry` : `${isEdit ? "Update" : "Create"} Exit`}
+                    <ModalHeader />
                 </Typography>
                 <TriggerTypeSwitch />
                 <Box sx={{ marginBottom: "1rem", maxWidth: "100%" }}>
@@ -121,6 +121,11 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
             </Box>
         </Modal>
     );
+
+    function ModalHeader() {
+        const action = `${isEdit ? "Update" : "Create"}`;
+        return isEntry ? `${action} Entry` : `${action} Exit`;
+    }
 
     function TriggerTypeSwitch() {
         return <Stack direction="row" sx={{ alignItems: "center" }} marginBottom="1rem">
