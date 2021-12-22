@@ -90,7 +90,7 @@ function HomePage() {
     }, [signalsData])
 
 
-    const assembleCreateSignal = () =>
+    const AssembledCreateSignal = () =>
         <SignalComponent
             isCreate={true}
             onSubmit={onSubmitSignal}
@@ -118,7 +118,7 @@ function HomePage() {
                     Add Signal
                 </Button>
             </Box>
-            {isAddSignal && assembleCreateSignal()}
+            {isAddSignal && <AssembledCreateSignal />}
             {isLoadingData() ?
                 <CircularProgress />
                 :
