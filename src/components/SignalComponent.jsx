@@ -16,6 +16,7 @@ import { LoadingButton } from '@mui/lab';
 
 
 import TriggerModal from './TriggerModal.jsx';
+import TriggerComponent from './TriggerComponent.jsx';
 import { ArraysState } from '../utils/utils.jsx';
 import { toast } from 'react-toastify';
 
@@ -432,47 +433,55 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
     }
 
     function assembleTrigger(trigger) {
-        const executionTime = new Date(trigger.executionTime);
-        // date format 2021-11-04 00:00
-        const executionTimeString = `${executionTime.getFullYear()}-${executionTime.getMonth() + 1}-${executionTime.getDate()} ${executionTime.getHours()}:${executionTime.getMinutes()}`;
-
+        // const executionTime = new Date(trigger.executionTime);
+        // // date format 2021-11-04 00:00
+        // const executionTimeString = `${executionTime.getFullYear()}-${executionTime.getMonth() + 1}-${executionTime.getDate()} ${executionTime.getHours()}:${executionTime.getMinutes()}`;
         return (
-            <StyledTableRow
-                key={trigger.id}>
-                <StyledTableCell scope="row" width="0.5rem">
-                    <ExecutedIcon />
-                </StyledTableCell>
-                <StyledTableCell scope="row">
-                    {trigger.isMarket ? "Market" : "Limit"}@{trigger.price} {trigger.isEntry ? "Entry" : "Exit"}
-                </StyledTableCell>
-                {isModify() &&
-                    <StyledTableCell align="right" scope="row">
-                        <Box component="span">
-                            <IconButton color="error" onClick={() => onTriggerDelete(trigger)} >
-                                {deleteSignalLoading ?
-                                    <CircularProgress color="error" size="1rem" />
-                                    :
-                                    <DeleteForeverIcon />
-                                }
-                            </IconButton>
-                            <IconButton onClick={() => onTriggerEdit(trigger)} color="primary" >
-                                <EditIcon />
-                            </IconButton>
-                        </Box>
-                    </StyledTableCell>
-                }
-            </StyledTableRow>
+            <TriggerComponent
+                key={trigger.id}
+                signal={signal}
+                trigger={trigger}
+                showActionBar={isModify()}
+                onSubmit={onTriggerSubmitCallback}
+            />
         )
+        // return (
+        //     <StyledTableRow
+        //         key={trigger.id}>
+        //         <StyledTableCell scope="row" width="0.5rem">
+        //             <ExecutedIcon />
+        //         </StyledTableCell>
+        //         <StyledTableCell scope="row">
+        //             {trigger.isMarket ? "Market" : "Limit"}@{trigger.price} {trigger.isEntry ? "Entry" : "Exit"}
+        //         </StyledTableCell>
+        //         {isModify() &&
+        //             <StyledTableCell align="right" scope="row">
+        //                 <Box component="span">
+        //                     <IconButton color="error" onClick={() => onTriggerDelete(trigger)} >
+        //                         {deleteSignalLoading ?
+        //                             <CircularProgress color="error" size="1rem" />
+        //                             :
+        //                             <DeleteForeverIcon />
+        //                         }
+        //                     </IconButton>
+        //                     <IconButton onClick={() => onTriggerEdit(trigger)} color="primary" >
+        //                         <EditIcon />
+        //                     </IconButton>
+        //                 </Box>
+        //             </StyledTableCell>
+        //         }
+        //     </StyledTableRow>
+        // )
 
-        function ExecutedIcon() {
-            return <Box component="span" marginRight="1rem">
-                {trigger.executed ?
-                    <CheckCircleIcon color="success" />
-                    :
-                    <HourglassBottomIcon color="warning" />
-                }
-            </Box>;
-        }
+        // function ExecutedIcon() {
+        //     return <Box component="span" marginRight="1rem">
+        //         {trigger.executed ?
+        //             <CheckCircleIcon color="success" />
+        //             :
+        //             <HourglassBottomIcon color="warning" />
+        //         }
+        //     </Box>;
+        // }
     }
 
     function isModify() {
