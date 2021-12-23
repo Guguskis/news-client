@@ -71,7 +71,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
     }, [createTriggerError]);
 
     useEffect(() => {
-        if (patchTriggerLoading && patchTriggerData) {
+        if (!patchTriggerLoading && patchTriggerData) {
             toast.success("Trigger updated")
             console.info('Trigger updated', patchTriggerData);
             onSubmit(patchTriggerData);
