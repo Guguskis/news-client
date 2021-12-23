@@ -78,7 +78,7 @@ function TriggerComponent({ signal, trigger, showActionBar = true, onSubmit }) {
         if (trigger.executed)
             setExecuted(trigger.executed)
         if (trigger.entryTime)
-            setEntryTime(trigger.entryTime)
+            setEntryTime(new Date(trigger.entryTime))
         if (trigger.price)
             setPrice(trigger.price)
     }
@@ -100,14 +100,11 @@ function TriggerComponent({ signal, trigger, showActionBar = true, onSubmit }) {
     const onTriggerSubmit = (trigger) => {
         console.debug("onTriggerSubmit", trigger);
         onSubmit();
-        // getSignalExecute();
-        // setIsTriggerModalOpen(false);
     }
 
     const onTriggerSubmitCallback = useCallback(onTriggerSubmit, [onTriggerSubmit])
 
     const onTriggerEdit = () => {
-        // todo send PUT trigger
         setIsEditTrigger(true);
         setIsTriggerModalOpen(true);
         console.debug("onTriggerEdit", trigger);

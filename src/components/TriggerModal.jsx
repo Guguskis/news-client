@@ -37,12 +37,19 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
         { manual: true }
     )
 
+    const [{ data: patchTriggerData, loading: patchTriggerLoading, error: patchTriggerError }, patchTriggerExecute] = API.useCryptoApi({
+        url: `/api/signals/${signal?.id}/triggers/${trigger?.id}`,
+        method: "PATCH"
+    },
+        { manual: true }
+    )
+
     const [id, setId] = useState(-1);
     const [isEntry, setIsEntry] = useState(false);
     const [isMarket, setIsMarket] = useState(true);
     const [quantity, setQuantity] = useState(100);
     const [executed, setExecuted] = useState(false);
-    const [entryTime, setEntryTime] = useState(Date.now());
+    const [entryTime, setEntryTime] = useState(new Date());
     const [price, setPrice] = useState(250);
 
     useEffect(() => {
@@ -63,6 +70,20 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
         }
     }, [createTriggerError]);
 
+    useEffect(() => {
+        if (patchTriggerLoading && patchTriggerData) {
+            toast.success("Trigger updated")
+            console.info('Trigger updated', patchTriggerData);
+            onSubmit(patchTriggerData);
+        }
+    }, [patchTriggerLoading, patchTriggerData, onSubmit]);
+
+    useEffect(() => {
+        if (patchTriggerError) {
+            toast.error(patchTriggerError.message);
+        }
+    }, [patchTriggerError]);
+
     const bindTriggerStateFields = (trigger) => {
         if (!trigger) return;
         if (trigger.id)
@@ -76,7 +97,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
         if (trigger.executed)
             setExecuted(trigger.executed)
         if (trigger.entryTime)
-            setEntryTime(trigger.entryTime)
+            setEntryTime(new Date(trigger.entryTime))
         if (trigger.price)
             setPrice(trigger.price)
     }
@@ -90,7 +111,6 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
     }
 
     const onTriggerCreateSubmit = () => {
-        console.info('Sending create trigger request');
         const time = new Date(entryTime);
         time.setMinutes(time.getMinutes() - 1);
 
@@ -99,14 +119,23 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
                 isEntry: isEntry,
                 isMarket: isMarket,
                 quantity: quantity,
-                entryTime: time.toISOString(),
+                entryTime: time,
                 price: price
             }
         });
     }
 
-    const onTriggerEditSubmit = (trigger) => {
-        onSubmit(trigger);
+    const onTriggerEditSubmit = () => {
+        const time = new Date(entryTime);
+        time.setMinutes(time.getMinutes() - 1);
+
+        patchTriggerExecute({
+            data: {
+                quantity: quantity,
+                entryTime: time,
+                price: price
+            }
+        });
     }
 
     const onTriggerCancel = () => {
