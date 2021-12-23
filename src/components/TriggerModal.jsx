@@ -56,7 +56,7 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
         url: `/api/currencies/${signal?.symbol}/tickers`,
         method: "GET",
         params: {
-            from: getEntryTimeMinusMinute(),
+            from: entryTime,
         }
     },
         { manual: true }
@@ -72,7 +72,6 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
             if (getTickersData.length > 0)
                 setPrice(getTickersData[0].close);
         }
-        console.log('getTickersData', getTickersData)
     }, [getTickersLoading, getTickersData])
 
     useEffect(() => {
@@ -134,28 +133,22 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
     }
 
     const onTriggerCreateSubmit = () => {
-        const time = new Date(entryTime);
-        time.setMinutes(time.getMinutes() - 1);
-
         createTriggerExecute({
             data: {
                 isEntry: isEntry,
                 isMarket: isMarket,
                 quantity: quantity,
-                entryTime: time,
+                entryTime: entryTime,
                 price: price
             }
         });
     }
 
     const onTriggerEditSubmit = () => {
-        const time = new Date(entryTime);
-        time.setMinutes(time.getMinutes() - 1);
-
         patchTriggerExecute({
             data: {
                 quantity: quantity,
-                entryTime: time,
+                entryTime: entryTime,
                 price: price
             }
         });
@@ -205,12 +198,6 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
             </Box>
         </Modal>
     );
-
-    function getEntryTimeMinusMinute() {
-        const time = new Date(entryTime);
-        time.setMinutes(entryTime.getMinutes() - 1);
-        return time;
-    }
 
     function ModalHeader() {
         const action = `${isEdit ? "Update" : "Create"}`;
