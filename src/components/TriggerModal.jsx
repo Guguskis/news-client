@@ -52,6 +52,29 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
     const [entryTime, setEntryTime] = useState(new Date());
     const [price, setPrice] = useState(250);
 
+    const [{ data: getTickersData, loading: getTickersLoading, error: getTickersError }, getTickersExecute] = API.useCryptoApi({
+        url: `/api/currencies/${signal?.symbol}/tickers`,
+        method: "GET",
+        params: {
+            from: getEntryTimeMinusMinute(),
+        }
+    },
+        { manual: true }
+    )
+
+    useEffect(() => {
+        if (isOpen && signal)
+            getTickersExecute()
+    }, [isOpen, signal, getTickersExecute])
+
+    useEffect(() => {
+        if (!getTickersLoading && getTickersData) {
+            if (getTickersData.length > 0)
+                setPrice(getTickersData[0].close);
+        }
+        console.log('getTickersData', getTickersData)
+    }, [getTickersLoading, getTickersData])
+
     useEffect(() => {
         bindTriggerStateFields(trigger);
     }, [trigger])
@@ -182,6 +205,12 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
             </Box>
         </Modal>
     );
+
+    function getEntryTimeMinusMinute() {
+        const time = new Date(entryTime);
+        time.setMinutes(entryTime.getMinutes() - 1);
+        return time;
+    }
 
     function ModalHeader() {
         const action = `${isEdit ? "Update" : "Create"}`;
