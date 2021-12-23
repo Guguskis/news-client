@@ -225,7 +225,8 @@ const TriggerModal = ({ signal, trigger, isOpen, isEdit = false, onSubmit, onCan
             <Switch
                 onChange={(e) => setIsMarket(e.target.checked)}
                 checked={isMarket}
-                disabled={isEdit} />
+                disabled={isEdit} 
+                />
             <Typography variant="body2">
                 Market
             </Typography>

@@ -62,8 +62,8 @@ function TriggerComponent({ signal, trigger, showActionBar = true, onSubmit }) {
     const [price, setPrice] = useState(250);
 
     useEffect(() => {
-        bindTriggerStateFields(signal);
-    }, [signal])
+        bindTriggerStateFields(trigger);
+    }, [trigger])
 
     const bindTriggerStateFields = (trigger) => {
         if (!trigger) return;
@@ -126,7 +126,7 @@ function TriggerComponent({ signal, trigger, showActionBar = true, onSubmit }) {
                 <ExecutedIcon />
             </StyledTableCell>
             <StyledTableCell scope="row">
-                {trigger.isMarket ? "Market" : "Limit"} {quantity}@{price} {isEntry ? "Entry" : "Exit"}
+                {trigger.isMarket ? "Market" : "Limit"} {quantity}@{price}
             </StyledTableCell>
             {showActionBar &&
                 <StyledTableCell align="right" scope="row">
