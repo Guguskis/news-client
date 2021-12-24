@@ -352,15 +352,13 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     <AddBoxIcon />
                 </IconButton>
             </Stack>
-            {entries.length > 0 &&
-                <TableContainer component={Paper} sx={{ marginBottom: "0.5rem", padding: "0.25rem" }}>
-                    <Table size="small" >
-                        <TableBody>
-                            {entries.map(assembleTrigger)}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            }
+            <TableContainer component={Paper} sx={{ marginBottom: "0.5rem", padding: "0.25rem" }}>
+                <Table size="small" >
+                    <TableBody>
+                        {entries.map(assembleTrigger)}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </>;
     }
 
@@ -377,15 +375,13 @@ function SignalComponent({ signal, isEdit = false, isCreate = false, onSubmit, o
                     <AddBoxIcon />
                 </IconButton>
             </Grid>
-            {/* {exits.length > 0 && */}
-                <TableContainer component={Paper} sx={{ marginBottom: "0.5rem", padding: "0.25rem" }}>
-                    <Table size="small" aria-label="a dense table" >
-                        <TableBody>
-                            {exits.map(assembleTrigger)}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            {/* } */}
+            <TableContainer component={Paper} sx={{ marginBottom: "0.5rem", padding: "0.25rem" }}>
+                <Table size="small" aria-label="a dense table" >
+                    <TableBody>
+                        {exits.map(assembleTrigger)}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </>;
     }
 
