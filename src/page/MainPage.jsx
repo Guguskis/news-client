@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useNewsClient } from '../hooks/useNewsClient';
-import Box from '@mui/material/Box';
+import { Box, Container } from '@mui/material';
 import NewsCard from '../components/NewsCard.jsx';
 import Typography from '@material-ui/core/Typography';
 
@@ -8,9 +8,9 @@ const MainPage = () => {
     const [news] = useNewsClient();
 
     // add auto scroll to bottom for Box
-    const boxRef = useRef(null);
+    const containerRef = useRef(null);
     useEffect(() => {
-        boxRef.current.scrollTop = boxRef.current.scrollHeight;
+        containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }, [news]);
 
     function assembleNewsCard(news, i) {
@@ -21,31 +21,14 @@ const MainPage = () => {
 
     return (
         // todo Box sticky scroll bottom
-        <Box ref={boxRef} sx={{
+        <Container ref={containerRef} sx={{
             display: 'flex',
             flexDirection: 'column',
             // alignItems: 'center',
             // justifyContent: 'center',
         }}>
-            {/* random picture */}
-            {/* <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-                height: '100%',
-                backgroundImage: 'url(https://source.unsplash.com/random)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}>
-                <Typography variant="h4" component="div">
-                    News
-                </Typography>
-            </Box> */}
-
             {news.map(assembleNewsCard)}
-        </Box>
+        </Container>
     );
 
 }
