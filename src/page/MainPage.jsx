@@ -13,18 +13,12 @@ const MainPage = () => {
         containerRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [news]);
 
-    function assembleNewsCard(news, i) {
-        return (
-            <NewsCard news={news} key={i} />
-        )
-    }
-
     return (
         <Container sx={{
             display: 'flex',
             flexDirection: 'column',
         }}>
-            {news.map(assembleNewsCard)}
+            {news.map((news, i) => <NewsCard news={news} key={i} />)}
             <Box ref={containerRef}></Box>
         </Container>
     );
