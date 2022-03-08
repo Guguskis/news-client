@@ -1,29 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
 import { Card, CardActions, CardContent, Typography } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
 import { IconButton } from '@mui/material';
 import ReactTimeAgo from 'react-time-ago'
 
-const NewsCard = (props) => {
+const NewsCard = ({ news, sx }) => {
 
     return (
-        <Card >
+        <Card sx={sx}>
             <CardContent>
                 <Typography variant="h5" component="div">
-                    {props.news.title}
+                    {news.title}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    <ReactTimeAgo date={props.news.created} locale="en-US" />
-                </Typography>
-                <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
+                    <ReactTimeAgo date={news.created} locale="en-US" />
                 </Typography>
             </CardContent>
             <CardActions>
-                <IconButton href={props.news.url}
+                <IconButton
+                    href={news.url}
                     target="_blank"
                 >
                     <LinkIcon />

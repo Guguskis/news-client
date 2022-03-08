@@ -6,18 +6,22 @@ import NewsCard from '../components/NewsCard.jsx';
 const MainPage = () => {
     const [news] = useNewsClient();
 
-    const containerRef = useRef(null);
+    const scrollTargetRef = useRef(null);
     useEffect(() => {
-        containerRef.current?.scrollIntoView({ behavior: "smooth" })
+        scrollTargetRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [news]);
 
     return (
-        <Container sx={{
-            display: 'flex',
-            flexDirection: 'column',
-        }}>
-            {news.map((news, i) => <NewsCard news={news} key={i} />)}
-            <Box ref={containerRef}></Box>
+        // Container With spacing between items
+        <Container maxWidth="lg" spacing={30}>
+            {news.map((news, i) =>
+                <NewsCard
+                    sx={{ mb: 1 }}
+                    news={news}
+                    key={i}
+                />
+            )}
+            <Box ref={scrollTargetRef}></Box>
         </Container>
     );
 
