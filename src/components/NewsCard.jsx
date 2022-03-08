@@ -7,7 +7,6 @@ const NewsCard = (props) => {
 
     return (
         <Card >
-        {/* <Card sx={{ minWidth: 275 }} > */}
             <CardContent>
                 <Typography variant="h5" component="div">
                     {props.news.title}

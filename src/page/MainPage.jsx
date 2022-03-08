@@ -10,7 +10,7 @@ const MainPage = () => {
     // add auto scroll to bottom for Box
     const containerRef = useRef(null);
     useEffect(() => {
-        containerRef.current.scrollTop = containerRef.current.scrollHeight;
+        containerRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [news]);
 
     function assembleNewsCard(news, i) {
@@ -20,14 +20,12 @@ const MainPage = () => {
     }
 
     return (
-        // todo Box sticky scroll bottom
-        <Container ref={containerRef} sx={{
+        <Container sx={{
             display: 'flex',
             flexDirection: 'column',
-            // alignItems: 'center',
-            // justifyContent: 'center',
         }}>
             {news.map(assembleNewsCard)}
+            <Box ref={containerRef}></Box>
         </Container>
     );
 
