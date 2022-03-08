@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { useNewsClient } from '../hooks/useNewsClient';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import { Card, CardActions, CardContent, Typography } from '@mui/material';
+import NewsCard from '../components/NewsCard.jsx';
+import Typography from '@material-ui/core/Typography';
 
 const MainPage = () => {
     const [news] = useNewsClient();
@@ -13,42 +13,38 @@ const MainPage = () => {
         boxRef.current.scrollTop = boxRef.current.scrollHeight;
     }, [news]);
 
-    function NewsCard(news, i) {
+    function assembleNewsCard(news, i) {
         return (
-            <Card sx={{ minWidth: 275 }} key={i} >
-                <CardContent>
-                    <Typography variant="h5" component="div">
-                        {news.title}
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        adjective
-                    </Typography>
-                    <Typography variant="body2">
-                        well meaning and kindly.
-                        <br />
-                        {'"a benevolent smile"'}
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="small">Learn More</Button>
-                </CardActions>
-            </Card>
+            <NewsCard news={news} key={i} />
         )
     }
 
     return (
-        // Box sticky scroll bottom
-
-
-
+        // todo Box sticky scroll bottom
         <Box ref={boxRef} sx={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
+            // alignItems: 'center',
+            // justifyContent: 'center',
         }}>
-        {/* <Box sx={{ display: 'flex', flexDirection: 'column-reverse' }}> */}
-            {news.slice().reverse().map(NewsCard)}
+            {/* random picture */}
+            {/* <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                height: '100%',
+                backgroundImage: 'url(https://source.unsplash.com/random)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }}>
+                <Typography variant="h4" component="div">
+                    News
+                </Typography>
+            </Box> */}
+
+            {news.map(assembleNewsCard)}
         </Box>
     );
 
