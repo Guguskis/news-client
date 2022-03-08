@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 const MainPage = () => {
     const [news] = useNewsClient();
 
-    // add auto scroll to bottom for Box
     const containerRef = useRef(null);
     useEffect(() => {
         containerRef.current?.scrollIntoView({ behavior: "smooth" })
