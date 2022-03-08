@@ -17,6 +17,7 @@ export function useNewsClient() {
 
     try {
       const newsItem = JSON.parse(message);
+      newsItem.created = new Date(newsItem.created);
       ArraysState.add(setNews, newsItem);
       console.debug(message);
 

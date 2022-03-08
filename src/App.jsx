@@ -10,7 +10,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 import MainPage from './page/MainPage.jsx';
+import TimeAgo from 'javascript-time-ago'
 
+import en from 'javascript-time-ago/locale/en.json'
 import { StompSessionProvider } from "react-stomp-hooks";
 
 const theme = createTheme({
@@ -38,6 +40,8 @@ toast.configure({
   position: "top-right",
   autoClose: 5000
 })
+
+TimeAgo.addDefaultLocale(en)
 
 function App() {
   return (

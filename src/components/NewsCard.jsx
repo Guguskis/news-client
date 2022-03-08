@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import { Card, CardActions, CardContent, Typography } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
 import { IconButton } from '@mui/material';
+import ReactTimeAgo from 'react-time-ago'
 
 const NewsCard = (props) => {
 
@@ -13,7 +14,7 @@ const NewsCard = (props) => {
                     {props.news.title}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    adjective
+                    <ReactTimeAgo date={props.news.created} locale="en-US" />
                 </Typography>
                 <Typography variant="body2">
                     well meaning and kindly.
@@ -22,14 +23,11 @@ const NewsCard = (props) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                {/* IconButton to open news.url in new tab*/}
-                <IconButton href={props.news.url} 
+                <IconButton href={props.news.url}
                     target="_blank"
                 >
                     <LinkIcon />
                 </IconButton>
-
-                
             </CardActions>
         </Card>
     )
