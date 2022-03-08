@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import { useNewsClient } from '../hooks/useNewsClient';
 import { Box, Container } from '@mui/material';
 import NewsCard from '../components/NewsCard.jsx';
-import Typography from '@material-ui/core/Typography';
 
 const MainPage = () => {
     const [news] = useNewsClient();

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { Card, CardActions, CardContent, Typography } from '@mui/material';
-
+import LinkIcon from '@mui/icons-material/Link';
+import { IconButton } from '@mui/material';
 
 const NewsCard = (props) => {
 
@@ -21,7 +22,14 @@ const NewsCard = (props) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">Learn More</Button>
+                {/* IconButton to open news.url in new tab*/}
+                <IconButton href={props.news.url} 
+                    target="_blank"
+                >
+                    <LinkIcon />
+                </IconButton>
+
+                
             </CardActions>
         </Card>
     )
