@@ -1,5 +1,5 @@
 // import './App.css';
-import HomePage from './components/HomePage.jsx';
+import SignalsHomePage from './components/SignalsHomePage.jsx';
 
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
@@ -9,6 +9,9 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
+import MainPage from './page/MainPage.jsx';
+
+import { StompSessionProvider } from "react-stomp-hooks";
 
 const theme = createTheme({
   palette: {
@@ -35,20 +38,26 @@ toast.configure({
   position: "top-right",
   autoClose: 5000
 })
-
 function App() {
   return (
     <ThemeProvider theme={theme} >
-      <LocalizationProvider dateAdapter={DateAdapter}>
-        <ToastContainer />
-        <CssBaseline />
-        <Router>
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            {/* <Route component={NotFoundPage}/> */}
-          </Switch>
-        </Router>
-      </LocalizationProvider>
+      <StompSessionProvider
+        url={"ws://localhost:8081/news/websocket"}
+        debug={(str) => {
+          console.debug("NEWS: " + str);
+        }}
+      >
+        <LocalizationProvider dateAdapter={DateAdapter}>
+          <ToastContainer />
+          <CssBaseline />
+          <Router>
+            <Switch>
+              <Route exact path="/" component={MainPage} />
+              {/* <Route component={NotFoundPage}/> */}
+            </Switch>
+          </Router>
+        </LocalizationProvider>
+      </StompSessionProvider>
     </ThemeProvider>
   );
 }

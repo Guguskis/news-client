@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { useState, useEffect } from 'react';
 
 import { Box, Button, CircularProgress } from '@mui/material';
-import SignalComponent from '../components/SignalComponent.jsx';
+import SignalComponent from './SignalComponent.jsx';
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import { ArraysState } from "../utils/utils.jsx";
 import { API } from "../config/axiosConfig.jsx";
