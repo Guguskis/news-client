@@ -43,7 +43,7 @@ function App() {
   return (
     <ThemeProvider theme={theme} >
       <StompSessionProvider
-        url={"ws://86.100.240.140:90812.0/news/websocket"}
+        url={"ws://86.100.240.140:9081/news/websocket"}
         debug={(str) => {
           console.debug("NEWS: " + str);
         }}
