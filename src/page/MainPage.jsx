@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useNewsClient } from '../hooks/useNewsClient';
+import { useNewsClient } from '../hooks/useNewsClient.jsx';
 import { Box, Container } from '@mui/material';
 import NewsCard from '../components/NewsCard.jsx';
 
