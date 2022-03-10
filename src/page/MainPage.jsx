@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useNewsClient } from '../hooks/useNewsClient.jsx';
 import { Box, Container } from '@mui/material';
 import NewsCard from '../components/NewsCard.jsx';
@@ -7,15 +7,25 @@ import { useScrollPosition } from '@n8tb1t/use-scroll-position'
 const MainPage = () => {
     const { news, loadMore } = useNewsClient();
 
+    const [loadingNews, setLoadingNews] = useState(false);
+
     const scrollTargetRef = useRef(null);
     const containerRef = useRef(null);
+
     useEffect(() => {
+        // if (!loadingNews)
         scrollTargetRef.current?.scrollIntoView({ behavior: "smooth" })
-    }, [news]);
+    }, [news, loadingNews]);
+
+    // function loadMoreNews() {
+    //     setLoadingNews(true);
+    //     loadMore();
+    // }
 
     useScrollPosition(({ prevPos, currPos }) => {
-        if (currPos.y === 0) {
-            loadMore()
+        if (currPos.y === 0 && !loadingNews) {
+            // loadMoreNews()
+            loadMore();
         }
     })
 
