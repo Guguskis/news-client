@@ -1,30 +1,46 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useNewsClient } from '../hooks/useNewsClient.jsx';
-import { Box, Container } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import NewsCard from '../components/NewsCard.jsx';
 import { useScrollPosition } from '@n8tb1t/use-scroll-position'
+import { useTimer } from 'react-timer-hook';
+import { useStopwatch } from 'react-timer-hook';
+
+function nowPlus2Seconds() {
+    return new Date(Date.now() + 2000);
+}
+
+// const useScrollStopwatch = (expiryTimestamp) => {
+//     const { isRunning, restart } = useTimer({ expiryTimestamp, autoStart: false });
+
+//     useScrollPosition(() => {
+//         restart(nowPlus2Seconds());
+//     }, [restart]);
+
+//     return { scrolledRecently: isRunning };
+// }
+
 
 const MainPage = () => {
-    const { news, loadMore } = useNewsClient();
+    const { news, loading, loadMore } = useNewsClient();
 
-    const [loadingNews, setLoadingNews] = useState(false);
+    // const { scrolledRecently } = useScrollStopwatch(nowPlus2Seconds())
 
     const scrollTargetRef = useRef(null);
     const containerRef = useRef(null);
 
-    useEffect(() => {
-        // if (!loadingNews)
-        scrollTargetRef.current?.scrollIntoView({ behavior: "smooth" })
-    }, [news, loadingNews]);
+    // const scrollDown = useCallback(() => {
+    //     if (!scrolledRecently)
+    //         scrollTargetRef.current.scrollIntoView({ behavior: 'smooth' });
+    // }, [scrolledRecently]);
 
-    // function loadMoreNews() {
-    //     setLoadingNews(true);
-    //     loadMore();
-    // }
+
+    // useEffect(() => {
+    //     scrollDown();
+    // }, [news]);
 
     useScrollPosition(({ prevPos, currPos }) => {
-        if (currPos.y === 0 && !loadingNews) {
-            // loadMoreNews()
+        if (currPos.y === 0) {
             loadMore();
         }
     })
@@ -43,6 +59,10 @@ const MainPage = () => {
                 />
             )}
             <Box ref={scrollTargetRef}></Box>
+            {/* Typography isRunning */}
+            <Typography variant="h4" component="h1" gutterBottom>
+                {/* HELLO {scrolledRecently ? "scrolledRecently" : "not scrolledRecently"} */}
+            </Typography>
         </Container>
     );
 

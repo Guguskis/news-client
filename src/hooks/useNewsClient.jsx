@@ -37,7 +37,6 @@ export function useNewsClient() {
 
   useEffect(() => {
     if (!getNewsLoading && getNewsData) {
-      console.log(getNewsData.nextPageToken)
       setPageToken(getNewsData.nextPageToken)
       mergeLoadedNews()
     }
@@ -68,8 +67,11 @@ export function useNewsClient() {
   }, [news]);
 
   function loadMore() {
-    if (getNewsLoading || pageToken == null)
+    if (getNewsLoading || pageToken == null) {
+      console.warn("All news loaded")
       return;
+    }
+    console.debug("Loading more news")
     getNewsExecute()
   }
 
