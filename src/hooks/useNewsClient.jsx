@@ -17,13 +17,11 @@ export function useNewsClient() {
 
   useEffect(() => {
     if (!getNewsLoading && getNewsData) {
-      let news = getNewsData.news.map(newsItem => {
-        newsItem.created = new Date(newsItem.created);
-        return newsItem;
-      })
-      news.sort((a, b) => a.created - b.created);
+      let fetchedNews = getNewsData.news.map(assembleNews)
 
-      ArraysState.add(setNews, news);
+      fetchedNews.sort((a, b) => a.created - b.created);
+
+      setNews(fetchedNews)
     }
   }, [getNewsLoading, getNewsData]);
 
@@ -32,16 +30,25 @@ export function useNewsClient() {
       return;
 
     try {
-      const newsItem = JSON.parse(message);
-      newsItem.created = new Date(newsItem.created);
+      const newsItem = assembleNews(JSON.parse(message));
       ArraysState.add(setNews, newsItem);
-      console.debug(message);
+      console.debug(newsItem);
 
     } catch (error) {
       console.warn("Can't parse message: " + message, error)
     }
   }, [message]);
 
-  return [news];
+  function loadMore() {
+    console.log("load more");
+  }
+
+  function assembleNews(news) {
+    news.created = new Date(news.created);
+    return news
+  }
+
+
+  return { news, loadMore };
   // return [news, subscribeChannel, unsubscribeChannel];
 }
