@@ -35,7 +35,7 @@ const MainPage = () => {
     //// --------------------
 
     return (
-        <>
+        <Box>
             <Container
                 maxWidth="lg"
                 spacing={30}
@@ -48,9 +48,9 @@ const MainPage = () => {
                         key={i}
                     />
                 )}
-                {loading && <LinearProgress />}
+                <LinearProgress sx={{ visibility: loading ? 'visible' : 'hidden' }} />
             </Container>
-        </>
+        </Box>
     );
 }
 
