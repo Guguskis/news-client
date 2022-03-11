@@ -13,11 +13,6 @@ const MainPage = () => {
     const { news, loading, loadMoreRef } = useNewsClient();
 
     const [scroll, ScrollTargetComponent] = useScrollableComponent();
-
-    useEffect(() => {
-        scroll();
-    }, [news]);
-
     const { scrolledRecently } = useScrollStopwatch({ seconds: 2 })
 
     //// --------------------
@@ -30,6 +25,11 @@ const MainPage = () => {
             loadMoreRef.current();
         }
     }
+
+    useEffect(() => {
+        if (!loading && !scrolledRecently)
+            scroll();
+    }, [loading, scrolledRecently]);
 
     useEffect(() => {
         window.addEventListener("scroll", handleScroll);
