@@ -20,6 +20,10 @@ export function useNewsClient() {
   }, { manual: true });
 
   useSubscription("/topic/news", (message) => setMessage(message.body));
+  
+  useEffect(() => {
+    getNewsExecute();
+  }, [])
 
   const addNews = useCallback((addedNews) => {
     let fetchedNews = addedNews
@@ -31,9 +35,6 @@ export function useNewsClient() {
     setNews(fetchedNews)
   }, [news])
 
-  useEffect(() => {
-    getNewsExecute();
-  }, [])
 
   useEffect(() => {
     if (!getNewsLoading && getNewsData) {
@@ -66,9 +67,8 @@ export function useNewsClient() {
     setLoading(false)
   }, [news]);
 
-  function loadMore() {
-    console.log("todo figure out why not loading on bottom scroll");
-    if (getNewsLoading || !getNewsData)
+  const loadMore = useCallback(() => {
+    if (loading)
       return;
     else if (pageToken == null) {
       console.warn("All news loaded")
@@ -78,6 +78,7 @@ export function useNewsClient() {
       getNewsExecute()
     }
   }
+  , [loading, pageToken, getNewsExecute]);
 
   function assembleNews(news) {
     news.created = new Date(news.created);
