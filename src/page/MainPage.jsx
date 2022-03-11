@@ -12,7 +12,7 @@ import useScrollableComponent from '../hooks/useScrollableComponent.jsx';
 const MainPage = () => {
     const { news, loading, loadMore } = useNewsClient();
 
-    const { scroll, ScrollTargetComponent } = useScrollableComponent();
+    const [scroll, ScrollTargetComponent] = useScrollableComponent();
 
     useEffect(() => {
         scroll();

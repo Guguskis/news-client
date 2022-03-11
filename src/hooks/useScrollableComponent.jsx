@@ -10,10 +10,10 @@ const useScrollableComponent = () => {
     const TargetComponent = () =>
         <div ref={scrollTargetRef} />
 
-    return {
-        scroll: scrollToTarget,
-        ScrollTargetComponent: TargetComponent
-    }
+    return [
+        scrollToTarget,
+        TargetComponent
+    ]
 
 }
 
