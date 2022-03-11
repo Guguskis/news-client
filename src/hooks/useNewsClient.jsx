@@ -15,7 +15,7 @@ export function useNewsClient() {
     url: "/api/news",
     params: {
       pageToken: pageToken,
-      pageSize: 5
+      // pageSize: 5
     },
     method: "GET",
   }, { manual: true });
