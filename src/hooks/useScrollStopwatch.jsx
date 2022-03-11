@@ -1,11 +1,11 @@
-import { useRef, useEffect} from 'react';
+import { useEffect, useState } from 'react';
 import { useScrollPosition } from '@n8tb1t/use-scroll-position'
 import { useTimer } from 'react-timer-hook';
 import { Time } from "../utils/utils.jsx";
 
 export function useScrollStopwatch({ seconds }) {
 
-    const scrolledRecentlyRef = useRef(false);
+    const [scrolledRecently, setScrolledRecently] = useState(false);
 
     const { isRunning, restart } = useTimer({
         expiryTimestamp: Time.nowPlusSeconds(seconds),
@@ -14,12 +14,12 @@ export function useScrollStopwatch({ seconds }) {
 
     useScrollPosition(() => {
         restart(Time.nowPlusSeconds(seconds));
-        scrolledRecentlyRef.current = true;
+        setScrolledRecently(true);
     }, [restart]);
 
     useEffect(() => {
-        scrolledRecentlyRef.current = isRunning;
+        setScrolledRecently(isRunning);
     }, [isRunning]);
 
-    return { scrolledRecentlyRef };
+    return { scrolledRecently };
 }
