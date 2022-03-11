@@ -21,15 +21,15 @@ export function useNewsClient() {
 
   useSubscription("/topic/news", (message) => setMessage(message.body));
 
-  const mergeLoadedNews = useCallback(() => {
-    let fetchedNews = getNewsData.news
+  const addNews = useCallback((addedNews) => {
+    let fetchedNews = addedNews
       .map(assembleNews)
       .filter(item => !news.some(newsItem => newsItem.id === item.id))
       .concat(news)
       .sort((a, b) => b.created - a.created);
 
     setNews(fetchedNews)
-  }, [news, getNewsData])
+  }, [news])
 
   useEffect(() => {
     getNewsExecute();
@@ -38,7 +38,7 @@ export function useNewsClient() {
   useEffect(() => {
     if (!getNewsLoading && getNewsData) {
       setPageToken(getNewsData.nextPageToken)
-      mergeLoadedNews()
+      addNews(getNewsData.news)
     }
   }, [getNewsLoading, getNewsData]);
 
@@ -48,7 +48,7 @@ export function useNewsClient() {
 
     try {
       const newsItem = assembleNews(JSON.parse(message));
-      ArraysState.add(setNews, newsItem);
+      addNews([newsItem]);
       console.debug(newsItem);
 
     } catch (error) {
