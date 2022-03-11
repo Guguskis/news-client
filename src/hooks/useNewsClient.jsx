@@ -14,7 +14,8 @@ export function useNewsClient() {
   const [{ data: getNewsData, loading: getNewsLoading, error: getNewsError }, getNewsExecute] = API.useNewsApi({
     url: "/api/news",
     params: {
-      pageToken: pageToken
+      pageToken: pageToken,
+      pageSize: 5
     },
     method: "GET",
   }, { manual: true });

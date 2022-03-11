@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useNewsClient } from '../hooks/useNewsClient.jsx';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Typography, LinearProgress } from '@mui/material';
 import NewsCard from '../components/NewsCard.jsx';
 import { useScrollStopwatch } from './../hooks/useScrollStopwatch.jsx';
 import useScrollableComponent from '../hooks/useScrollableComponent.jsx';
@@ -26,7 +26,7 @@ const MainPage = () => {
     useEffect(() => {
         if (!loading && !scrolledRecently)
             scroll();
-    }, [loading, news]);
+    }, [news]);
 
     useEffect(() => {
         window.addEventListener("scroll", handleScroll);
@@ -48,10 +48,10 @@ const MainPage = () => {
                         key={i}
                     />
                 )}
+                {loading && <LinearProgress />}
             </Container>
         </>
     );
-
 }
 
 export default MainPage;
