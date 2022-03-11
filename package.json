@@ -43,6 +43,7 @@
     "react-timer-hook": "^3.0.5",
     "react-toastify": "^7.0.3",
     "recharts": "^2.0.9",
+    "use-window-dimensions": "^1.0.2",
     "web-vitals": "^1.1.1"
   },
   "scripts": {

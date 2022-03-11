@@ -58,5 +58,11 @@ class ObjectState {
     }
 }
 
-export {Guid, ArraysState, ObjectState};
+class Time {
+    static nowPlusSeconds(seconds) {
+        return new Date(Date.now() + seconds * 1000);
+    }
+}
+
+export { Guid, ArraysState, ObjectState, Time };
 

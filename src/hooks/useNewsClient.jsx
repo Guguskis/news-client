@@ -26,7 +26,7 @@ export function useNewsClient() {
       .map(assembleNews)
       .filter(item => !news.some(newsItem => newsItem.id === item.id))
       .concat(news)
-      .sort((a, b) => a.created - b.created);
+      .sort((a, b) => b.created - a.created);
 
     setNews(fetchedNews)
   }, [news, getNewsData])
@@ -67,12 +67,16 @@ export function useNewsClient() {
   }, [news]);
 
   function loadMore() {
-    if (getNewsLoading || pageToken == null) {
+    console.log("todo figure out why not loading on bottom scroll");
+    if (getNewsLoading || !getNewsData)
+      return;
+    else if (pageToken == null) {
       console.warn("All news loaded")
       return;
+    } else {
+      console.debug("Loading more news")
+      getNewsExecute()
     }
-    console.debug("Loading more news")
-    getNewsExecute()
   }
 
   function assembleNews(news) {
