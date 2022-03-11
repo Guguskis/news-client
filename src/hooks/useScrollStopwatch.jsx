@@ -5,7 +5,10 @@ import { Time } from "../utils/utils.jsx";
 
 
 export function useScrollStopwatch({ seconds }) {
-    const { isRunning, restart } = useTimer({ expiryTimestamp: Time.nowPlusSeconds(seconds), autoStart: false });
+    const { isRunning, restart } = useTimer({
+        expiryTimestamp: Time.nowPlusSeconds(seconds),
+        autoStart: false
+    });
 
     useScrollPosition(() => {
         restart(Time.nowPlusSeconds(seconds));
