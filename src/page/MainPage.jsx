@@ -10,7 +10,7 @@ import useWindowDimensions from 'use-window-dimensions';
 import useScrollableComponent from '../hooks/useScrollableComponent.jsx';
 
 const MainPage = () => {
-    const { news, loading, loadMore } = useNewsClient();
+    const { news, loading, loadMoreRef } = useNewsClient();
 
     const [scroll, ScrollTargetComponent] = useScrollableComponent();
 
@@ -18,22 +18,18 @@ const MainPage = () => {
         scroll();
     }, [news]);
 
-    useScrollPosition(({ currPos }) => {
-        if (currPos.y === 0) {
-            loadMore();
-        }
-    })
-
-    const { scrolledRecently } = useScrollStopwatch(2)
+    const { scrolledRecently } = useScrollStopwatch({ seconds: 2 })
 
     //// --------------------
-    const handleScroll = useCallback((e) => {
+    const handleScroll = (e) => {
         const target = e.target.scrollingElement;
         const bottom = target.scrollHeight - target.scrollTop === target.clientHeight;
 
-        if (bottom)
-            loadMore();
-    }, [loadMore]);
+        if (bottom) {
+            console.log("handleScroll loadMoreRef")
+            loadMoreRef.current();
+        }
+    }
 
     useEffect(() => {
         window.addEventListener("scroll", handleScroll);

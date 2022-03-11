@@ -4,11 +4,11 @@ import { useTimer } from 'react-timer-hook';
 import { Time } from "../utils/utils.jsx";
 
 
-export function useScrollStopwatch(expiresInSeconds) {
-    const { isRunning, restart } = useTimer({ expiryTimestamp: Time.nowPlusSeconds(expiresInSeconds), autoStart: false });
+export function useScrollStopwatch({ seconds }) {
+    const { isRunning, restart } = useTimer({ expiryTimestamp: Time.nowPlusSeconds(seconds), autoStart: false });
 
     useScrollPosition(() => {
-        restart(Time.nowPlusSeconds(expiresInSeconds));
+        restart(Time.nowPlusSeconds(seconds));
     }, [restart]);
 
     return { scrolledRecently: isRunning };

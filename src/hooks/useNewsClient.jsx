@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 import { useSubscription } from "react-stomp-hooks";
 import { ArraysState } from '../utils/utils.jsx';
@@ -20,7 +20,7 @@ export function useNewsClient() {
   }, { manual: true });
 
   useSubscription("/topic/news", (message) => setMessage(message.body));
-  
+
   useEffect(() => {
     getNewsExecute();
   }, [])
@@ -67,9 +67,11 @@ export function useNewsClient() {
     setLoading(false)
   }, [news]);
 
-  const loadMore = useCallback(() => {
-    if (loading)
+  const loadMore = () => {
+    if (loading) {
+      console.log("Still loading")
       return;
+    }
     else if (pageToken == null) {
       console.warn("All news loaded")
       return;
@@ -78,7 +80,11 @@ export function useNewsClient() {
       getNewsExecute()
     }
   }
-  , [loading, pageToken, getNewsExecute]);
+
+  const loadMoreRef = useRef(loadMore);
+  useEffect(() => {
+    loadMoreRef.current = loadMore;
+  });
 
   function assembleNews(news) {
     news.created = new Date(news.created);
@@ -86,6 +92,6 @@ export function useNewsClient() {
   }
 
 
-  return { news, loading, loadMore };
+  return { news, loading, loadMoreRef };
   // return [news, subscribeChannel, unsubscribeChannel];
 }
