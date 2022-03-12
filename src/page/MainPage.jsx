@@ -12,7 +12,7 @@ const MainPage = () => {
     const { scrolledRecently } = useScrollStopwatch({ seconds: 2 })
 
     //// --------------------
-    const handleScroll = (e) => {
+    const handleScroll = useCallback((e) => {
 
         const target = e.target.scrollingElement;
         const offset = target.scrollHeight - target.scrollTop;
@@ -21,7 +21,7 @@ const MainPage = () => {
         if (bottom) {
             loadMoreRef.current();
         }
-    }
+    } , [loadMoreRef]);
 
     useEffect(() => {
         if (!loading && !scrolledRecently)
@@ -31,7 +31,7 @@ const MainPage = () => {
     useEffect(() => {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [handleScroll]);
     //// --------------------
 
     return (
