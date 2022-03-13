@@ -64,7 +64,8 @@ export function useNewsClient() {
 
     try {
       const newsItem = assembleNews(JSON.parse(message));
-      addNews([newsItem]);
+      // fixme if I leave app open for longer period of time this line causes all news data to be loaded via pagination
+      // addNews([newsItem]); 
       console.debug(newsItem);
 
     } catch (error) {
