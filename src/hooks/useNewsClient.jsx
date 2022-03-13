@@ -27,13 +27,13 @@ export function useNewsClient() {
   }, [])
 
   const addNews = useCallback((addedNews) => {
-    let fetchedNews = addedNews
+    addedNews = addedNews
       .map(assembleNews)
       .filter(item => !news.some(newsItem => newsItem.id === item.id))
       .concat(news)
       .sort((a, b) => b.created - a.created);
 
-    setNews(fetchedNews)
+    setNews(addedNews)
   }, [news])
 
 
@@ -42,7 +42,7 @@ export function useNewsClient() {
       setPageToken(getNewsData.nextPageToken)
       addNews(getNewsData.news)
     }
-  }, [getNewsLoading, getNewsData]);
+  }, [getNewsLoading, getNewsData, addNews]);
 
   useEffect(() => {
     if (message === "")
@@ -56,7 +56,7 @@ export function useNewsClient() {
     } catch (error) {
       console.warn("Can't parse message: " + message, error)
     }
-  }, [message]);
+  }, [addNews, message]);
 
   useEffect(() => {
     if (getNewsLoading) {
