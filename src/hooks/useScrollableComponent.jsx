@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 
 const useScrollableComponent = () => {
     const scrollTargetRef = useRef(null);
 
-    const scrollToTarget = () => {
+    const scrollToTarget = useCallback(() => {
         scrollTargetRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    } , []);
 
     const TargetComponent = () =>
         <div ref={scrollTargetRef} />
