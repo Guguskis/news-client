@@ -21,7 +21,7 @@ const MainPage = () => {
         if (bottom) {
             loadMoreRef.current();
         }
-    } , [loadMoreRef]);
+    } , []);
 
     useEffect(() => {
         if (!loading && !scrolledRecently)

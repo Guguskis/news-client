@@ -42,7 +42,7 @@ export function useNewsClient() {
       setPageToken(getNewsData.nextPageToken)
       addNews(getNewsData.news)
     }
-  }, [getNewsLoading, getNewsData, addNews]);
+  }, [getNewsLoading, getNewsData]);
 
   useEffect(() => {
     if (message === "")
@@ -56,7 +56,7 @@ export function useNewsClient() {
     } catch (error) {
       console.warn("Can't parse message: " + message, error)
     }
-  }, [addNews, message]);
+  }, [message]);
 
   useEffect(() => {
     if (getNewsLoading) {
