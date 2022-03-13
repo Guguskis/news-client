@@ -6,22 +6,21 @@ import { useScrollStopwatch } from './../hooks/useScrollStopwatch.jsx';
 import useScrollableComponent from '../hooks/useScrollableComponent.jsx';
 
 const MainPage = () => {
-    const { news, loading, loadMoreRef } = useNewsClient();
+    const { news, loading, loadMore } = useNewsClient();
 
     const [scroll, ScrollTargetComponent] = useScrollableComponent();
     const { scrolledRecently } = useScrollStopwatch({ seconds: 2 })
 
     //// --------------------
     const handleScroll = useCallback((e) => {
-
         const target = e.target.scrollingElement;
         const offset = target.scrollHeight - target.scrollTop;
         const bottom = (offset - target.clientHeight) < 100;
 
         if (bottom) {
-            loadMoreRef.current();
+            loadMore();
         }
-    } , []);
+    } , [loadMore]);
 
     useEffect(() => {
         if (!loading && !scrolledRecently)

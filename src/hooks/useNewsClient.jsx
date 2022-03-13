@@ -36,6 +36,19 @@ export function useNewsClient() {
     setNews(addedNews)
   }, [news])
 
+  const loadMore = useCallback(() => {
+    if (loading) {
+      console.log("Still loading")
+      return;
+    }
+    else if (pageToken == null) {
+      console.warn("All news loaded")
+      return;
+    } else {
+      console.debug("Loading more news")
+      getNewsExecute()
+    }
+  }, [getNewsExecute, loading, pageToken])
 
   useEffect(() => {
     if (!getNewsLoading && getNewsData) {
@@ -43,6 +56,7 @@ export function useNewsClient() {
       addNews(getNewsData.news)
     }
   }, [getNewsLoading, getNewsData]);
+  
 
   useEffect(() => {
     if (message === "")
@@ -68,24 +82,7 @@ export function useNewsClient() {
     setLoading(false)
   }, [news]);
 
-  const loadMore = () => {
-    if (loading) {
-      console.log("Still loading")
-      return;
-    }
-    else if (pageToken == null) {
-      console.warn("All news loaded")
-      return;
-    } else {
-      console.debug("Loading more news")
-      getNewsExecute()
-    }
-  }
-
-  const loadMoreRef = useRef(loadMore);
-  useEffect(() => {
-    loadMoreRef.current = loadMore;
-  });
+  
 
   function assembleNews(news) {
     news.created = new Date(news.created);
@@ -93,6 +90,6 @@ export function useNewsClient() {
   }
 
 
-  return { news, loading, loadMoreRef };
+  return { news, loading, loadMore };
   // return [news, subscribeChannel, unsubscribeChannel];
 }
