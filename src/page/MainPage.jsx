@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback, memo } from 'react';
 import { useNewsClient } from '../hooks/useNewsClient.jsx';
 import { Box, Container, Typography, LinearProgress } from '@mui/material';
 import NewsCard from '../components/NewsCard.jsx';
@@ -20,7 +20,7 @@ const MainPage = () => {
         if (bottom) {
             loadMore();
         }
-    } , [loadMore]);
+    }, [loadMore]);
 
     useEffect(() => {
         if (!loading && !scrolledRecently)
