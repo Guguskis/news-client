@@ -1,7 +1,6 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useSubscription } from "react-stomp-hooks";
-import { ArraysState } from '../utils/utils.jsx';
 
 import { API } from '../config/axiosConfig.jsx';
 
@@ -11,7 +10,7 @@ export function useNewsClient() {
   const [loading, setLoading] = useState(false);
 
   const [pageToken, setPageToken] = useState(0);
-  const [{ data: getNewsData, loading: getNewsLoading, error: getNewsError }, getNewsExecute] = API.useNewsApi({
+  const [{ data: getNewsData, loading: getNewsLoading }, getNewsExecute] = API.useNewsApi({
     url: "/api/news",
     params: {
       pageToken: pageToken,
@@ -39,11 +38,8 @@ export function useNewsClient() {
   const loadMore = useCallback(() => {
     if (loading) {
       console.log("Still loading")
-      return;
-    }
-    else if (pageToken == null) {
+    } else if (pageToken == null) {
       console.warn("All news loaded")
-      return;
     } else {
       console.debug("Loading more news")
       getNewsExecute()
@@ -56,7 +52,6 @@ export function useNewsClient() {
       addNews(getNewsData.news)
     }
   }, [getNewsLoading, getNewsData]);
-  
 
   useEffect(() => {
     if (message === "")
@@ -82,13 +77,10 @@ export function useNewsClient() {
     setLoading(false)
   }, [news]);
 
-  
-
   function assembleNews(news) {
     news.created = new Date(news.created);
     return news
   }
-
 
   return { news, loading, loadMore };
   // return [news, subscribeChannel, unsubscribeChannel];

@@ -5,7 +5,7 @@ const useScrollableComponent = () => {
 
     const scrollToTarget = useCallback(() => {
         scrollTargetRef.current.scrollIntoView({ behavior: 'smooth' });
-    } , []);
+    }, []);
 
     const TargetComponent = () =>
         <div ref={scrollTargetRef} />
