@@ -40,11 +40,11 @@ const MainPage = () => {
                 spacing={30}
             >
                 <ScrollTargetComponent />
-                {news.map((news, i) =>
+                {news.map(news =>
                     <NewsCard
                         sx={{ mb: 1 }}
                         news={news}
-                        key={i}
+                        key={news.id}
                     />
                 )}
                 <LinearProgress sx={{ visibility: loading ? 'visible' : 'hidden' }} />
