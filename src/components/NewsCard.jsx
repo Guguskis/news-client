@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { memo } from 'react';
 import { Card, CardActions, CardContent, Typography } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
 import { IconButton } from '@mui/material';
@@ -28,4 +28,4 @@ const NewsCard = ({ news, sx }) => {
     )
 }
 
-export default NewsCard;
+export default memo(NewsCard, (a, b) => a.id === b.id);
