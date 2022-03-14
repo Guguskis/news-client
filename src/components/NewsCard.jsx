@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
-import { Card, CardActions, CardContent, Typography } from '@mui/material';
+import { Card, CardActions, CardContent, IconButton, Typography } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
-import { IconButton } from '@mui/material';
 import ReactTimeAgo from 'react-time-ago'
 
 const NewsCard = ({ news, sx }) => {

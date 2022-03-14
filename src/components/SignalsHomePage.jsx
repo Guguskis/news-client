@@ -35,7 +35,7 @@ function HomePage() {
 
     const [signals, setSignals] = useState([]);
     const [isAddSignal, setIsAddSignal] = useState(false);
-    
+
     useEffect(() => {
         if (signalsData) {
             setSignals(signalsData.items)
@@ -78,7 +78,7 @@ function HomePage() {
         console.log('cancelled create new signal');
     }
 
-    const onSubmitSignalCallback = useCallback(onSubmitSignal, [onSubmitSignal]) 
+    const onSubmitSignalCallback = useCallback(onSubmitSignal, [onSubmitSignal])
     const onCancelSignalCallback = useCallback(onCancelSignal, [onCancelSignal])
 
 

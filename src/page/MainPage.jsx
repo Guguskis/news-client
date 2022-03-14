@@ -1,37 +1,36 @@
-import React, { useRef, useEffect, useState, useCallback, memo } from 'react';
-import { useNewsClient } from '../hooks/useNewsClient.jsx';
-import { Box, Container, Typography, LinearProgress } from '@mui/material';
-import NewsCard from '../components/NewsCard.jsx';
-import { useScrollStopwatch } from './../hooks/useScrollStopwatch.jsx';
-import useScrollableComponent from '../hooks/useScrollableComponent.jsx';
+import React, { useCallback, useEffect } from 'react'
+import { useNewsClient } from '../hooks/useNewsClient.jsx'
+import { Box, Container, LinearProgress } from '@mui/material'
+import NewsCard from '../components/NewsCard.jsx'
+import { useScrollStopwatch } from '../hooks/useScrollStopwatch'
+import useScrollableComponent from '../hooks/useScrollableComponent.jsx'
 
 const MainPage = () => {
-    const { news, loading, loadMore } = useNewsClient();
+    const { news, loading, loadMore } = useNewsClient()
 
-    const [scroll, ScrollTargetComponent] = useScrollableComponent();
+    const [scroll, ScrollTargetComponent] = useScrollableComponent()
     const { scrolledRecently } = useScrollStopwatch({ seconds: 2 })
 
-    //// --------------------
     const handleScroll = useCallback((e) => {
-        const target = e.target.scrollingElement;
-        const offset = target.scrollHeight - target.scrollTop;
-        const bottom = (offset - target.clientHeight) < 100;
+        const target = e.target.scrollingElement
+        const offset = target.scrollHeight - target.scrollTop
+        const bottom = (offset - target.clientHeight) < 100
 
         if (bottom) {
-            loadMore();
+            loadMore()
         }
-    }, [loadMore]);
+    }, [loadMore])
+
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [handleScroll])
 
     useEffect(() => {
         if (!loading && !scrolledRecently)
-            scroll();
-    }, [news]);
-
-    useEffect(() => {
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [handleScroll]);
-    //// --------------------
+            scroll()
+    }, [news])
 
     return (
         <Box>
@@ -45,12 +44,12 @@ const MainPage = () => {
                         sx={{ mb: 1 }}
                         news={news}
                         key={news.id}
-                    />
+                    />,
                 )}
                 <LinearProgress sx={{ visibility: loading ? 'visible' : 'hidden' }} />
             </Container>
         </Box>
-    );
+    )
 }
 
-export default MainPage;
+export default MainPage
