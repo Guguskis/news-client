@@ -12,7 +12,7 @@ const NewsCard = ({ news, sx }) => {
                     {news.title}
                 </Typography>
                 <Typography color="text.secondary">
-                    {news.channel}
+                    {news.subChannel}
                 </Typography>
                 <Typography variant="caption" sx={{ mb: 1.5 }} color="text.secondary">
                     <ReactTimeAgo date={news.created} locale="en-US" />
