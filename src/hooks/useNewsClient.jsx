@@ -22,7 +22,6 @@ export function useNewsClient() {
   const stompClient = useStompClient();
 
   const sendMessage = useCallback((message) => {
-    //Send Message
     console.debug("Websocket sending message /app/news", message)
     stompClient.publish({
       destination: "/app/news",
