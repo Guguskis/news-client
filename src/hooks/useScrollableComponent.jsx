@@ -1,20 +1,15 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useCallback, useRef } from "react";
 
 const useScrollableComponent = () => {
-    const scrollTargetRef = useRef(null);
+  const scrollTargetRef = useRef(null);
 
-    const scrollToTarget = useCallback(() => {
-        scrollTargetRef.current.scrollIntoView({ behavior: 'smooth' });
-    }, []);
+  const scrollToTarget = useCallback(() => {
+    scrollTargetRef.current.scrollIntoView({ behavior: "smooth" });
+  }, []);
 
-    const TargetComponent = () =>
-        <div ref={scrollTargetRef} />
+  const TargetComponent = () => <div ref={scrollTargetRef} />;
 
-    return [
-        scrollToTarget,
-        TargetComponent
-    ]
-
-}
+  return [scrollToTarget, TargetComponent];
+};
 
 export default useScrollableComponent;
