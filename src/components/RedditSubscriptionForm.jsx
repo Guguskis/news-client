@@ -10,7 +10,6 @@ import {
   ListItemAvatar,
   ListItemText,
   TextField,
-  Typography,
 } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -56,18 +55,14 @@ const RedditSubscriptionForm = ({
     [handleSubredditSubmit]
   );
 
-  const handleSubredditRemove = useCallback(
-    (subreddit) => {
-      setSubreddits((subreddits) => subreddits.filter((s) => s !== subreddit));
-    },
-    [setSubreddits]
-  );
+  const handleSubredditRemove = useCallback((subreddit) => {
+    console.log(subreddits);
+    console.log(subreddit);
+    setSubreddits((subreddits) => subreddits.filter((s) => s !== subreddit));
+  }, []);
 
   return (
-    <Grid item xs={12} md={6}>
-      <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-        Subreddits
-      </Typography>
+    <Grid item xs={12} md={6} sx={{ pt: 2 }}>
       <TextField
         sx={{ mb: 2 }}
         variant="outlined"
@@ -90,9 +85,9 @@ const RedditSubscriptionForm = ({
               <IconButton
                 edge="end"
                 aria-label="delete"
-                onClick={handleSubredditRemove}
+                onClick={() => handleSubredditRemove(subreddit)}
               >
-                <DeleteIcon />
+                <DeleteIcon color="primary" />
               </IconButton>
             }
           >
@@ -101,10 +96,7 @@ const RedditSubscriptionForm = ({
                 <FolderIcon />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText
-              primary={"r/" + subreddit}
-              // secondary={true ? "Secondary text" : null}
-            />
+            <ListItemText primary={"r/" + subreddit} />
           </ListItem>
         ))}
       </List>
