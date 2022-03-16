@@ -59,6 +59,7 @@ const RedditSubscriptionForm = ({
 
   return (
     <Grid item xs={12} md={6} sx={{ pt: 2 }}>
+      {/* todo force text and button in the same row */}
       <TextField
         InputProps={{
           startAdornment: <InputAdornment position="start">r/</InputAdornment>,

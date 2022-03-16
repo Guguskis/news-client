@@ -1,25 +1,24 @@
 // import './App.css';
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import MailIcon from "@mui/icons-material/Mail";
+import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import MenuIcon from "@mui/icons-material/Menu";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import {
   AppBar,
   Drawer,
   IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   styled,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
@@ -108,9 +107,6 @@ function App() {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="h6" noWrap component="div">
-                Persistent drawer
-              </Typography>
             </Toolbar>
           </AppBar>
           <Drawer
@@ -129,35 +125,26 @@ function App() {
             <DrawerHeader>
               <IconButton onClick={handleDrawerClose}>
                 {theme.direction === "ltr" ? (
-                  <ChevronLeftIcon />
+                  <ChevronLeftIcon color="primary" />
                 ) : (
-                  <ChevronRightIcon />
+                  <ChevronRightIcon color="primary" />
                 )}
               </IconButton>
             </DrawerHeader>
             <Divider />
             <List>
-              {["Inbox", "Starred", "Send email", "Drafts"].map(
-                (text, index) => (
-                  <ListItem button key={text}>
-                    <ListItemIcon>
-                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                  </ListItem>
-                )
-              )}
-            </List>
-            <Divider />
-            <List>
-              {["All mail", "Trash", "Spam"].map((text, index) => (
-                <ListItem button key={text}>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
-              ))}
+              <ListItem button onClick={() => console.log("Click")}>
+                <ListItemIcon>
+                  <DynamicFeedIcon color="primary" />
+                </ListItemIcon>
+                <ListItemText primary="Feed" />
+              </ListItem>
+              <ListItem button onClick={() => console.log("Click")}>
+                <ListItemIcon>
+                  <FilterListIcon color="primary" />
+                </ListItemIcon>
+                <ListItemText primary="Subreddits" />
+              </ListItem>
             </List>
           </Drawer>
         </LocalizationProvider>
