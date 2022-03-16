@@ -1,17 +1,17 @@
 // import './App.css';
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import DateAdapter from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CssBaseline from '@mui/material/CssBaseline';
-import { toast, ToastContainer } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 import MainPage from './page/MainPage.jsx';
 import TimeAgo from 'javascript-time-ago'
 
 import en from 'javascript-time-ago/locale/en.json'
-import { StompSessionProvider } from "react-stomp-hooks";
+import {StompSessionProvider} from "react-stomp-hooks";
 
 const theme = createTheme({
     palette: {
@@ -51,11 +51,11 @@ function App() {
                 }}
             >
                 <LocalizationProvider dateAdapter={DateAdapter}>
-                    <ToastContainer />
-                    <CssBaseline />
+                    <ToastContainer/>
+                    <CssBaseline/>
                     <Router>
                         <Switch>
-                            <Route exact path="/" component={MainPage} />
+                            <Route exact path="/" component={MainPage}/>
                             {/* <Route component={NotFoundPage}/> */}
                         </Switch>
                     </Router>
