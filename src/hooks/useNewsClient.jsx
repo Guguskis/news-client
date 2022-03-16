@@ -21,19 +21,19 @@ export function useNewsClient() {
 
   const stompClient = useStompClient();
 
-  const sendMessage = useCallback((message) => {
+  const sendMessage = useCallback((channel, message) => {
     console.debug("Websocket sending message /app/news", message)
     stompClient.publish({
-      destination: "/app/news",
+      destination: channel,
       body: JSON.stringify(message)
     });
   }, [stompClient]);
 
   const subscribeSubreddits = useCallback((subreddits) => {
-    sendMessage({ subscribe: true, subreddits: subreddits })
+    sendMessage("/app/news/reddit", { subscribe: true, subreddits: subreddits })
   }, [sendMessage])
   const unsubscribeSubreddits = useCallback((subreddits) => {
-    sendMessage({ subscribe: false, subreddits: subreddits })
+    sendMessage("/app/news/reddit", { subscribe: false, subreddits: subreddits })
   }, [sendMessage])
 
   useSubscription("/topic/news", (message) => setMessage(message.body));
