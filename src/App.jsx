@@ -1,6 +1,8 @@
 // import './App.css';
+import MenuIcon from "@mui/icons-material/Menu";
 import DateAdapter from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TimeAgo from "javascript-time-ago";
@@ -41,6 +43,16 @@ toast.configure({
 TimeAgo.addDefaultLocale(en);
 
 function App() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <StompSessionProvider
@@ -58,6 +70,22 @@ function App() {
               {/* <Route component={NotFoundPage}/> */}
             </Switch>
           </Router>
+          <AppBar position="fixed" color="text" open={open}>
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{ mr: 2, ...(open && { display: "none" }) }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap component="div">
+                Persistent drawer
+              </Typography>
+            </Toolbar>
+          </AppBar>
         </LocalizationProvider>
       </StompSessionProvider>
     </ThemeProvider>
