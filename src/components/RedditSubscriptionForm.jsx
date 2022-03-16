@@ -31,7 +31,6 @@ const RedditSubscriptionForm = ({
   }, []);
 
   const handleSubredditSubmit = useCallback(() => {
-    console.log("Subreddit input" + subredditInput);
     if (subredditInput.length === 0) {
       setSubredditError("Subreddit name cannot be empty");
       return;
