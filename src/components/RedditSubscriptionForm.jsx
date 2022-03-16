@@ -12,7 +12,7 @@ import {
   ListItemText,
   TextField,
 } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 const RedditSubscriptionForm = ({
   subscribeSubreddits,
@@ -21,10 +21,6 @@ const RedditSubscriptionForm = ({
   const [subreddits, setSubreddits] = useState([]);
   const [subredditInput, setSubredditInput] = useState("");
   const [subredditError, setSubredditError] = useState(null);
-
-  useEffect(() => {
-    console.log(subredditInput);
-  }, [subredditInput]);
 
   const handleSubredditInputChange = useCallback((e) => {
     setSubredditInput(e.target.value);
