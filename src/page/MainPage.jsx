@@ -40,8 +40,8 @@ const MainPage = () => {
             >
                 <ScrollTargetComponent />
                 <Container sx={{ mb: 1 }}>
-                    <Button variant='contained' sx={{ mr: 1 }} onClick={() => subscribeSubreddits(['reactjs', 'javascript'])}>Subscribe</Button>
-                    <Button variant='contained' onClick={() => unsubscribeSubreddits(['reactjs', 'javascript'])}>Unsubscribe</Button>
+                    <Button variant='contained' sx={{ mr: 1 }} onClick={() => subscribeSubreddits(['lithuania', 'cryptoCurrency'])}>Subscribe</Button>
+                    <Button variant='contained' onClick={() => unsubscribeSubreddits(['lithuania'])}>Unsubscribe</Button>
                 </Container>
                 {news.map(news =>
                     <NewsCard
