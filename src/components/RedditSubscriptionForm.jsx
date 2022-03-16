@@ -1,14 +1,11 @@
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FolderIcon from "@mui/icons-material/Folder";
 import {
-  Avatar,
   Grid,
   IconButton,
   InputAdornment,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
   TextField,
 } from "@mui/material";
@@ -66,7 +63,7 @@ const RedditSubscriptionForm = ({
         InputProps={{
           startAdornment: <InputAdornment position="start">r/</InputAdornment>,
         }}
-        sx={{ mb: 2 }}
+        sx={{ mb: 1 }}
         variant="outlined"
         label="Subreddit"
         value={subredditInput}
@@ -82,23 +79,15 @@ const RedditSubscriptionForm = ({
 
       <List dense={true}>
         {subreddits.map((subreddit) => (
-          <ListItem
-            key={subreddit}
-            secondaryAction={
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={() => handleSubredditRemove(subreddit)}
-              >
-                <DeleteIcon color="primary" />
-              </IconButton>
-            }
-          >
-            <ListItemAvatar>
-              <Avatar>
-                <FolderIcon />
-              </Avatar>
-            </ListItemAvatar>
+          <ListItem key={subreddit}>
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={() => handleSubredditRemove(subreddit)}
+              sx={{ mr: 1 }}
+            >
+              <DeleteIcon color="primary" />
+            </IconButton>
             <ListItemText primary={"r/" + subreddit} />
           </ListItem>
         ))}
