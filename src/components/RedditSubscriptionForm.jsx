@@ -1,88 +1,97 @@
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FolderIcon from "@mui/icons-material/Folder";
 import {
   Avatar,
-  Button,
-  Container,
   Grid,
   IconButton,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  TextField,
   Typography,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 const RedditSubscriptionForm = ({
   subscribeSubreddits,
   unsubscribeSubreddits,
 }) => {
-  const [subscriptions, setSubscriptions] = useState([]);
-  const [subscriptionInput, setSubscriptionInput] = useState("");
-  const [subscriptionError, setSubscriptionError] = useState(null);
+  const [subreddits, setSubreddits] = useState([]);
+  const [subredditInput, setSubredditInput] = useState("");
+  const [subredditError, setSubredditError] = useState(null);
 
-  const handleSubscriptionInputChange = useCallback((e) => {
-    setSubscriptionInput(e.target.value);
+  useEffect(() => {
+    console.log(subredditInput);
+  }, [subredditInput]);
+
+  const handleSubredditInputChange = useCallback((e) => {
+    setSubredditInput(e.target.value);
   }, []);
 
-  const handleSubscriptionInputKeyDown = useCallback((e) => {
-    if (e.key === "Enter") {
-      handleSubscriptionSubmit();
-    }
-  }, []);
-
-  const handleSubscriptionSubmit = useCallback(() => {
-    if (subscriptionInput.length === 0) {
-      setSubscriptionError("Subreddit name cannot be empty");
+  const handleSubredditSubmit = useCallback(() => {
+    console.log("Subreddit input" + subredditInput);
+    if (subredditInput.length === 0) {
+      setSubredditError("Subreddit name cannot be empty");
       return;
     }
 
-    if (subscriptions.includes(subscriptionInput)) {
-      setSubscriptionError("Subreddit already subscribed");
+    if (subreddits.includes(subredditInput)) {
+      setSubredditError("Subreddit already subscribed");
       return;
     }
 
-    setSubscriptionError(null);
-    setSubscriptions([...subscriptions, subscriptionInput]);
-    setSubscriptionInput("");
-  }, [subscriptions, subscriptionInput]);
+    setSubredditError(null);
+    setSubreddits([...subreddits, subredditInput]);
+    setSubredditInput("");
+  }, [subreddits, subredditInput]);
 
-  const handleSubscriptionRemove = useCallback(
-    (subreddit) => {
-      setSubscriptions(subscriptions.filter((s) => s !== subreddit));
+  const handleSubredditInputKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        handleSubredditSubmit();
+      }
     },
-    [subscriptions]
+    [handleSubredditSubmit]
+  );
+
+  const handleSubredditRemove = useCallback(
+    (subreddit) => {
+      setSubreddits((subreddits) => subreddits.filter((s) => s !== subreddit));
+    },
+    [setSubreddits]
   );
 
   return (
     <Grid item xs={12} md={6}>
-      <Container sx={{ flexDirection: "row" }}>
-        <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-          Avatar with text and icon
-        </Typography>
-        <Container sx={{ mb: 1 }}>
-          <Button
-            variant="contained"
-            sx={{ mr: 1 }}
-            onClick={() => subscribeSubreddits(["lithuania", "cryptoCurrency"])}
-          >
-            Subscribe
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => unsubscribeSubreddits(["lithuania"])}
-          >
-            Unsubscribe
-          </Button>
-        </Container>
-      </Container>
+      <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+        Subreddits
+      </Typography>
+      <TextField
+        sx={{ mb: 2 }}
+        variant="outlined"
+        label="Subreddit"
+        value={subredditInput}
+        onChange={handleSubredditInputChange}
+        onKeyDown={handleSubredditInputKeyDown}
+        error={subredditError !== null}
+        helperText={subredditError}
+      />
+      <IconButton color="primary" onClick={handleSubredditSubmit}>
+        <AddCircleIcon />
+      </IconButton>
+
       <List dense={true}>
-        {[1, 2, 3].map((value) => (
+        {subreddits.map((subreddit) => (
           <ListItem
-            key={value}
+            key={subreddit}
             secondaryAction={
-              <IconButton edge="end" aria-label="delete">
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={handleSubredditRemove}
+              >
                 <DeleteIcon />
               </IconButton>
             }
@@ -93,8 +102,8 @@ const RedditSubscriptionForm = ({
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary="Single-line item"
-              secondary={true ? "Secondary text" : null}
+              primary={"r/" + subreddit}
+              // secondary={true ? "Secondary text" : null}
             />
           </ListItem>
         ))}
