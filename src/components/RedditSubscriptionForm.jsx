@@ -40,7 +40,8 @@ const RedditSubscriptionForm = ({
     setSubredditError(null);
     setSubreddits([...subreddits, subredditInput]);
     setSubredditInput("");
-  }, [subreddits, subredditInput]);
+    subscribeSubreddits([subredditInput]);
+  }, [subredditInput, subreddits, subscribeSubreddits]);
 
   const handleSubredditInputKeyDown = useCallback(
     (e) => {
@@ -51,9 +52,13 @@ const RedditSubscriptionForm = ({
     [handleSubredditSubmit]
   );
 
-  const handleSubredditRemove = useCallback((subreddit) => {
-    setSubreddits((subreddits) => subreddits.filter((s) => s !== subreddit));
-  }, []);
+  const handleSubredditRemove = useCallback(
+    (subreddit) => {
+      setSubreddits((subreddits) => subreddits.filter((s) => s !== subreddit));
+      unsubscribeSubreddits([subreddit]);
+    },
+    [unsubscribeSubreddits]
+  );
 
   return (
     <Grid item xs={12} md={6} sx={{ pt: 2 }}>
