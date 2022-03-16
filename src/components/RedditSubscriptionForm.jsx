@@ -5,6 +5,7 @@ import {
   Avatar,
   Grid,
   IconButton,
+  InputAdornment,
   List,
   ListItem,
   ListItemAvatar,
@@ -64,6 +65,9 @@ const RedditSubscriptionForm = ({
   return (
     <Grid item xs={12} md={6} sx={{ pt: 2 }}>
       <TextField
+        InputProps={{
+          startAdornment: <InputAdornment position="start">r/</InputAdornment>,
+        }}
         sx={{ mb: 2 }}
         variant="outlined"
         label="Subreddit"
@@ -73,6 +77,7 @@ const RedditSubscriptionForm = ({
         error={subredditError !== null}
         helperText={subredditError}
       />
+
       <IconButton color="primary" onClick={handleSubredditSubmit}>
         <AddCircleIcon />
       </IconButton>
