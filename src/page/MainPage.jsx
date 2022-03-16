@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect } from 'react'
 import { useNewsClient } from '../hooks/useNewsClient.jsx'
-import { Box, Container, LinearProgress } from '@mui/material'
+import { Box, Container, LinearProgress, Button } from '@mui/material'
 import NewsCard from '../components/NewsCard.jsx'
 import { useScrollStopwatch } from '../hooks/useScrollStopwatch.jsx'
 import useScrollableComponent from '../hooks/useScrollableComponent.jsx'
 
 const MainPage = () => {
-    const { news, loading, loadMore } = useNewsClient()
+    const { news, loading, loadMore, subscribeSubreddits, unsubscribeSubreddits } = useNewsClient()
 
     const [scroll, ScrollTargetComponent] = useScrollableComponent()
     const { scrolledRecently } = useScrollStopwatch({ seconds: 2 })
@@ -34,6 +34,8 @@ const MainPage = () => {
 
     return (
         <Box>
+            <Button onClick={() => subscribeSubreddits(['reactjs', 'javascript'])}>Subscribe</Button>
+            <Button onClick={() => unsubscribeSubreddits(['reactjs', 'javascript'])}>Unsubscribe</Button>
             <Container
                 maxWidth="lg"
                 spacing={30}

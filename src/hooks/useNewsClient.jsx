@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useSubscription } from "react-stomp-hooks";
+import { useSubscription, useStompClient } from "react-stomp-hooks";
 
 import { API } from '../config/axiosConfig.jsx';
 
@@ -18,6 +18,24 @@ export function useNewsClient() {
     },
     method: "GET",
   }, { manual: true });
+
+  const stompClient = useStompClient();
+
+  const sendMessage = useCallback((message) => {
+    //Send Message
+    console.debug("Websocket sending message /app/news", message)
+    stompClient.publish({
+      destination: "/app/news",
+      body: JSON.stringify(message)
+    });
+  }, [stompClient]);
+
+  const subscribeSubreddits = useCallback((subreddits) => {
+    sendMessage({ subscribe: true, subreddits: subreddits })
+  }, [sendMessage])
+  const unsubscribeSubreddits = useCallback((subreddits) => {
+    sendMessage({ subscribe: false, subreddits: subreddits })
+  }, [sendMessage])
 
   useSubscription("/topic/news", (message) => setMessage(message.body));
 
@@ -82,6 +100,5 @@ export function useNewsClient() {
     return news
   }
 
-  return { news, loading, loadMore };
-  // return [news, subscribeChannel, unsubscribeChannel];
+  return { news, loading, loadMore, subscribeSubreddits, unsubscribeSubreddits };
 }
