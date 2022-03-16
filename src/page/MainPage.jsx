@@ -34,13 +34,15 @@ const MainPage = () => {
 
     return (
         <Box>
-            <Button onClick={() => subscribeSubreddits(['reactjs', 'javascript'])}>Subscribe</Button>
-            <Button onClick={() => unsubscribeSubreddits(['reactjs', 'javascript'])}>Unsubscribe</Button>
             <Container
                 maxWidth="lg"
                 spacing={30}
             >
                 <ScrollTargetComponent />
+                <Container sx={{ mb: 1 }}>
+                    <Button variant='contained' sx={{ mr: 1 }} onClick={() => subscribeSubreddits(['reactjs', 'javascript'])}>Subscribe</Button>
+                    <Button variant='contained' onClick={() => unsubscribeSubreddits(['reactjs', 'javascript'])}>Unsubscribe</Button>
+                </Container>
                 {news.map(news =>
                     <NewsCard
                         sx={{ mb: 1 }}
