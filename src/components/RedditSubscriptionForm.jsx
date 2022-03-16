@@ -57,8 +57,6 @@ const RedditSubscriptionForm = ({
   );
 
   const handleSubredditRemove = useCallback((subreddit) => {
-    console.log(subreddits);
-    console.log(subreddit);
     setSubreddits((subreddits) => subreddits.filter((s) => s !== subreddit));
   }, []);
 
