@@ -16,7 +16,9 @@ const NewsCard = ({ news, sx }) => {
         <Typography variant="h5" component="div">
           {news.title}
         </Typography>
-        <Typography color="text.secondary">{news.subChannel}</Typography>
+        <Typography color="text.secondary">
+          {news.channel === "REDDIT" ? "r/" + news.subChannel : news.subChannel}
+        </Typography>
         <Typography variant="caption" sx={{ mb: 1.5 }} color="text.secondary">
           <ReactTimeAgo date={news.created} locale="en-US" />
         </Typography>
