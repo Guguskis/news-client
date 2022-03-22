@@ -36,7 +36,7 @@ export function useNewsClient() {
 
   const subscribeSubreddits = useCallback(
     (subreddits) => {
-      sendMessage("/app/news/reddit", {
+      sendMessage("/app/queue/news/reddit", {
         subscribe: true,
         subreddits: subreddits,
       });
@@ -45,7 +45,7 @@ export function useNewsClient() {
   );
   const unsubscribeSubreddits = useCallback(
     (subreddits) => {
-      sendMessage("/app/news/reddit", {
+      sendMessage("/app/queue/news/reddit", {
         subscribe: false,
         subreddits: subreddits,
       });
