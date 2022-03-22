@@ -53,7 +53,7 @@ export function useNewsClient() {
     [sendMessage]
   );
 
-  useSubscription("/topic/news", (message) => setMessage(message.body));
+  useSubscription("/user/topic/news", (message) => setMessage(message.body));
 
   useEffect(() => {
     getNewsExecute();
