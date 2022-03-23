@@ -1,6 +1,5 @@
 import { Container } from "@mui/material";
 import React from "react";
-import "react-toastify/dist/ReactToastify.css";
 import MenuBar from "../components/MenuBar.jsx";
 
 function MenuBarContainer({ children }) {

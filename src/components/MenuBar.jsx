@@ -18,7 +18,6 @@ import Divider from "@mui/material/Divider";
 import { useTheme } from "@mui/styles";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
