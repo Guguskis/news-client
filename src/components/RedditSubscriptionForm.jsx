@@ -10,6 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
+import MenuBarContainer from "../components/MenuBarContainer.jsx";
 
 const RedditSubscriptionForm = ({
   subscribeSubreddits,
@@ -58,42 +59,46 @@ const RedditSubscriptionForm = ({
   );
 
   return (
-    <Grid item xs={12} md={6} sx={{ pt: 2 }}>
-      {/* todo force text and button in the same row */}
-      <TextField
-        InputProps={{
-          startAdornment: <InputAdornment position="start">r/</InputAdornment>,
-        }}
-        sx={{ mb: 1 }}
-        variant="outlined"
-        label="Subreddit"
-        value={subredditInput}
-        onChange={handleSubredditInputChange}
-        onKeyDown={handleSubredditInputKeyDown}
-        error={subredditError !== null}
-        helperText={subredditError}
-      />
+    <MenuBarContainer>
+      <Grid item xs={12} md={6}>
+        {/* todo force text and button in the same row */}
+        <TextField
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">r/</InputAdornment>
+            ),
+          }}
+          sx={{ mb: 1 }}
+          variant="outlined"
+          label="Subreddit"
+          value={subredditInput}
+          onChange={handleSubredditInputChange}
+          onKeyDown={handleSubredditInputKeyDown}
+          error={subredditError !== null}
+          helperText={subredditError}
+        />
 
-      <IconButton color="primary" onClick={handleSubredditSubmit}>
-        <AddCircleIcon />
-      </IconButton>
+        <IconButton color="primary" onClick={handleSubredditSubmit}>
+          <AddCircleIcon />
+        </IconButton>
 
-      <List dense={true}>
-        {subreddits.map((subreddit) => (
-          <ListItem key={subreddit}>
-            <IconButton
-              edge="end"
-              aria-label="delete"
-              onClick={() => handleSubredditRemove(subreddit)}
-              sx={{ mr: 1 }}
-            >
-              <DeleteIcon color="primary" />
-            </IconButton>
-            <ListItemText primary={"r/" + subreddit} />
-          </ListItem>
-        ))}
-      </List>
-    </Grid>
+        <List dense={true}>
+          {subreddits.map((subreddit) => (
+            <ListItem key={subreddit}>
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => handleSubredditRemove(subreddit)}
+                sx={{ mr: 1 }}
+              >
+                <DeleteIcon color="primary" />
+              </IconButton>
+              <ListItemText primary={"r/" + subreddit} />
+            </ListItem>
+          ))}
+        </List>
+      </Grid>
+    </MenuBarContainer>
   );
 };
 

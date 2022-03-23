@@ -1,10 +1,10 @@
-import { Container, LinearProgress } from "@mui/material";
+import { LinearProgress } from "@mui/material";
 import React, { useCallback, useEffect } from "react";
+import MenuBarContainer from "../components/MenuBarContainer.jsx";
 import NewsCard from "../components/NewsCard.jsx";
 import { useNewsClient } from "../hooks/useNewsClient.jsx";
 import useScrollableComponent from "../hooks/useScrollableComponent.jsx";
 import { useScrollStopwatch } from "../hooks/useScrollStopwatch.jsx";
-import RedditSubscriptionForm from "./../components/RedditSubscriptionForm.jsx";
 
 const MainPage = () => {
   const {
@@ -41,17 +41,13 @@ const MainPage = () => {
   }, [news]);
 
   return (
-    <Container>
+    <MenuBarContainer>
       <ScrollTargetComponent />
-      <RedditSubscriptionForm
-        subscribeSubreddits={subscribeSubreddits}
-        unsubscribeSubreddits={unsubscribeSubreddits}
-      />
       {news.map((news) => (
         <NewsCard sx={{ mb: 1 }} news={news} key={news.id} />
       ))}
       <LinearProgress sx={{ visibility: loading ? "visible" : "hidden" }} />
-    </Container>
+    </MenuBarContainer>
   );
 };
 
