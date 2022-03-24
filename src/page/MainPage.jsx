@@ -1,5 +1,6 @@
 import { LinearProgress } from "@mui/material";
 import React, { useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
 import MenuBarContainer from "../components/MenuBarContainer.jsx";
 import NewsCard from "../components/NewsCard.jsx";
 import { useNewsClient } from "../hooks/useNewsClient.jsx";
@@ -14,6 +15,8 @@ const MainPage = () => {
     subscribeSubreddits,
     unsubscribeSubreddits,
   } = useNewsClient();
+
+  const state = useSelector((state) => state.news);
 
   const [scroll, ScrollTargetComponent] = useScrollableComponent();
   const { scrolledRecently } = useScrollStopwatch({ seconds: 2 });
@@ -37,7 +40,11 @@ const MainPage = () => {
   }, [handleScroll]);
 
   useEffect(() => {
-    if (!loading && !scrolledRecently) scroll();
+    if (!loading && !scrolledRecently) {
+      scroll();
+      console.log("news");
+      console.log(state.news);
+    }
   }, [news]);
 
   return (

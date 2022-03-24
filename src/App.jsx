@@ -6,12 +6,15 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import React from "react";
+import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { StompSessionProvider } from "react-stomp-hooks";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { createStore } from "redux";
 import RedditSubscriptionForm from "./components/RedditSubscriptionForm.jsx";
 import MainPage from "./page/MainPage.jsx";
+import reducers from "./state/reducers.jsx";
 
 const theme = createTheme({
   palette: {
@@ -38,35 +41,37 @@ toast.configure({
   position: "top-right",
   autoClose: 5000,
 });
-
+const store = createStore(reducers, {});
 TimeAgo.addDefaultLocale(en);
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <StompSessionProvider
-        url={"ws://86.100.240.140:9081/news/websocket"}
-        debug={(str) => {
-          console.debug("NEWS: " + str);
-        }}
-      >
-        <LocalizationProvider dateAdapter={DateAdapter}>
-          <ToastContainer />
-          <CssBaseline />
-          <Router>
-            <Switch>
-              <Route exact path="/" component={MainPage} />
-              <Route
-                exact
-                path="/subscriptions"
-                component={RedditSubscriptionForm}
-              />
-              {/* <Route component={NotFoundPage}/> */}
-            </Switch>
-          </Router>
-        </LocalizationProvider>
-      </StompSessionProvider>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <StompSessionProvider
+          url={"ws://86.100.240.140:9081/news/websocket"}
+          debug={(str) => {
+            console.debug("NEWS: " + str);
+          }}
+        >
+          <LocalizationProvider dateAdapter={DateAdapter}>
+            <ToastContainer />
+            <CssBaseline />
+            <Router>
+              <Switch>
+                <Route exact path="/" component={MainPage} />
+                <Route
+                  exact
+                  path="/subscriptions"
+                  component={RedditSubscriptionForm}
+                />
+                {/* <Route component={NotFoundPage}/> */}
+              </Switch>
+            </Router>
+          </LocalizationProvider>
+        </StompSessionProvider>
+      </ThemeProvider>
+    </Provider>
   );
 }
 
