@@ -11,14 +11,20 @@ import {
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
 import MenuBarContainer from "../components/MenuBarContainer.jsx";
+import { useNewsClient } from "../hooks/useNewsClient.jsx";
 
-const RedditSubscriptionForm = ({
-  subscribeSubreddits,
-  unsubscribeSubreddits,
-}) => {
+const RedditSubscriptionForm = () => {
   const [subreddits, setSubreddits] = useState([]);
   const [subredditInput, setSubredditInput] = useState("");
   const [subredditError, setSubredditError] = useState(null);
+
+  const {
+    news,
+    loading,
+    loadMore,
+    subscribeSubreddits,
+    unsubscribeSubreddits,
+  } = useNewsClient();
 
   const handleSubredditInputChange = useCallback((e) => {
     setSubredditInput(e.target.value);

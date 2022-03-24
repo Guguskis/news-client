@@ -39,6 +39,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-singleton-hook": "^3.2.3",
     "react-stomp-hooks": "^2.0.3",
     "react-time-ago": "^7.1.9",
     "react-timer-hook": "^3.0.5",

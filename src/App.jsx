@@ -8,6 +8,7 @@ import en from "javascript-time-ago/locale/en.json";
 import React from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { SingletonHooksContainer } from "react-singleton-hook";
 import { StompSessionProvider } from "react-stomp-hooks";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -57,6 +58,7 @@ function App() {
           <LocalizationProvider dateAdapter={DateAdapter}>
             <ToastContainer />
             <CssBaseline />
+            <SingletonHooksContainer />
             <Router>
               <Switch>
                 <Route exact path="/" component={MainPage} />

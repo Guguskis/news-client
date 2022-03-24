@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
+import { singletonHook } from "react-singleton-hook";
 import { useStompClient, useSubscription } from "react-stomp-hooks";
 import { API } from "../config/axiosConfig.jsx";
 
-export function useNewsClient() {
+const init = { news: [] };
+
+const useNewsClientDefault = () => {
   const [news, setNews] = useState([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -112,6 +115,10 @@ export function useNewsClient() {
     setLoading(false);
   }, [news]);
 
+  useEffect(() => {
+    console.log("INITIALIZED NEWS CLIENT");
+  }, []);
+
   function assembleNews(news) {
     news.created = new Date(news.created);
     return news;
@@ -124,4 +131,6 @@ export function useNewsClient() {
     subscribeSubreddits,
     unsubscribeSubreddits,
   };
-}
+};
+
+export const useNewsClient = singletonHook(init, useNewsClientDefault);
